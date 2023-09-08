@@ -26,7 +26,6 @@
 #include "task/lookup_task.h"
 #include "dht.h"
 
-namespace elastos {
 namespace carrier {
 
 bool LookupTask::isBogonAddress(const SocketAddress& addr) const {
@@ -86,6 +85,4 @@ void LookupTask::callResponsed(RPCCall* call, Sp<Message> response) {
     addClosest(candidateNode);
 }
 
-
 } // namespace carrier
-} // namespace elastos

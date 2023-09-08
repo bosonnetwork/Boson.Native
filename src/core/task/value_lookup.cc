@@ -27,7 +27,6 @@
 #include "kclosest_nodes.h"
 #include "value_lookup.h"
 
-namespace elastos {
 namespace carrier {
 
 void ValueLookup::prepare() {
@@ -98,5 +97,4 @@ void ValueLookup::callResponsed(RPCCall* call, Sp<Message> message) {
     }
 }
 
-}
-}
+} // namespace carrier

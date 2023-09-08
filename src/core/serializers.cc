@@ -22,42 +22,40 @@
 
 #include "serializers.h"
 
-namespace elastos {
 namespace carrier {
 
-    void from_json(const nlohmann::json& json, SocketAddress& sa) {
-        auto s = json.get<std::string>();
-        int port = 0;
+void from_json(const nlohmann::json& json, SocketAddress& sa) {
+    auto s = json.get<std::string>();
+    int port = 0;
 
-        int colon = s.find(":");
-        if (colon < s.length()) {
-            port = stoi(s.substr(colon + 1));
-        } else {
-            colon = s.length() - 1;
-        }
-
-        auto a = s.substr(0, colon);
-        sa = SocketAddress(a, port);
+    int colon = s.find(":");
+    if (colon < s.length()) {
+        port = stoi(s.substr(colon + 1));
+    } else {
+        colon = s.length() - 1;
     }
 
-    void to_json(nlohmann::json& json, const NodeInfo& ni) {
-        auto addr = nlohmann::json::binary_t {
-            std::vector<uint8_t>(ni.getAddress().inaddr(), ni.getAddress().inaddr() + ni.getAddress().inaddrLength())
-        };
-
-        json = nlohmann::json::array();
-        json.push_back(ni.getId());
-        json.push_back(addr);
-        json.push_back(ni.getAddress().port());
-    }
-
-    void from_json(const nlohmann::json& json, NodeInfo& ni) {
-        auto id = json[0].get_binary();
-        auto ip = json[1].get_binary();
-        auto port = json[2].get<int>();
-
-        ni = NodeInfo(id, ip, port);
-    }
-
+    auto a = s.substr(0, colon);
+    sa = SocketAddress(a, port);
 }
+
+void to_json(nlohmann::json& json, const NodeInfo& ni) {
+    auto addr = nlohmann::json::binary_t {
+        std::vector<uint8_t>(ni.getAddress().inaddr(), ni.getAddress().inaddr() + ni.getAddress().inaddrLength())
+    };
+
+    json = nlohmann::json::array();
+    json.push_back(ni.getId());
+    json.push_back(addr);
+    json.push_back(ni.getAddress().port());
 }
+
+void from_json(const nlohmann::json& json, NodeInfo& ni) {
+    auto id = json[0].get_binary();
+    auto ip = json[1].get_binary();
+    auto port = json[2].get<int>();
+
+    ni = NodeInfo(id, ip, port);
+}
+
+} // namespace carrier

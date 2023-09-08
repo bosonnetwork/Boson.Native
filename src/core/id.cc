@@ -31,7 +31,6 @@
 #include "crypto/shasum.h"
 #include "crypto/hex.h"
 
-namespace elastos {
 namespace carrier {
 
 Id Id::MIN_ID = Id::zero();
@@ -208,5 +207,4 @@ void Id::fromHexString(const std::string& str) {
     Hex::decode(str.c_str() + pos, ID_BYTES * 2, bytes.data(), ID_BYTES);
 }
 
-}
-}
+} // namespace carrier

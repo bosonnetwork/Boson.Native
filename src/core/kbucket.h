@@ -32,7 +32,6 @@
 #include "constants.h"
 #include "kbucket_entry.h"
 
-namespace elastos {
 namespace carrier {
 
 class Message;
@@ -171,4 +170,3 @@ private:
 };
 
 } // namespace carrier
-} // namespace elastos

@@ -43,7 +43,6 @@
 #include "carrier/socket_address.h"
 #include "carrier/blob.h"
 
-namespace elastos {
 namespace carrier {
 
 // Invalid address
@@ -436,4 +435,3 @@ bool SocketAddress::IpCompare::operator()(const SocketAddress& a, const SocketAd
 }
 
 } // namespace carrier
-} // namespace elastos

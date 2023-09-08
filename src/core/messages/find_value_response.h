@@ -32,7 +32,6 @@
 #include "lookup_response.h"
 #include "message.h"
 
-namespace elastos {
 namespace carrier {
 
 class FindValueResponse : public LookupResponse {
@@ -69,5 +68,4 @@ private:
     std::vector<uint8_t> value;
 };
 
-}
-}
+} // namespace carrier

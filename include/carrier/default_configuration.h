@@ -28,7 +28,6 @@
 #include "def.h"
 #include "configuration.h"
 
-namespace elastos {
 namespace carrier {
 
 class CARRIER_PUBLIC DefaultConfiguration final : public Configuration {
@@ -151,4 +150,3 @@ private:
 };
 
 } // namespace carrier
-} // namespace elastos

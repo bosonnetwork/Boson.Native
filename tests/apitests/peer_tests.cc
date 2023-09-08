@@ -28,7 +28,7 @@
 #include "utils.h"
 #include "peer_tests.h"
 
-using namespace elastos::carrier;
+using namespace carrier;
 using namespace std::chrono_literals;
 
 namespace test {

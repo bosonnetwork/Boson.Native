@@ -24,7 +24,6 @@
 
 #include <cstring>
 
-namespace elastos {
 namespace carrier {
 
 std::string getLocalIpAddresses(bool ipv4 = true);
@@ -35,6 +34,4 @@ inline std::string getLocalIPv6() {
     return getLocalIpAddresses(false);
 }
 
-
 } // namespace carrier
-} // namespace elastos

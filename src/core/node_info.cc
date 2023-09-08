@@ -24,7 +24,6 @@
 #include "carrier/node_info.h"
 #include "carrier/version.h"
 
-namespace elastos {
 namespace carrier {
 
 std::string NodeInfo::toString() const {
@@ -48,5 +47,4 @@ std::string NodeInfo::getReadableVersion() const {
     return Version::toString(version);
 }
 
-}
-}
+} // namespace carrier

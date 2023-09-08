@@ -25,7 +25,6 @@
 #include <string>
 #include <stdexcept>
 
-namespace elastos {
 namespace carrier {
 namespace activeproxy {
 
@@ -51,4 +50,3 @@ public:
 
 } // namespace activeproxy
 } // namespace carrier
-} // namespace elastos

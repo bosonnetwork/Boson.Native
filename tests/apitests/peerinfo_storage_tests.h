@@ -41,7 +41,7 @@ class PeerInfoStorageTests : public CppUnit::TestFixture {
     void testPutAndGetPersistentPeer();
 
 private:
-    elastos::carrier::Scheduler scheduler {};
+    carrier::Scheduler scheduler {};
     std::string path;
 };
 

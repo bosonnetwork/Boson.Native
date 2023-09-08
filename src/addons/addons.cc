@@ -23,7 +23,6 @@
 #include "activeproxy.h"
 #include <iostream>
 
-namespace elastos {
 namespace carrier {
 
 std::map<std::string, std::shared_ptr<Addon>> g_addons {};
@@ -70,4 +69,3 @@ std::map<std::string, std::shared_ptr<Addon>>& getAddons() {
 }
 
 } // namespace carrier
-} // namespace elastos

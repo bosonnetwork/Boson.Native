@@ -46,7 +46,7 @@
 
 #include "activeproxy_tests.h"
 
-using namespace elastos::carrier;
+using namespace carrier;
 using namespace httplib;
 extern bool stopped;
 

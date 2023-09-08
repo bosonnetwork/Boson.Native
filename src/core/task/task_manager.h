@@ -29,7 +29,6 @@
 #include "utils/log.h"
 #include "constants.h"
 
-namespace elastos {
 namespace carrier {
 
 class DHT;
@@ -67,4 +66,3 @@ private:
 };
 
 } // namespace carrier
-} // namespace elastos

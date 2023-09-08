@@ -28,7 +28,6 @@
 #include "messages/ping_request.h"
 #include "ping_refresh_task.h"
 
-namespace elastos {
 namespace carrier {
 
 void PingRefreshTask::addBucket(Sp<KBucket> bucket) {
@@ -74,5 +73,4 @@ void PingRefreshTask::update() {
     }
 }
 
-}
-}
+} // namespace carrier

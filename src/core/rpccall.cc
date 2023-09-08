@@ -32,7 +32,6 @@
 #include "kbucket_entry.h"
 #include "task/candidate_node.h"
 
-namespace elastos {
 namespace carrier {
 
 RPCCall::RPCCall(DHT& _dht, Sp<NodeInfo> _target, Sp<Message> _request)
@@ -130,5 +129,3 @@ void RPCCall::checkTimeout() {
 }
 
 } // namespace carrier
-} // namespace elastos
-

@@ -29,31 +29,29 @@
 #include "carrier/peer_info.h"
 #include "carrier/id.h"
 
-namespace elastos {
 namespace carrier {
 
-    inline void to_json(nlohmann::json& json, const SocketAddress& sa) {
-        json = sa.toString();
-    }
-    void from_json(const nlohmann::json& json, SocketAddress& sa);
-
-    void to_json(nlohmann::json& json, const NodeInfo& ni);
-    void from_json(const nlohmann::json& json, NodeInfo& ni);
-
-    inline void to_json(nlohmann::json& json, const Id& id) {
-        json = nlohmann::json::binary_t {std::vector<uint8_t>(id.data(), id.data() + id.size())};
-    }
-
-    inline void from_json(const nlohmann::json& json, Id& id) {
-        id = Id(json.get_binary());
-    }
-
-    inline void from_json(const nlohmann::json& json, std::optional<Id>& id) {
-        id = Id(json.get_binary());
-    }
-
-    void to_json(nlohmann::json& json, const PeerInfo& pi);
-    void from_json(const nlohmann::json& json, PeerInfo& pi);
-
+inline void to_json(nlohmann::json& json, const SocketAddress& sa) {
+    json = sa.toString();
 }
+void from_json(const nlohmann::json& json, SocketAddress& sa);
+
+void to_json(nlohmann::json& json, const NodeInfo& ni);
+void from_json(const nlohmann::json& json, NodeInfo& ni);
+
+inline void to_json(nlohmann::json& json, const Id& id) {
+    json = nlohmann::json::binary_t {std::vector<uint8_t>(id.data(), id.data() + id.size())};
 }
+
+inline void from_json(const nlohmann::json& json, Id& id) {
+    id = Id(json.get_binary());
+}
+
+inline void from_json(const nlohmann::json& json, std::optional<Id>& id) {
+    id = Id(json.get_binary());
+}
+
+void to_json(nlohmann::json& json, const PeerInfo& pi);
+void from_json(const nlohmann::json& json, PeerInfo& pi);
+
+}  // namespace carrier

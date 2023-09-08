@@ -23,7 +23,6 @@
 #include "message_error.h"
 #include "find_value_request.h"
 
-namespace elastos {
 namespace carrier {
 
 void FindValueRequest::_serialize(nlohmann::json& object) const {
@@ -44,4 +43,3 @@ void FindValueRequest::_toString(std::stringstream& ss) const {
 }
 
 } // namespace carrier
-} // namespace elastos

@@ -39,7 +39,7 @@
 #include "utils/log.h"
 
 using namespace std::chrono_literals;
-using namespace elastos::carrier;
+using namespace carrier;
 
 static bool broke = false;
 ApplicationLock lock;
@@ -57,7 +57,7 @@ struct Options {
 
 static void printVersion()
 {
-    std::cout << "Elastos Carrier version " << version() << std::endl;
+    std::cout << "Carrier version " << version() << std::endl;
 }
 
 static Options parseArgs(int argc, char **argv)
@@ -65,7 +65,7 @@ static Options parseArgs(int argc, char **argv)
     Options options;
     bool version {false};
 
-    CLI::App app("Elastos Carrier Launcher", "launcher");
+    CLI::App app("Carrier Launcher", "launcher");
     app.add_option("-c, --config", options.configFile, "The configuration file.");
     app.add_option("-4, --address4", options.addr4, "IPv4 address to listen.");
     app.add_option("-6, --address6", options.addr6, "IPv6 address to listen.");

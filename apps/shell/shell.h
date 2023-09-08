@@ -41,11 +41,11 @@
 #include "help_command.h"
 #include "exit_command.h"
 
-using namespace elastos::carrier;
+using namespace carrier;
 
 class Shell : public Command {
 public:
-    Shell() : Command("Elastos carrier interactive shell.") {};
+    Shell() : Command("carrier interactive shell.") {};
     void handleCommands();
 
 protected:

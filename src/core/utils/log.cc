@@ -42,7 +42,6 @@
 
 using namespace spdlog;
 
-namespace elastos {
 namespace carrier {
 
 struct UserSettings {
@@ -147,5 +146,4 @@ void Logger::setPattern(const std::string& pattern, PatternTimeType time_type) c
     spd_logger->set_pattern(pattern, spd_time_type);
 }
 
-}
-}
+} // namespace carrier

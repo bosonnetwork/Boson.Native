@@ -29,7 +29,6 @@
 
 #include "node.h"
 
-namespace elastos {
 namespace carrier {
 
 class CARRIER_PUBLIC Addon {
@@ -44,4 +43,3 @@ CARRIER_PUBLIC void unloadAddons();
 CARRIER_PUBLIC std::map<std::string, std::shared_ptr<Addon>>& getAddons();
 
 } // namespace carrier
-} // namespace elastos

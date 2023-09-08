@@ -27,7 +27,6 @@
 #include "carrier/id.h"
 #include "carrier/socket_address.h"
 
-namespace elastos {
 namespace carrier {
 
 class SocketAddress;
@@ -48,5 +47,4 @@ private:
     std::array<uint8_t, 32> sessionSecret {};
 };
 
-} /* namespace carrier */
-} /* namespace elastos */
+} // namespace carrier

@@ -29,7 +29,6 @@
 #include "carrier/peer_info.h"
 #include "message.h"
 
-namespace elastos {
 namespace carrier {
 
 class AnnouncePeerRequest : public Message {
@@ -88,7 +87,4 @@ private:
     std::vector<uint8_t> signature {};
 };
 
-}
-}
-
-
+} // namespace carrier

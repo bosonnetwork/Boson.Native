@@ -27,7 +27,7 @@
 #include "crypto/hex.h"
 #include "messages/message.h"
 
-using namespace elastos::carrier;
+using namespace carrier;
 
 namespace test {
 

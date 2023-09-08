@@ -30,7 +30,6 @@
 #include <fstream>
 #include <nlohmann/json.hpp>
 
-namespace elastos {
 namespace carrier {
 
 int RoutingTable::indexOf(const std::list<Sp<KBucket>>& bucketsRef, const Id& id) {
@@ -349,5 +348,4 @@ std::string RoutingTable::toString() const {
     return str;
 }
 
-}
-}
+} // namespace carrier

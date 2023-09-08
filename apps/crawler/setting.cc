@@ -48,7 +48,6 @@
 /* Number of random node requests to make for each node we send a request to */
 #define RANDOM_REQUESTS             32
 
-namespace elastos {
 namespace carrier {
 
 static std::string normailizePath(const std::string& path) {

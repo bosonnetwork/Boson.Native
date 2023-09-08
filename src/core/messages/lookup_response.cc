@@ -26,7 +26,6 @@
 #include "lookup_response.h"
 #include "serializers.h"
 
-namespace elastos {
 namespace carrier {
 
 const std::list<Sp<NodeInfo>>& LookupResponse::getNodes(DHT::Type type) const {
@@ -159,5 +158,4 @@ void LookupResponse::toString(std::stringstream& ss) const {
 }
 #endif
 
-}
-}
+} // namespace carrier

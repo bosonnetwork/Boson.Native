@@ -26,7 +26,6 @@
 #include "message_error.h"
 #include "find_peer_response.h"
 
-namespace elastos {
 namespace carrier {
 
 int FindPeerResponse::estimateSize() const {
@@ -124,4 +123,3 @@ void FindPeerResponse::_toString(std::stringstream& ss) const {
 #endif
 
 } // namespace carrier
-} // namespace elastos

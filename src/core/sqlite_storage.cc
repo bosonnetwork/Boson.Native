@@ -27,7 +27,6 @@
 #include "scheduler.h"
 #include "sqlite_storage.h"
 
-namespace elastos {
 namespace carrier {
 
 static int VERSION = 4;
@@ -776,5 +775,4 @@ bool SqliteStorage::removePeer(const Id& peerId, const Id& origin) {
     return ret;
 }
 
-}
-}
+} // namespace carrier

@@ -30,7 +30,6 @@
 #include "carrier/def.h"
 
 using namespace spdlog;
-namespace elastos {
 namespace carrier {
 
 #define CARRIER_LOG_LEVEL_TRACE     0
@@ -210,5 +209,4 @@ private:
     Sp<spdlog::logger> spd_logger;
 };
 
-} /* carrier  */
-} /* elastos */
+} // namespace carrier

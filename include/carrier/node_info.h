@@ -26,7 +26,6 @@
 #include "id.h"
 #include "socket_address.h"
 
-namespace elastos {
 namespace carrier {
 
 class CARRIER_PUBLIC NodeInfo {
@@ -109,5 +108,4 @@ private:
     int version {0};
 };
 
-}
-}
+} // namespace carrier

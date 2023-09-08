@@ -29,7 +29,7 @@
 #include <CLI/CLI.hpp>
 #include <carrier.h>
 
-using namespace elastos::carrier;
+using namespace carrier;
 using namespace CLI;
 
 template<class T>

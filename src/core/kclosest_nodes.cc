@@ -32,7 +32,6 @@
 #include "routing_table.h"
 #include "kclosest_nodes.h"
 
-namespace elastos {
 namespace carrier {
 
 KClosestNodes::KClosestNodes(DHT& _dht, const Id& _id, int _maxEntries)
@@ -126,5 +125,4 @@ void KClosestNodes::fill(bool includeSelf) {
     shave();
 }
 
-}
-}
+} // namespace carrier

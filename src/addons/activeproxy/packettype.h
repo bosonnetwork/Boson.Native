@@ -27,7 +27,6 @@
 
 #include "crypto/random.h"
 
-namespace elastos {
 namespace carrier {
 namespace activeproxy {
 
@@ -166,4 +165,3 @@ private:
 
 } // namespace activeproxy
 } // namespace carrier
-} // namespace elastos

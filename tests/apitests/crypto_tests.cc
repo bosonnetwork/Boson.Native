@@ -25,7 +25,7 @@
 #include "crypto_tests.h"
 
 namespace test {
-using namespace elastos::carrier;
+using namespace carrier;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(CryptoTester);
 

@@ -2,9 +2,9 @@
 
 |GitHub CI|
 |:-:|
-|[![CI](https://github.com/elastos/Elastos.Carrier.Native/actions/workflows/cmake.yml/badge.svg)](https://github.com/elastos/Elastos.Carrier.Native/actions/workflows/cmake.yml)|
+|[![CI](https://github.com/trinity-tech-io/Carrier.Native/actions/workflows/cmake.yml/badge.svg)](https://github.com/trinity-tech-io/Carrier.Native/actions/workflows/cmake.yml)|
 
-Elastos Carrier is a decentralized and encrypted peer-to-peer (P2P)  communication framework that facilitates network traffic routing between virtual machines and decentralized Applications (dApps).  Carrier Native is a C++ version of the distribution that runs efficiently on native machines such as **macOS**, **Linux**, and mobile devices like **iOS** and **Android** systems. And the version for **Windows** still under  development.
+Carrier is a decentralized and encrypted peer-to-peer (P2P)  communication framework that facilitates network traffic routing between virtual machines and decentralized Applications (dApps).  Carrier Native is a C++ version of the distribution that runs efficiently on native machines such as **macOS**, **Linux**, and mobile devices like **iOS** and **Android** systems. And the version for **Windows** still under  development.
 
 Carrier V2 is a new two-layered architecture that features a unified DHT network as the bottom layer and facilitates various application-oriented services on top of the DHT network, where a list of services includes, but is not limited to:
 
@@ -31,7 +31,7 @@ Carrier V2 is a new two-layered architecture that features a unified DHT network
 
 ### 1. CMake Usage
 
-The Elastos Carrier project is built, tested, and packaged using CMake. A certain level of knowledge of CMake is required to effectively use this build system.
+The Carrier project is built, tested, and packaged using CMake. A certain level of knowledge of CMake is required to effectively use this build system.
 
 As of the time of writing, the source code can be compiled on **macOS** and **Linux** distributions such as Ubuntu and Debian. It also provides the options to cross-compile for the target platform of **iOS**. However, compiling for **Windows**, **Android**, and **Raspberry** devices is undergoing.
 
@@ -49,7 +49,7 @@ $ sudo apt-get install -f build-essential autoconf automake autopoint libtool cm
 Download this repository using Git:
 
 ```
-git clone https://github.com/elastos/Elastos.Carrier.Native
+git clone https://github.com/trinity-tech-io/Carrier.Native
 ```
 
 ### 3. Build for Host systems: Ubuntu / Debian Linux / macOS
@@ -59,7 +59,7 @@ To compile the project from its source code and run it on `Ubuntu`, `Debian` and
 Open a new terminal window and navigate to the directory with the source code downloaded:
 
 ```shell
-$ cd YOUR-PATH/Elastos.Carrier.Native
+$ cd YOUR-PATH/Carrier.Native
 ```
 
 Next, create a directory within the **build** directory and name it according to your preference (we suggest to use the target platform name), then switch to use it as your working directory.:
@@ -137,12 +137,12 @@ The API documentation is currently lacking and it has been added to the TODO lis
 
 ## Contribution
 
-We welcome contributions from passionate developers from open-source community who aspire to create a secure, decentralized communication platform and help expand the capabilities of Elastos Carrier to achieve wider adoption.
+We welcome contributions from passionate developers from open-source community who aspire to create a secure, decentralized communication platform and help expand the capabilities of Carrier to achieve wider adoption.
 
 ## Acknowledgments
 
-A sincere thank you goes out to all the projects that we rely on directly or indirectly, for their contributions to the development of Elastos Carrier Project. We value the collaborative nature of the open-source community and recognize the importance of working together to create innovative, reliable software solutions.
+A sincere thank you goes out to all the projects that we rely on directly or indirectly, for their contributions to the development of Carrier Project. We value the collaborative nature of the open-source community and recognize the importance of working together to create innovative, reliable software solutions.
 
 ## License
 
-This project is licensed under the terms of the [MIT License](https://github.com/elastos/Elastos.Carrier.Native/blob/master/LICENSE). We believe that open-source licensing  promotes transparency, collaboration, and innovation, and we encourage others to contribute to the project in accordance with the terms of the license.
+This project is licensed under the terms of the [MIT License](https://github.com/trinity-tech-io/Carrier.Native/blob/master/LICENSE). We believe that open-source licensing  promotes transparency, collaboration, and innovation, and we encourage others to contribute to the project in accordance with the terms of the license.

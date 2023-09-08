@@ -37,11 +37,10 @@
 #include "exceptions.h"
 #include "utils/log.h"
 
-namespace elastos {
 namespace carrier {
 namespace activeproxy {
 
-using Logger = elastos::carrier::Logger;
+using Logger = carrier::Logger;
 
 static std::shared_ptr<Logger> log;
 
@@ -1008,4 +1007,3 @@ void ProxyConnection::startReadUpstream() noexcept
 
 } // namespace activeproxy
 } // namespace carrier
-} // namespace elastos

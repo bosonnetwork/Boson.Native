@@ -23,7 +23,6 @@
 #include "carrier/prefix.h"
 #include "crypto/hex.h"
 
-namespace elastos {
 namespace carrier {
 
 Id Prefix::last() const {
@@ -96,5 +95,4 @@ std::string Prefix::toString() const {
     return _data + "/" + std::to_string(depth);
 }
 
-}
-}
+} // namespace carrier

@@ -29,7 +29,6 @@
 #include "task.h"
 #include "closest_set.h"
 
-namespace elastos {
 namespace carrier {
 
 class DHT;
@@ -50,5 +49,4 @@ private:
     PeerInfo peer;
 };
 
-} /* namespace carrier */
-} /* namespace elastos */
+} // namespace carrier

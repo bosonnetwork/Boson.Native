@@ -29,7 +29,6 @@
 #include "blob.h"
 #include "signature.h"
 
-namespace elastos {
 namespace carrier {
 
 class CARRIER_PUBLIC CryptoBox {
@@ -414,5 +413,4 @@ private:
     std::array<uint8_t, SYMMETRIC_KEY_BYTES> key {};
 };
 
-}
-}
+} // namespace carrier

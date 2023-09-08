@@ -27,7 +27,6 @@
 #include "closest_candidates.h"
 #include "task.h"
 
-namespace elastos {
 namespace carrier {
 
 class LookupTask : public Task {
@@ -78,4 +77,3 @@ private:
 };
 
 } // namespace carrier
-} // namespace elastos

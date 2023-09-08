@@ -29,7 +29,6 @@
 
 #include "candidate_node.h"
 
-namespace elastos {
 namespace carrier {
 
 class ClosestCandidates {
@@ -71,5 +70,4 @@ private:
 };
 
 } // namespace carrier
-} // namespace elastos
 

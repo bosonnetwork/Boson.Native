@@ -24,7 +24,6 @@
 
 #include "message.h"
 
-namespace elastos {
 namespace carrier {
 
 class PingRequest : public Message {
@@ -33,4 +32,3 @@ public:
 };
 
 } // namespace carrier
-} // namespace elastos

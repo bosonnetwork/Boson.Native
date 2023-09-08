@@ -27,7 +27,6 @@
 #include "candidate_node.h"
 #include "closest_candidates.h"
 
-namespace elastos {
 namespace carrier {
 
 const Sp<CandidateNode>& ClosestCandidates::get(const Id& id) const {
@@ -140,4 +139,3 @@ void ClosestCandidates::add(const std::list<Sp<NodeInfo>>& candidates) {
 }
 
 } // namespace carrier
-} // namespace elastos

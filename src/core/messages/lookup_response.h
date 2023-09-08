@@ -26,7 +26,6 @@
 #include "dht.h"
 #include "carrier/node_info.h"
 
-namespace elastos {
 namespace carrier {
 
 class LookupResponse : public Message {
@@ -79,5 +78,4 @@ private:
     int token {0};
 };
 
-}
-}
+} // namespace carrier

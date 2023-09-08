@@ -27,7 +27,6 @@
 #include "task/peer_lookup.h"
 #include "kclosest_nodes.h"
 
-namespace elastos {
 namespace carrier {
 
 void PeerLookup::prepare() {
@@ -87,5 +86,4 @@ void PeerLookup::callResponsed(RPCCall* call, Sp<Message> message) {
     }
 }
 
-}
-}
+} // namespace carrier

@@ -26,7 +26,6 @@
 #include <vector>
 #include <string>
 
-namespace elastos {
 namespace carrier {
 
 class Blob {
@@ -104,4 +103,3 @@ private:
 };
 
 } // namespace carrier
-} // namespace elastos

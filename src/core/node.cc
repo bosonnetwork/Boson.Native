@@ -46,7 +46,6 @@ namespace fs = std::filesystem;
 
 static const std::string PATH_CWD = ".";
 
-namespace elastos {
 namespace carrier {
 
 bool Node::checkPersistence(const std::string& path) {
@@ -636,5 +635,4 @@ std::string Node::toString() const {
     return str;
 }
 
-}
-}
+} // namespace carrier

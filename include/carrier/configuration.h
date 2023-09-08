@@ -31,7 +31,6 @@
 #include "node_info.h"
 #include "socket_address.h"
 
-namespace elastos {
 namespace carrier {
 
 class CARRIER_PUBLIC Configuration {
@@ -53,4 +52,3 @@ public:
 };
 
 } // namespace carrier
-} // namespace elastos

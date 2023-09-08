@@ -34,9 +34,9 @@
 namespace test {
 CPPUNIT_TEST_SUITE_REGISTRATION(PrefixTests);
 
-typedef elastos::carrier::Id             Id;
-typedef elastos::carrier::Hex            Hex;
-typedef elastos::carrier::Prefix         Prefix;
+typedef carrier::Id             Id;
+typedef carrier::Hex            Hex;
+typedef carrier::Prefix         Prefix;
 
 void
 PrefixTests::setUp() {
@@ -103,7 +103,7 @@ void PrefixTests::testGetParent() {
     CPPUNIT_ASSERT(prefix == parent);
 
     for (int i = 0; i < ID_BITS; i++) {
-        id = elastos::carrier::Id::MAX_ID;
+        id = carrier::Id::MAX_ID;
 
         prefix = Prefix(id, i);
         parent = prefix.getParent();

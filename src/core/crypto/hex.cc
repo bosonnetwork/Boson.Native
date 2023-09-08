@@ -23,7 +23,6 @@
 #include <sodium.h>
 #include "crypto/hex.h"
 
-namespace elastos {
 namespace carrier {
 
 ssize_t Hex::encode(const uint8_t* data, size_t length, char* buf, size_t bufLen)
@@ -47,4 +46,3 @@ ssize_t Hex::decode(const char* data, size_t length, uint8_t* buf, size_t bufLen
 }
 
 } // namespace carrier
-} // namespace elastos

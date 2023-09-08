@@ -24,7 +24,6 @@
 
 #include "lookup_request.h"
 
-namespace elastos {
 namespace carrier {
 
 class FindValueRequest : public LookupRequest {
@@ -60,4 +59,3 @@ private:
 };
 
 } // namespace carrier
-} // namespace elastos

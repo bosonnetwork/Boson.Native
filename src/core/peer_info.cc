@@ -30,7 +30,6 @@
 
 #include "carrier/peer_info.h"
 
-namespace elastos {
 namespace carrier {
 
 PeerInfo::PeerInfo(const Blob& peerId, const Blob& privateKey, const Blob& nodeId, const Blob& origin,
@@ -135,5 +134,4 @@ bool PeerInfo::isValid() const {
    return Signature::verify(getSignData(), signature, pk);
 }
 
-}
-}
+} // namespace carrier

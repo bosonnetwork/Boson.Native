@@ -43,7 +43,7 @@
 #include "utils.h"
 #include "node_tests.h"
 
-using namespace elastos::carrier;
+using namespace carrier;
 
 namespace test {
 CPPUNIT_TEST_SUITE_REGISTRATION(NodeTests);

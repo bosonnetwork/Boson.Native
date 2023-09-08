@@ -28,7 +28,6 @@
 #include "exceptions/state_error.h"
 #include "serializers.h"
 
-namespace elastos {
 namespace carrier {
 
 Value::Value(const Blob& publicKey, const Blob& privateKey, const Blob& recipient, const Blob& nonce,
@@ -173,4 +172,3 @@ std::string Value::toString() const {
 }
 
 } // namespace carrier
-} // namespace elastos

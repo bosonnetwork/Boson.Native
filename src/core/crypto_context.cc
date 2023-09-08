@@ -23,7 +23,6 @@
 #include "carrier/id.h"
 #include "crypto_context.h"
 
-namespace elastos {
 namespace carrier {
 
 CryptoContext::CryptoContext(const CryptoBox::PublicKey& pk, const CryptoBox::KeyPair& keypair) {
@@ -37,5 +36,4 @@ CryptoContext::CryptoContext(const CryptoBox::PublicKey& pk, const CryptoBox::Ke
     nonce = CryptoBox::Nonce({(uint8_t*)dist.data(), CryptoBox::Nonce::BYTES});
 }
 
-}
-}
+} // namespace carrier

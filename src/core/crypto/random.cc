@@ -24,7 +24,6 @@
 #include <sodium.h>
 #include "random.h"
 
-namespace elastos {
 namespace carrier {
 
 uint8_t Random::uint8()
@@ -83,4 +82,3 @@ void Random::buffer(std::vector<uint8_t>& bytes)
 }
 
 } // namespace carrier
-} // namespace elastos

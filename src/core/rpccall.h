@@ -28,7 +28,6 @@
 #include "messages/message.h"
 #include "scheduler.h"
 
-namespace elastos {
 namespace carrier {
 
 class RPCServer;
@@ -185,5 +184,5 @@ private:
     std::string name {};
 #endif
 };
-}
-}
+
+} // namespace carrier

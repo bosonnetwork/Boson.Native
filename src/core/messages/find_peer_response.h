@@ -26,7 +26,6 @@
 #include "lookup_response.h"
 #include "carrier/peer_info.h"
 
-namespace elastos {
 namespace carrier {
 
 class FindPeerResponse : public LookupResponse {
@@ -57,5 +56,4 @@ private:
     std::vector<PeerInfo> peers {};
 };
 
-}
-}
+} // namespace carrier

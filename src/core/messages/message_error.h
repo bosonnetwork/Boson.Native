@@ -25,7 +25,6 @@
 #include <string>
 #include <stdexcept>
 
-namespace elastos {
 namespace carrier {
 
 class MessageError : public std::runtime_error {
@@ -35,4 +34,3 @@ public:
 };
 
 } // namespace carrier
-} // namespace elastos

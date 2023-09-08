@@ -26,7 +26,6 @@
 
 #include "lookup_task.h"
 
-namespace elastos {
 namespace carrier {
 
 class RPCCall;
@@ -54,5 +53,4 @@ private:
     std::function<void(const Value& , Task*)> resultHandler {};
 };
 
-}
-}
+} // namespace carrier

@@ -40,7 +40,6 @@
 #include "routing_table.h"
 #include "token_manager.h"
 
-namespace elastos {
 namespace carrier {
 
 class Message;
@@ -201,4 +200,3 @@ private:
 };
 
 } // namespace carrier
-} // namespace elastos

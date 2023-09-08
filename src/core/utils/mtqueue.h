@@ -30,7 +30,6 @@
 #include <mutex>
 #include <queue>
 
-namespace elastos {
 namespace carrier {
 
 template <class T>
@@ -113,4 +112,3 @@ public:
 };
 
 } // namespace carrier
-} // namespace elastos

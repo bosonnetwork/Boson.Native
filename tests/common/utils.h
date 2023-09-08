@@ -27,7 +27,7 @@
 #include "utils/random_generator.h"
 #include "crypto/random.h"
 
-using namespace elastos::carrier;
+using namespace carrier;
 
 #if defined(_WIN32) || defined(_WIN64)
     #define PATH_MAX                MAX_PATH

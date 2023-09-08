@@ -26,7 +26,6 @@
 #include "candidate_node.h"
 #include "value_announce.h"
 
-namespace elastos {
 namespace carrier {
 
 ValueAnnounce::ValueAnnounce(DHT* dht, const ClosestSet& closestSet, const Value& _value)
@@ -52,5 +51,4 @@ void ValueAnnounce::update() {
     }
 }
 
-} /* namespace carrier */
-} /* namespace elastos */
+} // namespace carrier

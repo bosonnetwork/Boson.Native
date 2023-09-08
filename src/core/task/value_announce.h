@@ -27,7 +27,6 @@
 #include "closest_set.h"
 #include "carrier/value.h"
 
-namespace elastos {
 namespace carrier {
 
 class DHT;
@@ -47,5 +46,4 @@ private:
     Value value;
 };
 
-} /* namespace carrier */
-} /* namespace elastos */
+} // namespace carrier

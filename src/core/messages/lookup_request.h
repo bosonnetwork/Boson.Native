@@ -23,7 +23,6 @@
 
 #include "message.h"
 
-namespace elastos {
 namespace carrier {
 
 class LookupRequest : public Message {
@@ -85,5 +84,4 @@ private:
     bool wantToken {false};
 };
 
-}
-}
+} // namespace carrier

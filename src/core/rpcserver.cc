@@ -39,7 +39,6 @@
 #include "rpcserver.h"
 #include "dht.h"
 
-namespace elastos {
 namespace carrier {
 
 #ifdef MSG_PRINT_DETAIL
@@ -621,5 +620,3 @@ void RPCServer::periodic() {
 }
 
 } // namespace carrier
-} // namespace elastos
-

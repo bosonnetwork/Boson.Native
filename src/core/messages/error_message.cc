@@ -25,7 +25,6 @@
 #include "message_error.h"
 #include "error_message.h"
 
-namespace elastos {
 namespace carrier {
 
 void ErrorMessage::serializeInternal(nlohmann::json& root) const {
@@ -68,5 +67,4 @@ void ErrorMessage::toString(std::stringstream& ss) const {
 }
 #endif
 
-}
-}
+} // namespace carrier

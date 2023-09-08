@@ -24,7 +24,6 @@
 
 #include "lookup_response.h"
 
-namespace elastos {
 namespace carrier {
 
 class FindNodeResponse : public LookupResponse {
@@ -33,5 +32,4 @@ public:
     FindNodeResponse() : FindNodeResponse(0) {}
 };
 
-}
-}
+} // namespace carrier

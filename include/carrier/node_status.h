@@ -24,7 +24,6 @@
 #include <string>
 #include "def.h"
 
-namespace elastos {
 namespace carrier {
 
 enum class CARRIER_PUBLIC NodeStatus {
@@ -44,5 +43,4 @@ inline std::string statusToString(NodeStatus status) noexcept {
     }
 }
 
-} /* namespace carrier */
-} /* namespace elastos */
+} // namespace carrier
