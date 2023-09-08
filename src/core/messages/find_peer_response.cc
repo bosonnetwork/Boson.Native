@@ -100,16 +100,6 @@ void FindPeerResponse::_parse(const std::string& fieldName, nlohmann::json& obje
     }
 }
 
-#ifdef MSG_PRINT_DETAIL
-void FindPeerResponse::_toString(std::stringstream& ss) const {
-    if (!peers4.empty()) {
-        ss << "\n    peers:\n";
-        for (const auto& peer: peers) {
-            ss <<""      "" << peer << "\n";
-        }
-    }
-}
-#else
 void FindPeerResponse::_toString(std::stringstream& ss) const {
     if (!peers.empty()) {
         ss << ",p:";
@@ -120,6 +110,5 @@ void FindPeerResponse::_toString(std::stringstream& ss) const {
         }
     }
 }
-#endif
 
 } // namespace carrier

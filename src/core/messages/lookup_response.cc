@@ -107,29 +107,6 @@ void LookupResponse::parseNodes(const nlohmann::json &object, std::list<Sp<NodeI
     }
 }
 
-#ifdef MSG_PRINT_DETAIL
-void LookupResponse::toString(std::stringstream& ss) const {
-    ss << "\nResponse: ";
-
-    if (!nodes4.empty()) {
-        ss << "\n    n4: \n";
-        for (const auto& node : nodes4) {
-            ss << "      " << *node << "\n";
-        }
-    }
-    if (!nodes6.empty()) {
-        ss << "\n    n6: \n";
-        for (const auto& node : nodes4) {
-            ss << "      " << *node << "\n";
-        }
-    }
-
-    if (token != 0)
-        ss << "\nToken: " << std::to_string(token);
-
-    _toString(ss);
-}
-#else
 void LookupResponse::toString(std::stringstream& ss) const {
     ss << ",r:{";
 
@@ -156,6 +133,5 @@ void LookupResponse::toString(std::stringstream& ss) const {
     _toString(ss);
     ss << "}";
 }
-#endif
 
 } // namespace carrier

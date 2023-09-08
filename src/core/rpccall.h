@@ -147,15 +147,6 @@ public:
         return hashValue;
     }
 
-#if defined(MSG_PRINT_DETAIL)
-    void setName(const std::string& name) {
-        this->name = name;
-    }
-    const std::string& getName() const {
-        return name;
-    }
-#endif
-
 private:
     DHT& dht;
     Sp<NodeInfo> target;
@@ -179,10 +170,6 @@ private:
     Sp<Scheduler::Job> timeoutTimer {};
 
     size_t hashValue {0};
-
-#if defined(MSG_PRINT_DETAIL)
-    std::string name {};
-#endif
 };
 
 } // namespace carrier

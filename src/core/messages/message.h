@@ -32,8 +32,6 @@
 #include "carrier/id.h"
 #include "carrier/version.h"
 
-// #define MSG_PRINT_DETAIL 1
-
 namespace carrier {
 
 class RPCCall;
@@ -184,17 +182,6 @@ public:
     virtual int estimateSize() const {
         return BASE_SIZE;
     }
-
-#ifdef MSG_PRINT_DETAIL
-    std::string name {};
-
-    void setName(const std::string& name) {
-        this->name = name;
-    }
-    const std::string& getName() const {
-        return name;
-    }
-#endif
 
 protected:
     explicit Message(Type _type, Method _method, int _txid = 0)

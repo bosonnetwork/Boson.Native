@@ -157,9 +157,6 @@ bool Task::sendCall(Sp<NodeInfo> node, Sp<Message> request, std::function<void(S
     };
 
     auto call = std::make_shared<RPCCall>(dht, node, request);
-#if defined(MSG_PRINT_DETAIL)
-    call->setName(name);
-#endif
     call->addStateChangeHandler([&](RPCCall* c, RPCCall::State previous, RPCCall::State current) {
         switch (current) {
         case RPCCall::State::SENT:
