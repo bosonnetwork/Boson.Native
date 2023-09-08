@@ -48,7 +48,7 @@
 
 // carrier
 #include <carrier.h>
-using namespace elastos::carrier;
+using namespace carrier;
 
 namespace test {
 CPPUNIT_TEST_SUITE_REGISTRATION(LoggerTester);

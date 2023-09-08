@@ -29,6 +29,8 @@
 
 #include <nlohmann/json.hpp>
 
+namespace carrier {
+
 std::vector<std::any> jsonToVector(const nlohmann::json& j);
 std::map<std::string, std::any> jsonToMap(const nlohmann::json& j);
 std::any jsonToAny(const nlohmann::json& j);
@@ -37,3 +39,4 @@ std::ostream& operator <<(std::ostream& o, std::any a);
 std::ostream& operator <<(std::ostream&o, std::map<std::string, std::any> m);
 std::ostream& operator <<(std::ostream&o, std::vector<std::any> v);
 
+} // namespace carrier

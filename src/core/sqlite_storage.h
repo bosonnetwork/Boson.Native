@@ -31,7 +31,6 @@
 #include "data_storage.h"
 #include "scheduler.h"
 
-namespace elastos {
 namespace carrier {
 
 class SqliteStorage final : public DataStorage {
@@ -67,4 +66,3 @@ private:
 };
 
 } // namespace carrier
-} // namespace elastos

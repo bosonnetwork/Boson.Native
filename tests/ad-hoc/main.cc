@@ -73,7 +73,7 @@ static Options parseArgs(int argc, char **argv)
 {
     Options options;
 
-    CLI::App app("Elastos Carrier test case", "tests");
+    CLI::App app("Carrier test case", "tests");
     app.add_option("-d, --debug", options.wait_for_attach, "Wait for debugger to attach");
 
     try {

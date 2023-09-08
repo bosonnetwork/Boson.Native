@@ -27,7 +27,6 @@
 #include "utils/list.h"
 #include "task.h"
 
-namespace elastos {
 namespace carrier {
 
 class DHT;
@@ -68,5 +67,4 @@ private:
     bool removeOnTimeout { false };
 };
 
-}
-}
+} // namespace carrier

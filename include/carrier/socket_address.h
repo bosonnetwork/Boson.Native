@@ -46,7 +46,6 @@ typedef uint16_t in_port_t;
 #include "def.h"
 #include "blob.h"
 
-namespace elastos {
 namespace carrier {
 
 class CARRIER_PUBLIC SocketAddress {
@@ -195,4 +194,3 @@ private:
 };
 
 } // namespace carrier
-} // namespace elastos

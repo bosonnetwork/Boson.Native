@@ -24,7 +24,6 @@
 
 #include "lookup_task.h"
 
-namespace elastos {
 namespace carrier {
 
 class DHT;
@@ -58,5 +57,4 @@ private:
     bool wantToken {false};
 };
 
-} /* namespace carrier */
-} /* namespace elastos */
+} // namespace carrier

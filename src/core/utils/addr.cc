@@ -40,7 +40,6 @@
 #include "carrier/socket_address.h"
 #include "addr.h"
 
-namespace elastos {
 namespace carrier {
 
 #if defined(__linux__)
@@ -146,4 +145,3 @@ std::string getLocalIpAddresses(bool ipv4) {
 }
 
 } // namespace carrier
-} // namespace elastos

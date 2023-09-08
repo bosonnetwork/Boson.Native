@@ -31,7 +31,6 @@
 
 #include "message.h"
 
-namespace elastos {
 namespace carrier {
 
 class StoreValueRequest : public Message {
@@ -96,4 +95,3 @@ private:
 };
 
 } // namespace carrier
-} // namespace elastos

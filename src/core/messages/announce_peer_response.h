@@ -24,7 +24,6 @@
 
 #include "message.h"
 
-namespace elastos {
 namespace carrier {
 
 class AnnouncePeerResponse : public Message {
@@ -36,5 +35,4 @@ public:
         : AnnouncePeerResponse(0) {}
 };
 
-}
-}
+} // namespace carrier

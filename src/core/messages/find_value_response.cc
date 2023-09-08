@@ -28,7 +28,6 @@
 #include "serializers.h"
 #include "find_value_response.h"
 
-namespace elastos {
 namespace carrier {
 
 void FindValueResponse::setValue(const Value& value) {
@@ -103,5 +102,4 @@ void FindValueResponse::_toString(std::stringstream& ss) const {
         ss << ",v:" << Hex::encode(value);
 }
 
-}
-}
+} // namespace carrier

@@ -23,7 +23,6 @@
 
 #include <string>
 
-namespace elastos {
 namespace carrier {
 
 struct Constants {
@@ -98,5 +97,4 @@ struct Constants {
     static const std::string    ENVIRONMENT_PROPERTY;
 };
 
-} /* namespace carrier */
-} /* namespace elastos */
+} // namespace carrier

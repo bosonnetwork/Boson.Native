@@ -25,7 +25,7 @@ Here is an example configuration file for Carrier Super Node for your reference.
   ],
 	"services": [
     {
-      "class": "elastos.carrier.service.activeproxy.ActiveProxy",
+      "class": "carrier.service.activeproxy.ActiveProxy",
       "configuration": {
         "port": 8090,
         "portMappingRange": "20000-22000"
@@ -83,7 +83,7 @@ An application, named "`Launcher`," is utilized as a daemon service running as a
 }
 ```
 
-<aside> 💡 Notice: The "`Launcher`" application can be constructed under the "launcher" directory of the [Elastos.Native](https://github.com/elastos/Elastos.Carrier.Native) repository.
+<aside> 💡 Notice: The "`Launcher`" application can be constructed under the "launcher" directory of the Carrier.Native repository.
 
 </aside>
 

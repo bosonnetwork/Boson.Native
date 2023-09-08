@@ -24,6 +24,8 @@
 
 #include "json_to_any.h"
 
+namespace carrier {
+
 std::any jsonToAny(const nlohmann::json& j)
 {
     std::any a;
@@ -115,3 +117,5 @@ std::ostream& operator <<(std::ostream& o, std::any a)
 
     return o;
 }
+
+} // namespace carrier

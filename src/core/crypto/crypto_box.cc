@@ -32,7 +32,6 @@
 #include "crypto/hex.h"
 #include "exceptions/crypto_error.h"
 
-namespace elastos {
 namespace carrier {
 
 static_assert(CryptoBox::PrivateKey::BYTES == crypto_box_SECRETKEYBYTES,
@@ -219,4 +218,3 @@ void CryptoBox::decrypt(Blob& plain, const Blob& cipher, const Nonce& nonce,
 }
 
 } // namespace carrier
-} // namespace elastos

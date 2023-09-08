@@ -46,7 +46,7 @@
 #include "routingtable_tests.h"
 
 using namespace std::chrono_literals;
-using namespace elastos::carrier;
+using namespace carrier;
 extern bool stopped;
 
 namespace test {

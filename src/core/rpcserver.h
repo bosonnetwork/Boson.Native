@@ -32,7 +32,6 @@
 #include "rpccall.h"
 #include "scheduler.h"
 
-namespace elastos {
 namespace carrier {
 
 class Node;
@@ -128,5 +127,5 @@ private:
     std::queue<Sp<Message>> messageQueue {};
     Scheduler scheduler {};
 };
-}
-}
+
+} // namespace carrier

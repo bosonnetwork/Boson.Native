@@ -25,7 +25,6 @@
 #include <map>
 #include "candidate_node.h"
 
-namespace elastos {
 namespace carrier {
 
 class ClosestSet {
@@ -112,5 +111,3 @@ private:
 };
 
 } // namespace carrier
-} // namespace elastos
-

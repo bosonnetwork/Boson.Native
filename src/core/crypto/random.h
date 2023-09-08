@@ -25,7 +25,6 @@
 #include <vector>
 #include "carrier/blob.h"
 
-namespace elastos {
 namespace carrier {
 
 class Random {
@@ -48,5 +47,4 @@ public:
     static void buffer(std::vector<uint8_t>& bytes);
 };
 
-}
-}
+} // namespace carrier

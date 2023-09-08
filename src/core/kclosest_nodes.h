@@ -27,7 +27,6 @@
 #include "carrier/id.h"
 #include "carrier/node_info.h"
 
-namespace elastos {
 namespace carrier {
 
 class DHT;
@@ -82,4 +81,3 @@ private:
 };
 
 } // namespace carrier
-} // namespace elastos

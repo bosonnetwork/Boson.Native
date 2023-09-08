@@ -27,7 +27,6 @@
 #include "serializers.h"
 #include "store_value_request.h"
 
-namespace elastos {
 namespace carrier {
 
 void StoreValueRequest::setValue(const Value& value) {
@@ -141,5 +140,4 @@ void StoreValueRequest::toString(std::stringstream& ss) const {
 }
 #endif
 
-}
-}
+}  // namespace carrier

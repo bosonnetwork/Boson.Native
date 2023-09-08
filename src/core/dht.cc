@@ -58,7 +58,6 @@
 #include "kclosest_nodes.h"
 #include "dht.h"
 
-namespace elastos {
 namespace carrier {
 
 DHT::DHT(Type _type, const Node& _node, const SocketAddress& _addr)
@@ -757,5 +756,4 @@ std::string DHT::toString() const {
     return str;
 }
 
-}
-}
+} // namespace carrier

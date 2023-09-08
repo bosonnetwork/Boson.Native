@@ -33,7 +33,6 @@
 #include "messages/message.h"
 #include "dht.h"
 
-namespace elastos {
 namespace carrier {
 
 std::atomic<int> Task::nextTaskId(0);
@@ -218,4 +217,3 @@ std::string Task::toString() const {
 }
 
 } // namespace carrier
-} // namespace elastos

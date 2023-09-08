@@ -27,7 +27,6 @@
 #include <sodium.h>
 #include "shasum.h"
 
-namespace elastos {
 namespace carrier {
 
 void SHA256::reset()
@@ -65,4 +64,3 @@ void SHA256::digest(Blob& hash, const Blob& data)
 }
 
 } // namespace carrier
-} // namespace elastos

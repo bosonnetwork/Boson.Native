@@ -28,7 +28,6 @@
 #include "messages/find_node_response.h"
 #include "node_lookup.h"
 
-namespace elastos {
 namespace carrier {
 
 void NodeLookup::prepare() {
@@ -83,5 +82,4 @@ void NodeLookup::callResponsed(RPCCall* call, Sp<Message> response) {
         addCandidates(nodes);
 }
 
-}
-}
+} // namespace carrier

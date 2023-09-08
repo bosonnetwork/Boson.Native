@@ -25,7 +25,6 @@
 #include <string>
 #include "def.h"
 
-namespace elastos {
 namespace carrier {
 
 class CARRIER_PUBLIC Version {
@@ -36,5 +35,4 @@ public:
 
 CARRIER_PUBLIC const char* version();
 
-}
-}
+} // namespace carrier

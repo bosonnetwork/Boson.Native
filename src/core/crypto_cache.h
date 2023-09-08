@@ -27,7 +27,6 @@
 #include "constants.h"
 #include "crypto_context.h"
 
-namespace elastos {
 namespace carrier {
 
 class CryptoCache : public LocadingCache<Id, CryptoContext> {
@@ -52,4 +51,3 @@ private:
 };
 
 } // namespace carrier
-} // namespace elastos

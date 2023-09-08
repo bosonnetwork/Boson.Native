@@ -24,7 +24,6 @@
 #include "task.h"
 #include "task_manager.h"
 
-namespace elastos {
 namespace carrier {
 
 void TaskManager::add(Sp<Task> task, bool prior) {
@@ -92,5 +91,4 @@ void TaskManager::removeTask(Task* t) {
     queued.remove_if([t](Sp<Task> task){ return task.get() == t; });
 }
 
-}
-}
+} // namespace carrier

@@ -27,7 +27,6 @@
 #include <vector>
 #include <algorithm>
 
-namespace elastos {
 namespace carrier {
 
 template <class T>
@@ -60,4 +59,3 @@ inline bool vector_contains(const std::vector<T>& vector, const T& val) {
 }
 
 } // namespace carrier
-} // namespace elastos

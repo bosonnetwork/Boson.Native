@@ -25,7 +25,6 @@
 #include <nlohmann/json.hpp>
 #include "message.h"
 
-namespace elastos {
 namespace carrier {
 
 class ErrorMessage : public Message {
@@ -60,4 +59,3 @@ private:
 };
 
 } // namespace carrier
-} // namespace elastos

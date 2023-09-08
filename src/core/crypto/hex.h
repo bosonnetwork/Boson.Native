@@ -34,7 +34,6 @@
 typedef ptrdiff_t       ssize_t;
 #endif
 
-namespace elastos {
 namespace carrier {
 
 class Hex {
@@ -78,4 +77,3 @@ public:
 };
 
 } // namespace carrier
-} // namespace elastos

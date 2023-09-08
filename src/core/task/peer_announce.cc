@@ -24,7 +24,6 @@
 #include "peer_announce.h"
 #include "candidate_node.h"
 
-namespace elastos {
 namespace carrier {
 
 PeerAnnounce::PeerAnnounce(DHT* dht, const ClosestSet& closestSet, const PeerInfo& _peer)
@@ -50,5 +49,4 @@ void PeerAnnounce::update() {
     }
 }
 
-} /* namespace carrier */
-} /* namespace elastos */
+} // namespace carrier

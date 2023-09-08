@@ -25,7 +25,6 @@
 #include <string>
 #include <stdexcept>
 
-namespace elastos {
 namespace carrier {
 
 class CryptoError : public std::runtime_error
@@ -38,5 +37,4 @@ public:
     virtual ~CryptoError() noexcept = default;
 };
 
-}
-}
+} // namespace carrier

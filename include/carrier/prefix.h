@@ -25,7 +25,6 @@
 #include "def.h"
 #include "id.h"
 
-namespace elastos {
 namespace carrier {
 
 class CARRIER_PUBLIC Prefix : public Id {
@@ -96,4 +95,3 @@ private:
 };
 
 } // namespace carrier
-} // namespace elastos

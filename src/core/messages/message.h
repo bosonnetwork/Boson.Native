@@ -34,7 +34,6 @@
 
 // #define MSG_PRINT_DETAIL 1
 
-namespace elastos {
 namespace carrier {
 
 class RPCCall;
@@ -227,4 +226,3 @@ private:
 };
 
 } // namespace carrier
-} // namespace elastos

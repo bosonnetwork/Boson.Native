@@ -25,7 +25,6 @@
 #include <cstdlib>
 #include <chrono>
 
-namespace elastos {
 namespace carrier {
 
 inline uint64_t currentTimeMillis() {
@@ -36,4 +35,3 @@ inline uint64_t currentTimeMillis() {
 }
 
 } // namespace carrier
-} // namespace elastos

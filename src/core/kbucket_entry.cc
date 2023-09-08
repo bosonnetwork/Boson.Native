@@ -28,7 +28,6 @@
 #include "kbucket_entry.h"
 #include "carrier/version.h"
 
-namespace elastos {
 namespace carrier {
 
 #undef max
@@ -127,5 +126,4 @@ std::string KBucketEntry::toString() const {
     return str;
 }
 
-}
-}
+} // namespace carrier

@@ -29,7 +29,6 @@
 #include "utils/time.h"
 #include "constants.h"
 
-namespace elastos {
 namespace carrier {
 
 /**
@@ -186,4 +185,3 @@ private:
 };
 
 } // namespace carrier
-} // namespace elastos

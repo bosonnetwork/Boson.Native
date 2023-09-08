@@ -31,7 +31,6 @@
 #include "def.h"
 #include "blob.h"
 
-namespace elastos {
 namespace carrier {
 
 class CARRIER_PUBLIC Signature {
@@ -319,4 +318,3 @@ private:
     SignState state;
 };
 } // namespace carrier
-} // namespace elastos

@@ -25,7 +25,6 @@
 #include <list>
 #include "utils/time.h"
 
-namespace elastos {
 namespace carrier {
 
 template <typename Key, typename Value>
@@ -101,4 +100,3 @@ private:
 };
 
 } // namespace carrier
-} // namespace elastos

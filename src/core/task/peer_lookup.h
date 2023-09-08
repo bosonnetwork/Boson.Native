@@ -24,7 +24,6 @@
 
 #include "lookup_task.h"
 
-namespace elastos {
 namespace carrier {
 
 struct PeerInfo;
@@ -48,5 +47,4 @@ private:
     std::function<void(std::vector<PeerInfo>&, Task*)> resultHandler;
 };
 
-}
-}
+} // namespace carrier

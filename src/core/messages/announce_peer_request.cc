@@ -28,7 +28,6 @@
 #include "serializers.h"
 #include "announce_peer_request.h"
 
-namespace elastos {
 namespace carrier {
 
 void AnnouncePeerRequest::serializeInternal(nlohmann::json& root) const {
@@ -90,5 +89,5 @@ void AnnouncePeerRequest::toString(std::stringstream& ss) const {
         << ",tok:" << std::to_string(token)
         << "}";
 }
-}
-}
+
+} // namespace carrier

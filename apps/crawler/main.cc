@@ -60,7 +60,7 @@ struct Options {
 
 static void printVersion()
 {
-    std::cout << "Elastos Carrier Crawler version " << "1.0" << std::endl;
+    std::cout << "Carrier Crawler version " << "1.0" << std::endl;
 }
 
 static Options parseArgs(int argc, char **argv)
@@ -68,7 +68,7 @@ static Options parseArgs(int argc, char **argv)
     Options options;
     bool version {false};
 
-    CLI::App app("Elastos Carrier Crawler", "crawler");
+    CLI::App app("Carrier Crawler", "crawler");
     app.add_option("-c, --config", options.configFile, "The configuration file.");
     app.add_flag("-v, --version", version, "Show the Carrier version.");
 

@@ -26,7 +26,6 @@
 #include <string>
 #include <stdexcept>
 
-namespace elastos {
 namespace carrier {
 
 class StateError: public std::runtime_error
@@ -52,4 +51,3 @@ inline void checkState(bool expression, const std::string& errorMessage) {
 }
 
 } // namespace carrier
-} // namespace elastos

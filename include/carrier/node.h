@@ -39,7 +39,6 @@
 #include "node_status.h"
 #include "node_status_listener.h"
 
-namespace elastos {
 namespace carrier {
 
 class RPCServer;
@@ -176,5 +175,4 @@ private:
 
 };
 
-}
-}
+} // namespace carrier

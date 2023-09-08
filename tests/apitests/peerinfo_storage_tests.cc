@@ -34,7 +34,7 @@
 #include "sqlite_storage.h"
 #include "peerinfo_storage_tests.h"
 
-using namespace elastos::carrier;
+using namespace carrier;
 
 namespace test {
 CPPUNIT_TEST_SUITE_REGISTRATION(PeerInfoStorageTests);

@@ -24,7 +24,6 @@
 
 #include "carrier/crypto_box.h"
 
-namespace elastos {
 namespace carrier {
 
 class CryptoContext
@@ -79,4 +78,3 @@ private:
 };
 
 } // namespace carrier
-} // namespace elastos

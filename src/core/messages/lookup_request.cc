@@ -26,7 +26,6 @@
 #include "serializers.h"
 #include "lookup_request.h"
 
-namespace elastos {
 namespace carrier {
 
 int LookupRequest::getWant() const {
@@ -82,5 +81,4 @@ void LookupRequest::toString(std::stringstream& ss) const {
 }
 #endif
 
-}
-}
+} // namespace carrier

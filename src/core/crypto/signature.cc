@@ -29,7 +29,6 @@
 #include "carrier/signature.h"
 #include "crypto/hex.h"
 
-namespace elastos {
 namespace carrier {
 
 static_assert(Signature::PrivateKey::BYTES == crypto_sign_SECRETKEYBYTES,
@@ -171,4 +170,3 @@ bool Signature::verify(const Blob& sig, const Signature::PublicKey& pk) const
 }
 
 } // namespace carrier
-} // namespace elastos

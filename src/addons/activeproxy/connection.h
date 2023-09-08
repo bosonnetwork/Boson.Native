@@ -29,7 +29,6 @@
 #include "carrier.h"
 #include "packettype.h"
 
-namespace elastos {
 namespace carrier {
 
 namespace activeproxy {
@@ -249,4 +248,3 @@ private:
 
 } // namespace activeproxy
 } // namespace carrier
-} // namespace elastos

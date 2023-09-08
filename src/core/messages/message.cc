@@ -36,7 +36,6 @@
 #include "store_value_response.h"
 #include "message_error.h"
 
-namespace elastos {
 namespace carrier {
 
 const std::string Message::KEY_REQ_NODES4     = "n4";
@@ -265,7 +264,4 @@ std::vector<uint8_t> Message::serialize() const {
     return nlohmann::json::to_cbor(root);
 }
 
-}
-}
-
-
+} // namespace carrier

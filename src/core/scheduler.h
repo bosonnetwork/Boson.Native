@@ -29,7 +29,6 @@
 
 #include "utils/time.h"
 
-namespace elastos {
 namespace carrier {
 
 #undef max
@@ -126,5 +125,4 @@ private:
     std::multimap<uint64_t, Sp<Job>> timers {}; /* the jobs ordered by time */
 };
 
-}
-}
+} // namespace carrier

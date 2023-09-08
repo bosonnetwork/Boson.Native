@@ -25,7 +25,6 @@
 #include <vector>
 #include "carrier/blob.h"
 
-namespace elastos {
 namespace carrier {
 
 class SHA256 {
@@ -64,4 +63,3 @@ private:
 };
 
 } // namespace carrier
-} // namespace elastos

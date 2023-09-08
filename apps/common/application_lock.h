@@ -41,7 +41,6 @@
 #include <filesystem>
 #endif
 
-namespace elastos {
 namespace carrier {
 
 class ApplicationLock {
@@ -135,4 +134,3 @@ private:
 };
 
 } // namespace carrier
-} // namespace elastos

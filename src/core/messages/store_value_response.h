@@ -24,7 +24,6 @@
 
 #include "message.h"
 
-namespace elastos {
 namespace carrier {
 
 class StoreValueResponse : public Message {
@@ -34,5 +33,4 @@ public:
     StoreValueResponse(): StoreValueResponse(0) {}
 };
 
-}
-}
+} // namespace carrier

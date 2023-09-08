@@ -26,12 +26,10 @@
 #include "carrier/blob.h"
 #include "crypto/hex.h"
 
-namespace elastos {
 namespace carrier {
 
 const std::string Blob::toHexString() const {
     return Hex::encode(_ptr, _size, true);
 }
 
-}
-}
+} // namespace carrier

@@ -25,7 +25,6 @@
 #include "def.h"
 #include "node_status.h"
 
-namespace elastos {
 namespace carrier {
 
 class CARRIER_PUBLIC NodeStatusListener {
@@ -33,5 +32,4 @@ public:
     virtual void statusChanged(NodeStatus newStatus, NodeStatus oldStatus) {};
 };
 
-} /* namespace carrier */
-} /* namespace elastos */
+} // namespace carrier

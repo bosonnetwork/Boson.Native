@@ -26,7 +26,6 @@
 #include "kbucket.h"
 #include "messages/message.h"
 
-namespace elastos {
 namespace carrier {
 
 void KBucket::_put(Sp<KBucketEntry> newEntry) {
@@ -207,5 +206,4 @@ std::string KBucket::toString() const {
     return ss.str();
 }
 
-}
-}
+} // namespace carrier

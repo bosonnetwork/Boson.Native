@@ -38,7 +38,6 @@
 #include "task/ping_refresh_task.h"
 #include "kbucket.h"
 
-namespace elastos {
 namespace carrier {
 
 class DHT;
@@ -158,4 +157,3 @@ private:
 };
 
 } // namespace carrier
-} // namespace elastos

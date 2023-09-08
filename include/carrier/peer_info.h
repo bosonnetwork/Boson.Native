@@ -31,7 +31,6 @@
 #include "blob.h"
 #include "signature.h"
 
-namespace elastos {
 namespace carrier {
 
 class CARRIER_PUBLIC PeerInfo {
@@ -174,5 +173,4 @@ private:
     std::vector<uint8_t> signature {};
 };
 
-}
-}
+} // namespace carrier

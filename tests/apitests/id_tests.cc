@@ -28,7 +28,7 @@
 namespace test {
 CPPUNIT_TEST_SUITE_REGISTRATION(IdTests);
 
-using namespace elastos::carrier;
+using namespace carrier;
 
 void IdTests::test1() {
     auto pk = Signature::KeyPair::random().publicKey();

@@ -26,7 +26,6 @@
 #include <random>
 #include <type_traits>
 
-namespace elastos {
 namespace carrier {
 
 #include <random>
@@ -61,5 +60,4 @@ private:
 };
 
 
-} // carrier
-} // elastos
+} // namespace carrier

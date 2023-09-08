@@ -25,11 +25,9 @@
 #include <memory>
 #include <vector>
 
-namespace elastos {
 namespace carrier {
 
 template<class T> using Sp = std::shared_ptr<T>;
 template<class T> using Wp = std::weak_ptr<T>;
 
 } // namespace carrier
-} // namespace elastos

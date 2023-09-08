@@ -28,7 +28,6 @@
 #include "carrier/value.h"
 #include "carrier/peer_info.h"
 
-namespace elastos {
 namespace carrier {
 
 
@@ -63,4 +62,3 @@ public:
 };
 
 } // namespace carrier
-} // namespace elastos

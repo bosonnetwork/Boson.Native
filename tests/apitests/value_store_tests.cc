@@ -27,7 +27,7 @@
 #include "utils.h"
 #include "value_store_tests.h"
 
-using namespace elastos::carrier;
+using namespace carrier;
 
 namespace test {
 CPPUNIT_TEST_SUITE_REGISTRATION(ValueStoreTests);

@@ -26,7 +26,6 @@
 #include <vector>
 #include <carrier.h>
 
-namespace elastos {
 namespace carrier {
 
 class CARRIER_PUBLIC CrawlerSetting {
@@ -57,4 +56,3 @@ public:
 };
 
 } // namespace carrier
-} // namespace elastos

@@ -30,7 +30,6 @@
 #include "rpccall.h"
 #include "utils/log.h"
 
-namespace elastos {
 namespace carrier {
 
 class DHT;
@@ -180,5 +179,3 @@ private:
 };
 
 } // namespace carrier
-} // namespace elastos
-

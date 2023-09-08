@@ -34,12 +34,11 @@
 #include "carrier.h"
 #include "carrier/blob.h"
 
-namespace elastos {
 namespace carrier {
 namespace activeproxy {
 
-using SocketAddress = elastos::carrier::SocketAddress;
-using CryptoBox = elastos::carrier::CryptoBox;
+using SocketAddress = carrier::SocketAddress;
+using CryptoBox = carrier::CryptoBox;
 
 class ProxyConnection;
 
@@ -237,5 +236,4 @@ private:
 
 } // namespace activeproxy
 } // namespace carrier
-} // namespace elastos
 

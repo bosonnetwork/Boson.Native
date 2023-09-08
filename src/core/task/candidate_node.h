@@ -26,7 +26,6 @@
 #include "utils/time.h"
 #include "kbucket_entry.h"
 
-namespace elastos {
 namespace carrier {
 
 class CandidateNode: public NodeInfo {
@@ -91,4 +90,3 @@ private:
 };
 
 } // namespace carrier
-} // namespace elastos

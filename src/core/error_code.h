@@ -23,7 +23,6 @@
 
 #pragma once
 
-namespace elastos {
 namespace carrier {
 
 enum ErrorCode {
@@ -53,5 +52,4 @@ enum ErrorCode {
     Unknown                     = -1,
 };
 
-} /* carrier  */
-} /* elastos */
+} // namespace carrier

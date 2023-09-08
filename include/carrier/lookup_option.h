@@ -24,7 +24,6 @@
 
 #include "def.h"
 
-namespace elastos {
 namespace carrier {
 
 enum class CARRIER_PUBLIC LookupOption {
@@ -34,5 +33,4 @@ enum class CARRIER_PUBLIC LookupOption {
     CONSERVATIVE
 };
 
-} /* namespace carrier */
-} /* namespace elastos */
+} // namespace carrier

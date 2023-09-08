@@ -36,7 +36,6 @@
 #define ID_BYTES   32u
 #define ID_BITS    256u
 
-namespace elastos {
 namespace carrier {
 
 class CARRIER_PUBLIC Id {
@@ -167,4 +166,3 @@ private:
 };
 
 } // namespace carrier
-} // namespace elastos

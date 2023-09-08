@@ -206,7 +206,7 @@ if(ENABLE_SHARED)
     endif()
 
     install(TARGETS carrier-shared
-        EXPORT ElastosCarrierConfig
+        EXPORT CarrierConfig
         RUNTIME DESTINATION "bin"
         ARCHIVE DESTINATION "lib"
         LIBRARY DESTINATION "lib")

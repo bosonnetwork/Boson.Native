@@ -30,7 +30,7 @@
 #include "utils.h"
 #include "find_node_tests.h"
 
-using namespace elastos::carrier;
+using namespace carrier;
 
 namespace test {
 CPPUNIT_TEST_SUITE_REGISTRATION(FindNodeTests);

@@ -31,7 +31,7 @@
 #include "setting.h"
 #include "utils/log.h"
 
-using namespace elastos::carrier;
+using namespace carrier;
 
 class Crawler {
 public:

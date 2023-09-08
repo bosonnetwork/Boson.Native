@@ -36,7 +36,6 @@
 static const long TOKEN_TIMEOUT = 5 * 60 * 1000;   //5 minutes
 using namespace std::chrono;
 
-namespace elastos {
 namespace carrier {
 
 TokenManager::TokenManager() {
@@ -99,5 +98,4 @@ bool TokenManager::verifyToken(int token, const Id& nodeId, const SocketAddress&
     return false;
 }
 
-}
-}
+} // namespace carrier

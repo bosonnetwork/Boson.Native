@@ -31,7 +31,6 @@
 #include "crypto_box.h"
 #include "signature.h"
 
-namespace elastos {
 namespace carrier {
 
 class CARRIER_PUBLIC Value {
@@ -181,5 +180,5 @@ private:
     std::vector<uint8_t> data {};
     int32_t sequenceNumber {0};
 };
-}
-}
+
+} // namespace carrier
