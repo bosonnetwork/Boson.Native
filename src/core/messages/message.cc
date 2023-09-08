@@ -127,15 +127,9 @@ const std::string& Message::getKeyString() const {
 
 const std::string& Message::getTypeString() const {
     static std::unordered_map<Message::Type, std::string> nameMap = {
-#ifdef MSG_PRINT_DETAIL
-        { Type::REQUEST, "request" },
-        { Type::RESPONSE, "response" },
-        { Type::ERR, "error" }
-#else
         { Type::REQUEST, KEY_REQUEST },
         { Type::RESPONSE, KEY_RESPONSE },
         { Type::ERR, KEY_ERROR }
-#endif
     };
     return nameMap[getType()];
 }
@@ -219,24 +213,6 @@ Sp<Message> Message::createMessage(int messageType) {
     }
 }
 
-#ifdef MSG_PRINT_DETAIL
-std::string Message::toString() const {
-    std::stringstream ss;
-    if (!name.empty())
-        ss << "Name: " << name << "\n";
-
-    ss << "Type: " << getTypeString()
-        << "\nMethod: " << getMethodString()
-        << "\nTxid: " << std::to_string(txid);
-
-    toString(ss);
-
-    if (version != 0)
-        ss << "\nVersion: " << getReadableVersion();
-
-    return ss.str();
-}
-#else
 std::string Message::toString() const {
     std::stringstream ss;
     ss.exceptions(std::ios_base::failbit | std::ios_base::badbit);
@@ -250,7 +226,6 @@ std::string Message::toString() const {
         ss << ",v:" << getReadableVersion();
     return ss.str();
 }
-#endif
 
 void Message::serializeInternal(nlohmann::json& root) const {
     root[KEY_TYPE] = type;

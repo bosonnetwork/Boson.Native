@@ -41,27 +41,6 @@
 
 namespace carrier {
 
-#ifdef MSG_PRINT_DETAIL
-static std::map<int, std::string> txidNames {};
-
-static std::vector<std::string> filter {
-//    "User-level node lookup",
-//    "User-level value lookup",
-//    "NodeLookup: preTask to value announce",
-//    "Nested value announce",
-//    "User-level peer lookup",
-//    "NodeLookup: PreTask to peer announce",
-//    "Nested peer announce",
-};
-
-bool RPCServer::filterMessage(std::string name) {
-    if (filter.empty())
-        return true;
-    else
-        return std::find(filter.begin(), filter.end(), name) != filter.end();
-}
-#endif
-
 RPCServer::RPCServer(Node& _node, const Sp<DHT> _dht4, const Sp<DHT> _dht6): node(_node),
     dht4(_dht4 ? std::optional<std::reference_wrapper<DHT>>(*_dht4) : std::nullopt),
     dht6(_dht6 ? std::optional<std::reference_wrapper<DHT>>(*_dht6) : std::nullopt) {
@@ -183,17 +162,8 @@ int RPCServer::sendData(Sp<Message>& msg) {
         log->debug("Failed to send message to {}: {}", remoteAddr.toString(), std::strerror(errno));
         return errno;
     } else {
-#ifdef MSG_PRINT_DETAIL
-        msg->setName(txidNames[msg->getTxid()]);
-        if (filterMessage(msg->name)) {
-            auto af = msg->getRemoteAddress().family();
-            log->debug("\n\n-- Sent: {} bytes --\nLocal: {}\nTo: {}\n{}\n-- ** --\n",
-                    ret, getAddress(af).toString(), msg->getRemoteAddress().toString(), msg->toString());
-        }
-#else
         log->debug("Sent {}/{} to {}: [{}] {}", msg->getMethodString(), msg->getTypeString(),
                 msg->getRemoteAddress().toString(), buffer.size(), msg->toString());
-#endif
         return 0;
     }
 }
@@ -470,11 +440,6 @@ void RPCServer::sendMessage(Sp<Message> msg) {
     if (call != nullptr) {
         call->getDHT().onSend(call->getTargetId());
         call->sent(this);
-
-#ifdef MSG_PRINT_DETAIL
-        if (!call->getName().empty())
-            txidNames[msg->getTxid()] = call->getName();
-#endif
     }
 
     sendData(msg);
@@ -510,16 +475,8 @@ void RPCServer::handlePacket(const uint8_t *buf, size_t buflen, const SocketAddr
     msg->setId(sender);
     msg->setOrigin(from);
 
-#ifdef MSG_PRINT_DETAIL
-    msg->setName(txidNames[msg->getTxid()]);
-    if (filterMessage(msg->name)) {
-        log->debug("\n\n-- Received: {} bytes -- \nLocal: {}\nFrom: {}\n{}\n-- ** --\n",
-                  buflen,  getAddress(from.family()).toString(), from.toString(), msg->toString());
-    }
-#else
     log->debug("Received {}/{} from {}: [{}] {}", msg->getMethodString(), msg->getTypeString(),
             from.toString(), buflen, msg->toString());
-#endif
 
     // transaction id should be a non-zero integer
     if (msg->getType() != Message::Type::ERR && msg->getTxid() == 0) {

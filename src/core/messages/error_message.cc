@@ -51,20 +51,11 @@ void ErrorMessage::parse(const std::string& fieldName, nlohmann::json& object) {
     }
 }
 
-#ifdef MSG_PRINT_DETAIL
-void ErrorMessage::toString(std::stringstream& ss) const {
-    ss << "\nError:\n    Code:"
-        << std::to_string(code)
-        << "\nMessage: '" << message
-        << "'}";
-}
-#else
 void ErrorMessage::toString(std::stringstream& ss) const {
     ss << ",e:{c:"
         << std::to_string(code)
         << ".m:'" << message
         << "'}";
 }
-#endif
 
 } // namespace carrier

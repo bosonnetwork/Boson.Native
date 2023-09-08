@@ -97,26 +97,6 @@ void StoreValueRequest::parse(const std::string& fieldName, nlohmann::json& obje
     }
 }
 
-#ifdef MSG_PRINT_DETAIL
-void StoreValueRequest::toString(std::stringstream& ss) const {
-    ss << "\nRequest: ";
-
-    if (value->isMutable()) {
-        ss << "\n    PublicKey: " << publicKey.value().toString();;
-        if (isEncrypted())
-            ss << "\n    Recipient: " << recipient.value().toString();
-        ss << "\n    Nonce:" << Hex::encode(nonce.value().blob());
-        if (sequenceNumber >= 0)
-            ss << "\n    SequenceNumber: " << std::to_string(sequenceNumber);
-        ss << "\n    Signature: " << Hex::encode(signature.value());
-        if (expectedSequenceNumber >= 0)
-            ss << "\n    ExpectedSequenceNumber: " << std::to_string(expectedSequenceNumber);
-    }
-
-    ss << "\n    Token: " << std::to_string(token)
-        << "\n    Value: " << Hex::encode(value->getData());
-}
-#else
 void StoreValueRequest::toString(std::stringstream& ss) const {
     ss << ",q:{";
 
@@ -138,6 +118,5 @@ void StoreValueRequest::toString(std::stringstream& ss) const {
         << ",v:" << Hex::encode(value)
         << "}";
 }
-#endif
 
 }  // namespace carrier

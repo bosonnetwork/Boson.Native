@@ -92,10 +92,6 @@ private:
     void handlePacket(const uint8_t *buf, size_t buflen, const SocketAddress& from);
     void periodic();
 
-#if defined(MSG_PRINT_DETAIL)
-    bool filterMessage(std::string name);
-#endif
-
     Sp<Logger> log;
     Node& node;
 

@@ -64,21 +64,11 @@ void LookupRequest::parse(const std::string& fieldName, nlohmann::json& object) 
     }
 }
 
-#ifdef MSG_PRINT_DETAIL
-void LookupRequest::toString(std::stringstream& ss) const {
-    ss << "\n" << "Request: \n    Target: " << target << "\n    Want: "
-        << (want4 ? "ipv4": "")
-        << (want6 ? "ipv6": "")
-        << (wantToken ? "token": "");
-    _toString(ss);
-}
-#else
 void LookupRequest::toString(std::stringstream& ss) const {
     ss << ",q:{t:" << target
         << ",w:" << std::to_string(getWant());
     _toString(ss);
     ss << "}";
 }
-#endif
 
 } // namespace carrier
