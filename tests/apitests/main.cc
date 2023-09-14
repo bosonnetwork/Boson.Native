@@ -74,13 +74,12 @@ static Options parseArgs(int argc, char **argv)
     Options options;
 
     CLI::App app("Carrier test case", "tests");
-    app.add_option("-d, --debug", options.wait_for_attach, "Wait for debugger to attach");
+    app.add_flag("-d, --debug", options.wait_for_attach, "Wait for debugger to attach");
 
     try {
         app.parse(argc, argv);
     } catch (const CLI::Error &e) {
-        int rc = app.exit(e);
-        std::exit(rc);
+        std::exit(app.exit(e));
     }
 
     return options;
