@@ -24,7 +24,6 @@
 
 #include "crypto/hex.h"
 #include "message_error.h"
-#include "message.h"
 #include "serializers.h"
 #include "find_value_response.h"
 
@@ -51,34 +50,34 @@ Value FindValueResponse::getValue() const {
 
 void FindValueResponse::_serialize(nlohmann::json& object) const {
     if (publicKey.has_value()) {
-        object[Message::KEY_RES_PUBLICKEY] = publicKey.value();
+        object[KEY_RES_PUBLICKEY] = publicKey.value();
 
         if (recipient.has_value())
-            object[Message::KEY_RES_RECIPIENT] = recipient.value();
+            object[KEY_RES_RECIPIENT] = recipient.value();
 
-        object[Message::KEY_RES_NONCE] = nlohmann::json::binary_t {{nonce.value().cbegin(), nonce.value().cend()}};
+        object[KEY_RES_NONCE] = nlohmann::json::binary_t {{nonce.value().cbegin(), nonce.value().cend()}};
         if (sequenceNumber >= 0)
-            object[Message::KEY_RES_SEQ] = sequenceNumber;
+            object[KEY_RES_SEQ] = sequenceNumber;
 
-        object[Message::KEY_RES_SIGNATURE] = nlohmann::json::binary_t {signature.value()};
+        object[KEY_RES_SIGNATURE] = nlohmann::json::binary_t {signature.value()};
     }
 
     if (!value.empty())
-        object[Message::KEY_RES_VALUE] = nlohmann::json::binary_t {value};
+        object[KEY_RES_VALUE] = nlohmann::json::binary_t {value};
 }
 
 void FindValueResponse::_parse(const std::string& fieldName, nlohmann::json& object) {
-    if (fieldName == Message::KEY_RES_PUBLICKEY) {
+    if (fieldName == KEY_RES_PUBLICKEY) {
         publicKey = object.get<Id>();
-    } else if (fieldName == Message::KEY_RES_RECIPIENT) {
+    } else if (fieldName == KEY_RES_RECIPIENT) {
         recipient = object.get<Id>();
-    } else if (fieldName == Message::KEY_RES_NONCE) {
+    } else if (fieldName == KEY_RES_NONCE) {
         nonce = CryptoBox::Nonce(Blob(object.get_binary()));
-    } else if (fieldName == Message::KEY_RES_SEQ) {
+    } else if (fieldName == KEY_RES_SEQ) {
         sequenceNumber = object.get<int>();
-    } else if (fieldName == Message::KEY_RES_SIGNATURE) {
+    } else if (fieldName == KEY_RES_SIGNATURE) {
         signature = object.get_binary();
-    } else if (fieldName == Message::KEY_RES_VALUE) {
+    } else if (fieldName == KEY_RES_VALUE) {
         value = object.get_binary();
     } else {
         throw MessageError("Unknown field: " + fieldName);

@@ -65,7 +65,7 @@ void FindPeerResponse::_serialize(nlohmann::json& json) const {
         array.push_back(ar);
     }
 
-    json[Message::KEY_RES_PEERS] = array;
+    json[KEY_RES_PEERS] = array;
 }
 
 void FindPeerResponse::_parse(const std::string& fieldName, nlohmann::json& object) {

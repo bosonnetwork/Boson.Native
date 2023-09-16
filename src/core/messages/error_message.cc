@@ -29,21 +29,21 @@ namespace carrier {
 
 void ErrorMessage::serializeInternal(nlohmann::json& root) const {
     nlohmann::json object = {
-        {Message::KEY_ERR_CODE, code},
-        {Message::KEY_ERR_MESSAGE, message}
+        {KEY_ERR_CODE, code},
+        {KEY_ERR_MESSAGE, message}
     };
     Message::serializeInternal(root);
     root[getKeyString()] = object;
 }
 
 void ErrorMessage::parse(const std::string& fieldName, nlohmann::json& object) {
-    if (fieldName != Message::KEY_ERROR || !object.is_object())
+    if (fieldName != KEY_ERROR || !object.is_object())
         throw MessageError("Invalid request message");
 
     for (const auto& [key, value]: object.items()) {
-        if (key == Message::KEY_ERR_CODE) {
+        if (key == KEY_ERR_CODE) {
             value.get_to(code);
-        } else if(key == Message::KEY_ERR_MESSAGE) {
+        } else if(key == KEY_ERR_MESSAGE) {
             value.get_to(message);
         } else {
             throw MessageError("Invalid " + getMethodString() + " request message");

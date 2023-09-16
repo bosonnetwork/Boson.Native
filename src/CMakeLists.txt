@@ -35,6 +35,7 @@ list(APPEND CARRIER_SOURCES
     core/crypto/random.cc
     core/crypto/hex.cc
     core/messages/message.cc
+    core/messages/message_key.cc
     core/messages/announce_peer_request.cc
     core/messages/error_message.cc
     core/messages/find_peer_response.cc
