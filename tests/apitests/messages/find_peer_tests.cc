@@ -32,16 +32,22 @@
 namespace test {
 CPPUNIT_TEST_SUITE_REGISTRATION(FindPeerTests);
 
-void FindPeerTests::setUp() {
-}
-
 void FindPeerTests::testFindPeerRequestSize() {
+    auto nodeId = Id::random();
     auto msg = FindPeerRequest(Id::random());
-    msg.setId(Id::random());
+    msg.setId(nodeId);
     msg.setTxid(0x87654321);
     msg.setVersion(VERSION);
     msg.setWant4(true);
     msg.setWant6(true);
+
+    CPPUNIT_ASSERT(msg.getType() == Message::Type::REQUEST);
+    CPPUNIT_ASSERT(msg.getMethod() == Message::Method::FIND_PEER);
+    CPPUNIT_ASSERT(msg.getId() == nodeId);
+    CPPUNIT_ASSERT(msg.getTxid() == 0x87654321);
+    CPPUNIT_ASSERT(msg.getVersion() == VERSION);
+    CPPUNIT_ASSERT(msg.doesWant4());
+    CPPUNIT_ASSERT(msg.doesWant6());
 
     auto serialized = msg.serialize();
     CPPUNIT_ASSERT(serialized.size() <= msg.estimateSize());
@@ -66,14 +72,14 @@ void FindPeerTests::testFindPeerRequest4() {
     parsed->setId(nodeId);
     auto _msg = std::static_pointer_cast<FindPeerRequest>(parsed);
 
-    CPPUNIT_ASSERT_EQUAL(Message::Type::REQUEST, _msg->getType());
-    CPPUNIT_ASSERT_EQUAL(Message::Method::FIND_PEER, _msg->getMethod());
-    CPPUNIT_ASSERT_EQUAL(nodeId, _msg->getId());
-    CPPUNIT_ASSERT_EQUAL(txid, _msg->getTxid());
-    CPPUNIT_ASSERT_EQUAL(target, _msg->getTarget());
+    CPPUNIT_ASSERT(_msg->getType() == Message::Type::REQUEST);
+    CPPUNIT_ASSERT(_msg->getMethod() == Message::Method::FIND_PEER);
+    CPPUNIT_ASSERT(_msg->getId() == nodeId);
+    CPPUNIT_ASSERT(_msg->getTxid() == txid);
+    CPPUNIT_ASSERT(_msg->getTarget() == target);
+    CPPUNIT_ASSERT(_msg->getReadableVersion() == VERSION_STR);
     CPPUNIT_ASSERT(_msg->doesWant4());
     CPPUNIT_ASSERT(!_msg->doesWant6());
-    CPPUNIT_ASSERT_EQUAL(VERSION_STR, _msg->getReadableVersion());
 }
 
 void FindPeerTests::testFindPeerRequest6() {
@@ -94,11 +100,11 @@ void FindPeerTests::testFindPeerRequest6() {
     parsed->setId(nodeId);
     auto _msg = std::static_pointer_cast<FindPeerRequest>(parsed);
 
-    CPPUNIT_ASSERT_EQUAL(Message::Type::REQUEST, _msg->getType());
-    CPPUNIT_ASSERT_EQUAL(Message::Method::FIND_PEER, _msg->getMethod());
-    CPPUNIT_ASSERT_EQUAL(nodeId, _msg->getId());
-    CPPUNIT_ASSERT_EQUAL(txid, _msg->getTxid());
-    CPPUNIT_ASSERT_EQUAL(target, _msg->getTarget());
+    CPPUNIT_ASSERT(_msg->getType() == Message::Type::REQUEST);
+    CPPUNIT_ASSERT(_msg->getMethod() == Message::Method::FIND_PEER);
+    CPPUNIT_ASSERT(_msg->getId() == nodeId);
+    CPPUNIT_ASSERT(_msg->getTxid() == txid);
+    CPPUNIT_ASSERT(_msg->getTarget() == target);
     CPPUNIT_ASSERT(!_msg->doesWant4());
     CPPUNIT_ASSERT(_msg->doesWant6());
 }
@@ -121,11 +127,11 @@ void FindPeerTests::testFindPeerRequest46() {
     parsed->setId(nodeId);
     auto _msg = std::static_pointer_cast<FindPeerRequest>(parsed);
 
-    CPPUNIT_ASSERT_EQUAL(Message::Type::REQUEST, _msg->getType());
-    CPPUNIT_ASSERT_EQUAL(Message::Method::FIND_PEER, _msg->getMethod());
-    CPPUNIT_ASSERT_EQUAL(nodeId, _msg->getId());
-    CPPUNIT_ASSERT_EQUAL(txid, _msg->getTxid());
-    CPPUNIT_ASSERT_EQUAL(target, _msg->getTarget());
+    CPPUNIT_ASSERT(_msg->getType() == Message::Type::REQUEST);
+    CPPUNIT_ASSERT(_msg->getMethod() == Message::Method::FIND_PEER);
+    CPPUNIT_ASSERT(_msg->getId() == nodeId);
+    CPPUNIT_ASSERT(_msg->getTxid() == txid);
+    CPPUNIT_ASSERT(_msg->getTarget() == target);
     CPPUNIT_ASSERT(_msg->doesWant4());
     CPPUNIT_ASSERT(_msg->doesWant6());
 }
@@ -160,13 +166,20 @@ void FindPeerTests::testFindPeerResponseSize() {
         peers.push_back(PeerInfo::of(pid.blob(), {}, Id::random().blob(), {}, 65535 - i, {}, sig));
     }
 
+    auto nodeId = Id::random();
     auto msg = FindPeerResponse(0xF7654321);
-    msg.setId(Id::random());
+    msg.setId(nodeId);
     msg.setVersion(VERSION);
     msg.setNodes4(nodes4);
     msg.setNodes6(nodes6);
     msg.setToken(0x87654321);
     msg.setPeers(peers);
+
+    CPPUNIT_ASSERT(msg.getType() == Message::Type::RESPONSE);
+    CPPUNIT_ASSERT(msg.getMethod() == Message::Method::FIND_PEER);
+    CPPUNIT_ASSERT(msg.getId() == nodeId);
+    CPPUNIT_ASSERT(msg.getToken() == 0x87654321);
+    CPPUNIT_ASSERT(msg.getVersion() == VERSION);
 
     auto serialized = msg.serialize();
     printMessage(msg, serialized);
@@ -250,12 +263,12 @@ void FindPeerTests::testFindPeerResponse4() {
     parsed->setId(id);
     auto _msg = std::static_pointer_cast<FindPeerResponse>(parsed);
 
-    CPPUNIT_ASSERT_EQUAL(Message::Type::RESPONSE, _msg->getType());
-    CPPUNIT_ASSERT_EQUAL(Message::Method::FIND_PEER, _msg->getMethod());
-    CPPUNIT_ASSERT_EQUAL(id, _msg->getId());
-    CPPUNIT_ASSERT_EQUAL(txid, _msg->getTxid());
-    CPPUNIT_ASSERT_EQUAL(VERSION_STR, _msg->getReadableVersion());
-    CPPUNIT_ASSERT_EQUAL(token, _msg->getToken());
+    CPPUNIT_ASSERT(_msg->getType() == Message::Type::RESPONSE);
+    CPPUNIT_ASSERT(_msg->getMethod() == Message::Method::FIND_PEER);
+    CPPUNIT_ASSERT(_msg->getId() == id);
+    CPPUNIT_ASSERT(_msg->getTxid() == txid);
+    CPPUNIT_ASSERT(_msg->getReadableVersion() == VERSION_STR);
+    CPPUNIT_ASSERT(_msg->getToken() == token);
     CPPUNIT_ASSERT(_msg->getNodes6().empty());
     CPPUNIT_ASSERT(!_msg->getNodes4().empty());
     CPPUNIT_ASSERT(!_msg->getPeers().empty());
@@ -300,12 +313,12 @@ void FindPeerTests::testFindPeerResponse6() {
     parsed->setId(id);
     auto _msg = std::static_pointer_cast<FindPeerResponse>(parsed);
 
-    CPPUNIT_ASSERT_EQUAL(Message::Type::RESPONSE, _msg->getType());
-    CPPUNIT_ASSERT_EQUAL(Message::Method::FIND_PEER, _msg->getMethod());
-    CPPUNIT_ASSERT_EQUAL(id, _msg->getId());
-    CPPUNIT_ASSERT_EQUAL(txid, _msg->getTxid());
-    CPPUNIT_ASSERT_EQUAL(VERSION_STR, _msg->getReadableVersion());
-    CPPUNIT_ASSERT_EQUAL(token, _msg->getToken());
+    CPPUNIT_ASSERT(_msg->getType() == Message::Type::RESPONSE);
+    CPPUNIT_ASSERT(_msg->getMethod() == Message::Method::FIND_PEER);
+    CPPUNIT_ASSERT(_msg->getId() == id);
+    CPPUNIT_ASSERT(_msg->getTxid() == txid);
+    CPPUNIT_ASSERT(_msg->getReadableVersion() == VERSION_STR);
+    CPPUNIT_ASSERT(_msg->getToken() == token);
     CPPUNIT_ASSERT(_msg->getNodes4().empty());
     CPPUNIT_ASSERT(!_msg->getNodes6().empty());
     CPPUNIT_ASSERT(!_msg->getPeers().empty());
@@ -363,12 +376,12 @@ void FindPeerTests::testFindPeerResponse46() {
     parsed->setId(id);
     auto _msg = std::static_pointer_cast<FindPeerResponse>(parsed);
 
-    CPPUNIT_ASSERT_EQUAL(Message::Type::RESPONSE, _msg->getType());
-    CPPUNIT_ASSERT_EQUAL(Message::Method::FIND_PEER, _msg->getMethod());
-    CPPUNIT_ASSERT_EQUAL(id, _msg->getId());
-    CPPUNIT_ASSERT_EQUAL(txid, _msg->getTxid());
-    CPPUNIT_ASSERT_EQUAL(0, _msg->getVersion());
-    CPPUNIT_ASSERT_EQUAL(token, _msg->getToken());
+    CPPUNIT_ASSERT(_msg->getType() == Message::Type::RESPONSE);
+    CPPUNIT_ASSERT(_msg->getMethod() == Message::Method::FIND_PEER);
+    CPPUNIT_ASSERT(_msg->getId() == id);
+    CPPUNIT_ASSERT(_msg->getTxid() == txid);
+    CPPUNIT_ASSERT(_msg->getVersion() == 0);
+    CPPUNIT_ASSERT(_msg->getToken() == token);
     CPPUNIT_ASSERT(!_msg->getNodes4().empty());
     CPPUNIT_ASSERT(!_msg->getNodes6().empty());
     CPPUNIT_ASSERT(!_msg->getPeers().empty());
@@ -382,7 +395,5 @@ void FindPeerTests::testFindPeerResponse46() {
     CPPUNIT_ASSERT(peers == _msg->getPeers());
 }
 
-void FindPeerTests::tearDown() {
-}
 }
 

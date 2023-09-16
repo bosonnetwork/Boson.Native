@@ -30,20 +30,26 @@
 namespace test {
 CPPUNIT_TEST_SUITE_REGISTRATION(StoreValueTests);
 
-void StoreValueTests::setUp() {
-}
-
 void StoreValueTests::testStoreValueRequestSize() {
     std::vector<uint8_t> data(1025, 'D');
+    auto value = Value::of({}, {}, {}, {}, -1, {}, data);
 
-    Value value = Value::of({}, {}, {}, {}, -1, {}, data);
-
+    auto origin = Id::random();
     auto msg = StoreValueRequest();
-    msg.setId(Id::random());
+    msg.setId(origin);
     msg.setTxid(0x87654321);
     msg.setVersion(VERSION);
     msg.setToken(0x88888888);
     msg.setValue(value);
+
+    CPPUNIT_ASSERT(msg.getType() == Message::Type::REQUEST);
+    CPPUNIT_ASSERT(msg.getMethod() == Message::Method::STORE_VALUE);
+    CPPUNIT_ASSERT(msg.getId() == origin);
+    CPPUNIT_ASSERT(msg.getTxid() == 0x87654321);
+    CPPUNIT_ASSERT(msg.getVersion() == VERSION);
+    CPPUNIT_ASSERT(msg.getToken() == 0x88888888);
+    CPPUNIT_ASSERT(msg.getValue() == value);
+    CPPUNIT_ASSERT(msg.getExpectedSequenceNumber() == -1);
 
     auto serialized = msg.serialize();
     printMessage(msg, serialized);
@@ -56,15 +62,25 @@ void StoreValueTests::testStoreSignedValueRequestSize() {
     std::vector<uint8_t> data(1025, 'D');
     Id pk = Id::random();
     int seq = 0x77654321;
-
     Value value = Value::of(pk.blob(), {}, {}, nonce, seq, sig, data);
+
+    auto origin = Id::random();
     StoreValueRequest msg = StoreValueRequest();
-    msg.setId(Id::random());
+    msg.setId(origin);
     msg.setTxid(0x87654321);
     msg.setVersion(VERSION);
     msg.setToken(0x88888888);
     msg.setExpectedSequenceNumber(seq - 1);
     msg.setValue(value);
+
+    CPPUNIT_ASSERT(msg.getType() == Message::Type::REQUEST);
+    CPPUNIT_ASSERT(msg.getMethod() == Message::Method::STORE_VALUE);
+    CPPUNIT_ASSERT(msg.getId() == origin);
+    CPPUNIT_ASSERT(msg.getTxid() == 0x87654321);
+    CPPUNIT_ASSERT(msg.getVersion() == VERSION);
+    CPPUNIT_ASSERT(msg.getToken() == 0x88888888);
+    CPPUNIT_ASSERT(msg.getValue() == value);
+    CPPUNIT_ASSERT(msg.getExpectedSequenceNumber() == seq-1);
 
     auto serialized = msg.serialize();
     printMessage(msg, serialized);
@@ -76,16 +92,25 @@ void StoreValueTests::testStoreEncryptedValueRequestSize() {
     std::vector<uint8_t> sig(64, 'S');
     std::vector<uint8_t> data(1025, 'D');
     int seq = 0x77654321;
-
-
     Value value = Value::of(Id::random().blob(), {}, Id::random().blob(), nonce, seq, sig, data);
+
+    auto origin = Id::random();
     StoreValueRequest msg = StoreValueRequest();
-    msg.setId(Id::random());
+    msg.setId(origin);
     msg.setTxid(0x87654321);
     msg.setVersion(VERSION);
     msg.setToken(0x88888888);
     msg.setExpectedSequenceNumber(seq - 1);
     msg.setValue(value);
+
+    CPPUNIT_ASSERT(msg.getType() == Message::Type::REQUEST);
+    CPPUNIT_ASSERT(msg.getMethod() == Message::Method::STORE_VALUE);
+    CPPUNIT_ASSERT(msg.getId() == origin);
+    CPPUNIT_ASSERT(msg.getTxid() == 0x87654321);
+    CPPUNIT_ASSERT(msg.getVersion() == VERSION);
+    CPPUNIT_ASSERT(msg.getToken() == 0x88888888);
+    CPPUNIT_ASSERT(msg.getValue() == value);
+    CPPUNIT_ASSERT(msg.getExpectedSequenceNumber() == seq-1);
 
     auto serialized = msg.serialize();
     printMessage(msg, serialized);
@@ -115,14 +140,14 @@ void StoreValueTests::testStoreValueRequest() {
     parsed->setId(nodeId);
     auto _msg = std::static_pointer_cast<StoreValueRequest>(parsed);
 
-    CPPUNIT_ASSERT_EQUAL(Message::Type::REQUEST, _msg->getType());
-    CPPUNIT_ASSERT_EQUAL(Message::Method::STORE_VALUE, _msg->getMethod());
-    CPPUNIT_ASSERT_EQUAL(nodeId, _msg->getId());
-    CPPUNIT_ASSERT_EQUAL(txid, _msg->getTxid());
-    CPPUNIT_ASSERT_EQUAL(VERSION_STR, _msg->getReadableVersion());
-    CPPUNIT_ASSERT_EQUAL(token, _msg->getToken());
-
-    CPPUNIT_ASSERT(value == _msg->getValue());
+    CPPUNIT_ASSERT(msg.getType() == Message::Type::REQUEST);
+    CPPUNIT_ASSERT(msg.getMethod() == Message::Method::STORE_VALUE);
+    CPPUNIT_ASSERT(msg.getId() == nodeId);
+    CPPUNIT_ASSERT(msg.getTxid() == txid);
+    CPPUNIT_ASSERT(msg.getReadableVersion() == VERSION_STR);
+    CPPUNIT_ASSERT(msg.getToken() == token);
+    CPPUNIT_ASSERT(msg.getValue() == value);
+    CPPUNIT_ASSERT(msg.getExpectedSequenceNumber() == -1);
 }
 
 void StoreValueTests::testStoreSignedValueRequest() {
@@ -148,20 +173,18 @@ void StoreValueTests::testStoreSignedValueRequest() {
     msg.setValue(value);
 
     auto serialized = msg.serialize();
-    printMessage(msg, serialized);
-
     auto parsed = Message::parse(serialized.data(), serialized.size());
     parsed->setId(nodeId);
     auto _msg = std::static_pointer_cast<StoreValueRequest>(parsed);
 
-    CPPUNIT_ASSERT_EQUAL(Message::Type::REQUEST, _msg->getType());
-    CPPUNIT_ASSERT_EQUAL(Message::Method::STORE_VALUE, _msg->getMethod());
-    CPPUNIT_ASSERT_EQUAL(nodeId, _msg->getId());
-    CPPUNIT_ASSERT_EQUAL(txid, _msg->getTxid());
-    CPPUNIT_ASSERT_EQUAL(VERSION_STR, _msg->getReadableVersion());
-    CPPUNIT_ASSERT_EQUAL(token, _msg->getToken());
-
-    CPPUNIT_ASSERT(value == _msg->getValue());
+    CPPUNIT_ASSERT(msg.getType() == Message::Type::REQUEST);
+    CPPUNIT_ASSERT(msg.getMethod() == Message::Method::STORE_VALUE);
+    CPPUNIT_ASSERT(msg.getId() == nodeId);
+    CPPUNIT_ASSERT(msg.getTxid() == txid);
+    CPPUNIT_ASSERT(msg.getReadableVersion() == VERSION_STR);
+    CPPUNIT_ASSERT(msg.getToken() == token);
+    CPPUNIT_ASSERT(msg.getValue() == value);
+    CPPUNIT_ASSERT(msg.getExpectedSequenceNumber() == cas);
 }
 
 void StoreValueTests::testStoreEncryptedValueRequest() {
@@ -188,27 +211,32 @@ void StoreValueTests::testStoreEncryptedValueRequest() {
     msg.setValue(value);
 
     auto serialized = msg.serialize();
-    printMessage(msg, serialized);
-
     auto parsed = Message::parse(serialized.data(), serialized.size());
     parsed->setId(nodeId);
     auto _msg = std::static_pointer_cast<StoreValueRequest>(parsed);
 
-    CPPUNIT_ASSERT_EQUAL(Message::Type::REQUEST, _msg->getType());
-    CPPUNIT_ASSERT_EQUAL(Message::Method::STORE_VALUE, _msg->getMethod());
-    CPPUNIT_ASSERT_EQUAL(nodeId, _msg->getId());
-    CPPUNIT_ASSERT_EQUAL(txid, _msg->getTxid());
-    CPPUNIT_ASSERT_EQUAL(VERSION_STR, _msg->getReadableVersion());
-    CPPUNIT_ASSERT_EQUAL(token, _msg->getToken());
-
-    CPPUNIT_ASSERT(value == _msg->getValue());
+    CPPUNIT_ASSERT(msg.getType() == Message::Type::REQUEST);
+    CPPUNIT_ASSERT(msg.getMethod() == Message::Method::STORE_VALUE);
+    CPPUNIT_ASSERT(msg.getId() == nodeId);
+    CPPUNIT_ASSERT(msg.getTxid() == txid);
+    CPPUNIT_ASSERT(msg.getReadableVersion() == VERSION_STR);
+    CPPUNIT_ASSERT(msg.getToken() == token);
+    CPPUNIT_ASSERT(msg.getValue() == value);
+    CPPUNIT_ASSERT(msg.getExpectedSequenceNumber() == cas);
 }
 
 void StoreValueTests::testStoreValueResponseSize() {
+    auto id = Id::random();
     auto msg = StoreValueResponse(0xf7654321);
-    msg.setId(Id::random());
+    msg.setId(id);
     msg.setTxid(0x87654321);
     msg.setVersion(VERSION);
+
+    CPPUNIT_ASSERT(msg.getType() == Message::Type::RESPONSE);
+    CPPUNIT_ASSERT(msg.getMethod() == Message::Method::STORE_VALUE);
+    CPPUNIT_ASSERT(msg.getId() == id);
+    CPPUNIT_ASSERT(msg.getTxid() == 0x87654321);
+    CPPUNIT_ASSERT(msg.getVersion() == VERSION);
 
     auto serialized = msg.serialize();
     CPPUNIT_ASSERT(serialized.size() <= msg.estimateSize());
@@ -217,7 +245,6 @@ void StoreValueTests::testStoreValueResponseSize() {
 void StoreValueTests::testStoreValueResponse() {
     auto id = Id::random();
     int txid = Utils::getRandomInteger(62);
-
     auto msg = StoreValueResponse(txid);
     msg.setId(id);
 
@@ -228,13 +255,11 @@ void StoreValueTests::testStoreValueResponse() {
     parsed->setId(id);
     auto _msg = std::static_pointer_cast<StoreValueResponse>(parsed);
 
-    CPPUNIT_ASSERT_EQUAL(Message::Type::RESPONSE, _msg->getType());
-    CPPUNIT_ASSERT_EQUAL(Message::Method::STORE_VALUE, _msg->getMethod());
-    CPPUNIT_ASSERT_EQUAL(id, _msg->getId());
-    CPPUNIT_ASSERT_EQUAL(txid, _msg->getTxid());
-    CPPUNIT_ASSERT_EQUAL(0, _msg->getVersion());
+    CPPUNIT_ASSERT(msg.getType() == Message::Type::RESPONSE);
+    CPPUNIT_ASSERT(msg.getMethod() == Message::Method::STORE_VALUE);
+    CPPUNIT_ASSERT(msg.getId() == id);
+    CPPUNIT_ASSERT(msg.getTxid() == txid);
+    CPPUNIT_ASSERT(msg.getVersion() == 0);
 }
 
-void StoreValueTests::tearDown() {
-}
 }

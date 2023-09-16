@@ -29,28 +29,32 @@
 namespace test {
 CPPUNIT_TEST_SUITE_REGISTRATION(ErrorMessageTests);
 
-void ErrorMessageTests::setUp() {
-}
-
 void ErrorMessageTests::testErrorMessageSize() {
+    auto nodeId =Id::random();
     std::string error;
     error.assign(1025, 'E');
 
     auto msg = ErrorMessage(Message::Method::PING, 0xF7654321, 0x87654321, error);
-    msg.setId(Id::random());
+    msg.setId(nodeId);
     msg.setVersion(VERSION);
+
+    CPPUNIT_ASSERT(msg.getType() == Message::Type::ERR);
+    CPPUNIT_ASSERT(msg.getMethod() == Message::Method::PING);
+    CPPUNIT_ASSERT(msg.getId() == nodeId);
+    CPPUNIT_ASSERT(msg.getVersion() == VERSION);
 
     auto serialized = msg.serialize();
     CPPUNIT_ASSERT(serialized.size() <= msg.estimateSize());
 }
 
 void ErrorMessageTests::testErrorMessage() {
+    auto nodeId = Id::random();
     int txid = Utils::getRandomValue();
     int code = Utils::getRandomValue();
-    std::string error = "Test error message";
+    auto error = "Test error message";
 
     auto msg = ErrorMessage(Message::Method::PING, txid, code, error);
-    msg.setId(Id::random());
+    msg.setId(nodeId);
     msg.setVersion(VERSION);
 
     auto serialized = msg.serialize();
@@ -59,12 +63,12 @@ void ErrorMessageTests::testErrorMessage() {
     auto parsed = Message::parse(serialized.data(), serialized.size());
     auto _msg = std::static_pointer_cast<ErrorMessage>(parsed);
 
-    CPPUNIT_ASSERT_EQUAL(Message::Type::ERR, _msg->getType());
-    CPPUNIT_ASSERT_EQUAL(Message::Method::PING, _msg->getMethod());
-    CPPUNIT_ASSERT_EQUAL(txid, _msg->getTxid());
-    CPPUNIT_ASSERT_EQUAL(code, _msg->getCode());
-    CPPUNIT_ASSERT_EQUAL(error, _msg->getMessage());
-    CPPUNIT_ASSERT_EQUAL(VERSION_STR, _msg->getReadableVersion());
+    CPPUNIT_ASSERT(_msg->getType() == Message::Type::ERR);
+    CPPUNIT_ASSERT(_msg->getMethod() == Message::Method::PING);
+    CPPUNIT_ASSERT(_msg->getTxid() == txid);
+    CPPUNIT_ASSERT(_msg->getCode() == code);
+    CPPUNIT_ASSERT(_msg->getMessage() == error);
+    CPPUNIT_ASSERT(_msg->getReadableVersion() == VERSION_STR);
 }
 
 void ErrorMessageTests::testErrorMessagei18n() {
@@ -82,15 +86,13 @@ void ErrorMessageTests::testErrorMessagei18n() {
     auto parsed = Message::parse(serialized.data(), serialized.size());
     auto _msg = std::static_pointer_cast<ErrorMessage>(parsed);
 
-    CPPUNIT_ASSERT_EQUAL(Message::Type::ERR, _msg->getType());
-    CPPUNIT_ASSERT_EQUAL(Message::Method::UNKNOWN, _msg->getMethod());
-    CPPUNIT_ASSERT_EQUAL(txid, _msg->getTxid());
-    CPPUNIT_ASSERT_EQUAL(VERSION_STR, _msg->getReadableVersion());
-    CPPUNIT_ASSERT_EQUAL(code, _msg->getCode());
-    CPPUNIT_ASSERT_EQUAL(error, _msg->getMessage());
+    CPPUNIT_ASSERT(_msg->getType() == Message::Type::ERR);
+    CPPUNIT_ASSERT(_msg->getMethod() == Message::Method::UNKNOWN);
+    CPPUNIT_ASSERT(_msg->getTxid() == txid);
+    CPPUNIT_ASSERT(_msg->getCode() == code);
+    CPPUNIT_ASSERT(_msg->getMessage() == error);
+    CPPUNIT_ASSERT(_msg->getReadableVersion() == VERSION_STR);
 }
 
-void ErrorMessageTests::tearDown() {
-}
 }
 

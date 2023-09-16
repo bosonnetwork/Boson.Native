@@ -35,17 +35,23 @@ using namespace carrier;
 namespace test {
 CPPUNIT_TEST_SUITE_REGISTRATION(FindNodeTests);
 
-void FindNodeTests::setUp() {
-}
-
 void FindNodeTests::testFindNodeRequestSize() {
+    auto nodeId = Id::random();
     auto msg = FindNodeRequest(Id::random());
-    msg.setId(Id::random());
+    msg.setId(nodeId);
     msg.setTxid(0x87654321);
     msg.setWant4(true);
     msg.setWant6(true);
     msg.setWantToken(true);
     msg.setVersion(VERSION);
+
+    CPPUNIT_ASSERT(msg.getType() == Message::Type::REQUEST);
+    CPPUNIT_ASSERT(msg.getMethod() == Message::Method::FIND_NODE);
+    CPPUNIT_ASSERT(msg.getId() == nodeId);
+    CPPUNIT_ASSERT(msg.getTxid() == 0x87654321);
+    CPPUNIT_ASSERT(msg.getVersion() == VERSION);
+    CPPUNIT_ASSERT(msg.doesWant4());
+    CPPUNIT_ASSERT(msg.doesWant6());
 
     auto serialized = msg.serialize();
     CPPUNIT_ASSERT(serialized.size() <= msg.estimateSize());
@@ -70,15 +76,15 @@ void FindNodeTests::testFindNodeRequest4() {
     parsed->setId(nodeId);
     auto _msg = std::static_pointer_cast<FindNodeRequest>(parsed);
 
-    CPPUNIT_ASSERT(Message::Type::REQUEST == _msg->getType());
-    CPPUNIT_ASSERT(Message::Method::FIND_NODE == _msg->getMethod());
-    CPPUNIT_ASSERT(nodeId ==  _msg->getId());
-    CPPUNIT_ASSERT(txid == _msg->getTxid());
-    CPPUNIT_ASSERT(target == _msg->getTarget());
+    CPPUNIT_ASSERT(_msg->getType() == Message::Type::REQUEST);
+    CPPUNIT_ASSERT(_msg->getMethod() == Message::Method::FIND_NODE);
+    CPPUNIT_ASSERT(_msg->getId() == nodeId);
+    CPPUNIT_ASSERT(_msg->getTxid() == txid);
+    CPPUNIT_ASSERT(_msg->getTarget() == target);
+    CPPUNIT_ASSERT(_msg->getReadableVersion() == VERSION_STR);
     CPPUNIT_ASSERT(_msg->doesWant4());
     CPPUNIT_ASSERT(!_msg->doesWant6());
     CPPUNIT_ASSERT(!_msg->doesWantToken());
-    CPPUNIT_ASSERT(VERSION_STR == _msg->getReadableVersion());
 }
 
 void FindNodeTests::testFindNodeRequest4WithAt() {
@@ -101,15 +107,15 @@ void FindNodeTests::testFindNodeRequest4WithAt() {
     parsed->setId(nodeId);
     auto _msg = std::static_pointer_cast<FindNodeRequest>(parsed);
 
-    CPPUNIT_ASSERT(Message::Type::REQUEST == _msg->getType());
-    CPPUNIT_ASSERT(Message::Method::FIND_NODE == _msg->getMethod());
-    CPPUNIT_ASSERT(nodeId ==  _msg->getId());
-    CPPUNIT_ASSERT(txid == _msg->getTxid());
-    CPPUNIT_ASSERT(target == _msg->getTarget());
+    CPPUNIT_ASSERT(_msg->getType() == Message::Type::REQUEST);
+    CPPUNIT_ASSERT(_msg->getMethod() == Message::Method::FIND_NODE);
+    CPPUNIT_ASSERT(_msg->getId() == nodeId);
+    CPPUNIT_ASSERT(_msg->getTxid() == txid);
+    CPPUNIT_ASSERT(_msg->getTarget() == target);
+    CPPUNIT_ASSERT(_msg->getReadableVersion() == VERSION_STR);
     CPPUNIT_ASSERT(_msg->doesWant4());
     CPPUNIT_ASSERT(!_msg->doesWant6());
     CPPUNIT_ASSERT(_msg->doesWantToken());
-    CPPUNIT_ASSERT(VERSION_STR == _msg->getReadableVersion());
 }
 
 void FindNodeTests::testFindNodeRequest6() {
@@ -130,18 +136,18 @@ void FindNodeTests::testFindNodeRequest6() {
     parsed->setId(nodeId);
     auto _msg = std::static_pointer_cast<FindNodeRequest>(parsed);
 
-    CPPUNIT_ASSERT(Message::Type::REQUEST == _msg->getType());
-    CPPUNIT_ASSERT(Message::Method::FIND_NODE == _msg->getMethod());
-    CPPUNIT_ASSERT(nodeId == _msg->getId());
-    CPPUNIT_ASSERT(txid == _msg->getTxid());
-    CPPUNIT_ASSERT(target == _msg->getTarget());
+    CPPUNIT_ASSERT(_msg->getType() == Message::Type::REQUEST);
+    CPPUNIT_ASSERT(_msg->getMethod() == Message::Method::FIND_NODE);
+    CPPUNIT_ASSERT(_msg->getId() == nodeId);
+    CPPUNIT_ASSERT(_msg->getTxid() == txid);
+    CPPUNIT_ASSERT(_msg->getTarget() == target);
+    CPPUNIT_ASSERT(_msg->getVersion() == 0);
     CPPUNIT_ASSERT(!_msg->doesWant4());
     CPPUNIT_ASSERT(_msg->doesWant6());
     CPPUNIT_ASSERT(!_msg->doesWantToken());
 }
 
-void
-FindNodeTests::testFindNodeRequest6WithAt() {
+void FindNodeTests::testFindNodeRequest6WithAt() {
     auto nodeId = Id::random();
     auto target = Id::random();
     int txid = Utils::getRandomInteger(62);
@@ -160,11 +166,12 @@ FindNodeTests::testFindNodeRequest6WithAt() {
     parsed->setId(nodeId);
     auto _msg = std::static_pointer_cast<FindNodeRequest>(parsed);
 
-    CPPUNIT_ASSERT(Message::Type::REQUEST == _msg->getType());
-    CPPUNIT_ASSERT(Message::Method::FIND_NODE == _msg->getMethod());
-    CPPUNIT_ASSERT(nodeId == _msg->getId());
-    CPPUNIT_ASSERT(txid == _msg->getTxid());
-    CPPUNIT_ASSERT(target == _msg->getTarget());
+    CPPUNIT_ASSERT(_msg->getType() == Message::Type::REQUEST);
+    CPPUNIT_ASSERT(_msg->getMethod() == Message::Method::FIND_NODE);
+    CPPUNIT_ASSERT(_msg->getId() == nodeId);
+    CPPUNIT_ASSERT(_msg->getTxid() == txid);
+    CPPUNIT_ASSERT(_msg->getTarget() == target);
+    CPPUNIT_ASSERT(_msg->getVersion() == 0);
     CPPUNIT_ASSERT(!_msg->doesWant4());
     CPPUNIT_ASSERT(_msg->doesWant6());
     CPPUNIT_ASSERT(_msg->doesWantToken());
@@ -188,11 +195,12 @@ void FindNodeTests::testFindNodeRequest46() {
     parsed->setId(nodeId);
     auto _msg = std::static_pointer_cast<FindNodeRequest>(parsed);
 
-    CPPUNIT_ASSERT(Message::Type::REQUEST == _msg->getType());
-    CPPUNIT_ASSERT(Message::Method::FIND_NODE == _msg->getMethod());
-    CPPUNIT_ASSERT(nodeId == _msg->getId());
-    CPPUNIT_ASSERT(txid == _msg->getTxid());
-    CPPUNIT_ASSERT(target == _msg->getTarget());
+    CPPUNIT_ASSERT(_msg->getType() == Message::Type::REQUEST);
+    CPPUNIT_ASSERT(_msg->getMethod() == Message::Method::FIND_NODE);
+    CPPUNIT_ASSERT(_msg->getId() == nodeId);
+    CPPUNIT_ASSERT(_msg->getTxid() == txid);
+    CPPUNIT_ASSERT(_msg->getTarget() == target);
+    CPPUNIT_ASSERT(_msg->getVersion() == 0);
     CPPUNIT_ASSERT(_msg->doesWant4());
     CPPUNIT_ASSERT(_msg->doesWant6());
     CPPUNIT_ASSERT(!_msg->doesWantToken());
@@ -217,11 +225,12 @@ void FindNodeTests::testFindNodeRequest46WithAt() {
     parsed->setId(nodeId);
     auto _msg = std::static_pointer_cast<FindNodeRequest>(parsed);
 
-    CPPUNIT_ASSERT(Message::Type::REQUEST == _msg->getType());
-    CPPUNIT_ASSERT(Message::Method::FIND_NODE == _msg->getMethod());
-    CPPUNIT_ASSERT(nodeId == _msg->getId());
-    CPPUNIT_ASSERT(txid == _msg->getTxid());
-    CPPUNIT_ASSERT(target == _msg->getTarget());
+    CPPUNIT_ASSERT(_msg->getType() == Message::Type::REQUEST);
+    CPPUNIT_ASSERT(_msg->getMethod() == Message::Method::FIND_NODE);
+    CPPUNIT_ASSERT(_msg->getId() == nodeId);
+    CPPUNIT_ASSERT(_msg->getTxid() == txid);
+    CPPUNIT_ASSERT(_msg->getTarget() == target);
+    CPPUNIT_ASSERT(_msg->getVersion() == 0);
     CPPUNIT_ASSERT(_msg->doesWant4());
     CPPUNIT_ASSERT(_msg->doesWant6());
     CPPUNIT_ASSERT(_msg->doesWantToken());
@@ -248,19 +257,26 @@ void FindNodeTests::testFindNodeResponseSize() {
     nodes6.push_back(std::make_shared<NodeInfo>(Id::random(), "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff", 65529));
     nodes6.push_back(std::make_shared<NodeInfo>(Id::random(), "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff", 65528));
 
+    auto nodeId = Id::random();
     auto msg = FindNodeResponse(0xF7654321);
-    msg.setId(Id::random());
+    msg.setId(nodeId);
     msg.setVersion(VERSION);
     msg.setNodes4(nodes4);
     msg.setNodes6(nodes6);
     msg.setToken(0x78901234);
 
+    CPPUNIT_ASSERT(msg.getType() == Message::Type::RESPONSE);
+    CPPUNIT_ASSERT(msg.getMethod() == Message::Method::FIND_NODE);
+    CPPUNIT_ASSERT(msg.getId() == nodeId);
+    CPPUNIT_ASSERT(msg.getTxid() == 0xF7654321);
+    CPPUNIT_ASSERT(msg.getVersion() == VERSION);
+    CPPUNIT_ASSERT(msg.getToken() == 0x78901234);
+
     auto serialized = msg.serialize();
     CPPUNIT_ASSERT(serialized.size() <= msg.estimateSize());
 }
 
-void
-FindNodeTests::testFindNodeResponse4() {
+void FindNodeTests::testFindNodeResponse4() {
     auto id = Id::random();
     int txid = Utils::getRandomInteger(62);
 
@@ -283,21 +299,20 @@ FindNodeTests::testFindNodeResponse4() {
     parsed->setId(id);
     auto _msg = std::static_pointer_cast<FindNodeResponse>(parsed);
 
-    CPPUNIT_ASSERT(Message::Type::RESPONSE == _msg->getType());
-    CPPUNIT_ASSERT(Message::Method::FIND_NODE == _msg->getMethod());
-    CPPUNIT_ASSERT(id == _msg->getId());
-    CPPUNIT_ASSERT(txid == _msg->getTxid());
-    CPPUNIT_ASSERT(VERSION_STR == _msg->getReadableVersion());
+    CPPUNIT_ASSERT(_msg->getType() == Message::Type::RESPONSE);
+    CPPUNIT_ASSERT(_msg->getMethod() == Message::Method::FIND_NODE);
+    CPPUNIT_ASSERT(_msg->getId() == id);
+    CPPUNIT_ASSERT(_msg->getTxid() == txid);
+    CPPUNIT_ASSERT(_msg->getReadableVersion() == VERSION_STR);
+    CPPUNIT_ASSERT(_msg->getToken() == 0);
     CPPUNIT_ASSERT(_msg->getNodes6().empty());
     CPPUNIT_ASSERT(!_msg->getNodes4().empty());
-    CPPUNIT_ASSERT(0 == _msg->getToken());
 
     auto nodes = _msg->getNodes4();
     CPPUNIT_ASSERT(Utils::arrayEquals(nodes4, nodes));
 }
 
-void
-FindNodeTests::testFindNodeResponse4WithToken() {
+void FindNodeTests::testFindNodeResponse4WithToken() {
     auto id = Id::random();
     int txid = Utils::getRandomInteger(62);
 
@@ -321,14 +336,14 @@ FindNodeTests::testFindNodeResponse4WithToken() {
     parsed->setId(id);
     auto _msg = std::static_pointer_cast<FindNodeResponse>(parsed);
 
-    CPPUNIT_ASSERT(Message::Type::RESPONSE == _msg->getType());
-    CPPUNIT_ASSERT(Message::Method::FIND_NODE == _msg->getMethod());
-    CPPUNIT_ASSERT(id == _msg->getId());
-    CPPUNIT_ASSERT(txid == _msg->getTxid());
-    CPPUNIT_ASSERT(VERSION_STR == _msg->getReadableVersion());
+    CPPUNIT_ASSERT(_msg->getType() == Message::Type::RESPONSE);
+    CPPUNIT_ASSERT(_msg->getMethod() == Message::Method::FIND_NODE);
+    CPPUNIT_ASSERT(_msg->getId() == id);
+    CPPUNIT_ASSERT(_msg->getTxid() == txid);
+    CPPUNIT_ASSERT(_msg->getReadableVersion() == VERSION_STR);
+    CPPUNIT_ASSERT(_msg->getToken() == 0x12345678);
     CPPUNIT_ASSERT(_msg->getNodes6().empty());
     CPPUNIT_ASSERT(!_msg->getNodes4().empty());
-    CPPUNIT_ASSERT(0x12345678 == _msg->getToken());
 
     auto nodes = _msg->getNodes4();
     CPPUNIT_ASSERT(Utils::arrayEquals(nodes4, nodes));
@@ -357,14 +372,14 @@ void FindNodeTests::testFindNodeResponse6() {
     parsed->setId(id);
     auto _msg = std::static_pointer_cast<FindNodeResponse>(parsed);
 
-    CPPUNIT_ASSERT(Message::Type::RESPONSE == _msg->getType());
-    CPPUNIT_ASSERT(Message::Method::FIND_NODE == _msg->getMethod());
-    CPPUNIT_ASSERT(id == _msg->getId());
-    CPPUNIT_ASSERT(txid == _msg->getTxid());
-    CPPUNIT_ASSERT(VERSION_STR == _msg->getReadableVersion());
+    CPPUNIT_ASSERT(_msg->getType() == Message::Type::RESPONSE);
+    CPPUNIT_ASSERT(_msg->getMethod() == Message::Method::FIND_NODE);
+    CPPUNIT_ASSERT(_msg->getId() == id);
+    CPPUNIT_ASSERT(_msg->getTxid() == txid);
+    CPPUNIT_ASSERT(_msg->getReadableVersion() == VERSION_STR);
+    CPPUNIT_ASSERT(_msg->getToken() == 0);
     CPPUNIT_ASSERT(_msg->getNodes4().empty());
     CPPUNIT_ASSERT(!_msg->getNodes6().empty());
-    CPPUNIT_ASSERT(0 == _msg->getToken());
 
     auto nodes = _msg->getNodes6();
     CPPUNIT_ASSERT(Utils::arrayEquals(nodes6, nodes));
@@ -394,14 +409,14 @@ void FindNodeTests::testFindNodeResponse6WithToken() {
     parsed->setId(id);
     auto _msg = std::static_pointer_cast<FindNodeResponse>(parsed);
 
-    CPPUNIT_ASSERT(Message::Type::RESPONSE == _msg->getType());
-    CPPUNIT_ASSERT(Message::Method::FIND_NODE == _msg->getMethod());
-    CPPUNIT_ASSERT(id == _msg->getId());
-    CPPUNIT_ASSERT(txid == _msg->getTxid());
-    CPPUNIT_ASSERT(VERSION_STR == _msg->getReadableVersion());
+    CPPUNIT_ASSERT(_msg->getType() == Message::Type::RESPONSE);
+    CPPUNIT_ASSERT(_msg->getMethod() == Message::Method::FIND_NODE);
+    CPPUNIT_ASSERT(_msg->getId() == id);
+    CPPUNIT_ASSERT(_msg->getTxid() == txid);
+    CPPUNIT_ASSERT(_msg->getReadableVersion() == VERSION_STR);
+    CPPUNIT_ASSERT(_msg->getToken() == 0x43218765);
     CPPUNIT_ASSERT(_msg->getNodes4().empty());
     CPPUNIT_ASSERT(!_msg->getNodes6().empty());
-    CPPUNIT_ASSERT(0x43218765 == _msg->getToken());
 
     auto nodes = _msg->getNodes6();
     CPPUNIT_ASSERT(Utils::arrayEquals(nodes6, nodes));
@@ -437,14 +452,14 @@ void FindNodeTests::testFindNodeResponse46() {
     parsed->setId(id);
     auto _msg = std::static_pointer_cast<FindNodeResponse>(parsed);
 
-    CPPUNIT_ASSERT(Message::Type::RESPONSE == _msg->getType());
-    CPPUNIT_ASSERT(Message::Method::FIND_NODE == _msg->getMethod());
-    CPPUNIT_ASSERT(id == _msg->getId());
-    CPPUNIT_ASSERT(txid == _msg->getTxid());
-    CPPUNIT_ASSERT(0 == _msg->getVersion());
+    CPPUNIT_ASSERT(_msg->getType() == Message::Type::RESPONSE);
+    CPPUNIT_ASSERT(_msg->getMethod() == Message::Method::FIND_NODE);
+    CPPUNIT_ASSERT(_msg->getId() == id);
+    CPPUNIT_ASSERT(_msg->getTxid() == txid);
+    CPPUNIT_ASSERT(_msg->getVersion() == 0);
+    CPPUNIT_ASSERT(_msg->getToken() == 0);
     CPPUNIT_ASSERT(!_msg->getNodes4().empty());
     CPPUNIT_ASSERT(!_msg->getNodes6().empty());
-    CPPUNIT_ASSERT(0 == _msg->getToken());
 
     auto nodes = _msg->getNodes4();
     CPPUNIT_ASSERT(Utils::arrayEquals(nodes4, nodes));
@@ -484,23 +499,20 @@ void FindNodeTests::testFindNodeResponse46WithToken() {
     parsed->setId(id);
     auto _msg = std::static_pointer_cast<FindNodeResponse>(parsed);
 
-    CPPUNIT_ASSERT(Message::Type::RESPONSE == _msg->getType());
-    CPPUNIT_ASSERT(Message::Method::FIND_NODE == _msg->getMethod());
-    CPPUNIT_ASSERT(id == _msg->getId());
-    CPPUNIT_ASSERT(txid == _msg->getTxid());
-    CPPUNIT_ASSERT(0 == _msg->getVersion());
-    CPPUNIT_ASSERT(false == _msg->getNodes4().empty());
-    CPPUNIT_ASSERT(false == _msg->getNodes6().empty());
-    CPPUNIT_ASSERT(0x87654321 == _msg->getToken());
+    CPPUNIT_ASSERT(_msg->getType() == Message::Type::RESPONSE);
+    CPPUNIT_ASSERT(_msg->getMethod() == Message::Method::FIND_NODE);
+    CPPUNIT_ASSERT(_msg->getId() == id);
+    CPPUNIT_ASSERT(_msg->getTxid() == txid);
+    CPPUNIT_ASSERT(_msg->getVersion() == 0);
+    CPPUNIT_ASSERT(_msg->getToken() == 0x87654321);
+    CPPUNIT_ASSERT(!_msg->getNodes4().empty());
+    CPPUNIT_ASSERT(!_msg->getNodes6().empty());
 
     auto nodes = _msg->getNodes4();
     CPPUNIT_ASSERT(Utils::arrayEquals(nodes4, nodes));
 
     nodes = _msg->getNodes6();
     CPPUNIT_ASSERT(Utils::arrayEquals(nodes6, nodes));
-}
-
-void FindNodeTests::tearDown() {
 }
 
 }

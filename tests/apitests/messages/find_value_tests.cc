@@ -35,17 +35,25 @@ using namespace carrier;
 namespace test {
 CPPUNIT_TEST_SUITE_REGISTRATION(FindValueTests);
 
-void FindValueTests::setUp() {
-}
-
 void FindValueTests::testFindValueRequestSize() {
+    auto nodeId = Id::random();
+    auto seq = Utils::getRandomInteger(62);
     auto msg = FindValueRequest(Id::random());
-    msg.setId(Id::random());
+    msg.setId(nodeId);
     msg.setTxid(0x87654321);
     msg.setVersion(VERSION);
     msg.setWant4(true);
     msg.setWant6(true);
-    msg.setSequenceNumber(Utils::getRandomInteger(62));
+    msg.setSequenceNumber(seq);
+
+    CPPUNIT_ASSERT(msg.getType() == Message::Type::REQUEST);
+    CPPUNIT_ASSERT(msg.getMethod() == Message::Method::FIND_VALUE);
+    CPPUNIT_ASSERT(msg.getId() == nodeId);
+    CPPUNIT_ASSERT(msg.getTxid() == 0x87654321);
+    CPPUNIT_ASSERT(msg.getVersion() == VERSION);
+    CPPUNIT_ASSERT(msg.doesWant4());
+    CPPUNIT_ASSERT(msg.doesWant6());
+    CPPUNIT_ASSERT(msg.getSequenceNumber() == seq);
 
     auto serialized = msg.serialize();
     CPPUNIT_ASSERT(serialized.size() <= msg.estimateSize());
@@ -72,13 +80,13 @@ void FindValueTests::testFindValueRequest4() {
     parsed->setId(nodeId);
     auto _msg = std::static_pointer_cast<FindValueRequest>(parsed);
 
-    CPPUNIT_ASSERT_EQUAL(Message::Type::REQUEST, _msg->getType());
-    CPPUNIT_ASSERT_EQUAL(Message::Method::FIND_VALUE, _msg->getMethod());
-    CPPUNIT_ASSERT_EQUAL(nodeId, _msg->getId());
-    CPPUNIT_ASSERT_EQUAL(txid, _msg->getTxid());
-    CPPUNIT_ASSERT_EQUAL(VERSION_STR, _msg->getReadableVersion());
-    CPPUNIT_ASSERT_EQUAL(target, _msg->getTarget());
-    CPPUNIT_ASSERT_EQUAL(seq, _msg->getSequenceNumber());
+    CPPUNIT_ASSERT(_msg->getType() == Message::Type::REQUEST);
+    CPPUNIT_ASSERT(_msg->getMethod() == Message::Method::FIND_VALUE);
+    CPPUNIT_ASSERT(_msg->getId() == nodeId);
+    CPPUNIT_ASSERT(_msg->getTxid() == txid);
+    CPPUNIT_ASSERT(_msg->getReadableVersion() == VERSION_STR);
+    CPPUNIT_ASSERT(_msg->getTarget() == target);
+    CPPUNIT_ASSERT(_msg->getSequenceNumber() == seq);
     CPPUNIT_ASSERT(_msg->doesWant4());
     CPPUNIT_ASSERT(!_msg->doesWant6());
 }
@@ -103,12 +111,13 @@ void FindValueTests::testFindValueRequest6() {
     parsed->setId(nodeId);
     auto _msg = std::static_pointer_cast<FindValueRequest>(parsed);
 
-    CPPUNIT_ASSERT_EQUAL(Message::Type::REQUEST, _msg->getType());
-    CPPUNIT_ASSERT_EQUAL(Message::Method::FIND_VALUE, _msg->getMethod());
-    CPPUNIT_ASSERT_EQUAL(nodeId, _msg->getId());
-    CPPUNIT_ASSERT_EQUAL(txid, _msg->getTxid());
-    CPPUNIT_ASSERT_EQUAL(target, _msg->getTarget());
-    CPPUNIT_ASSERT_EQUAL(seq, _msg->getSequenceNumber());
+    CPPUNIT_ASSERT(_msg->getType() == Message::Type::REQUEST);
+    CPPUNIT_ASSERT(_msg->getMethod() == Message::Method::FIND_VALUE);
+    CPPUNIT_ASSERT(_msg->getId() == nodeId);
+    CPPUNIT_ASSERT(_msg->getTxid() == txid);
+    CPPUNIT_ASSERT(_msg->getVersion() == 0);
+    CPPUNIT_ASSERT(_msg->getTarget() == target);
+    CPPUNIT_ASSERT(_msg->getSequenceNumber() == seq);
     CPPUNIT_ASSERT(!_msg->doesWant4());
     CPPUNIT_ASSERT(_msg->doesWant6());
 }
@@ -133,18 +142,18 @@ void FindValueTests::testFindValueRequest46() {
     parsed->setId(nodeId);
     auto _msg = std::static_pointer_cast<FindValueRequest>(parsed);
 
-    CPPUNIT_ASSERT_EQUAL(Message::Type::REQUEST, _msg->getType());
-    CPPUNIT_ASSERT_EQUAL(Message::Method::FIND_VALUE, _msg->getMethod());
-    CPPUNIT_ASSERT_EQUAL(nodeId, _msg->getId());
-    CPPUNIT_ASSERT_EQUAL(txid, _msg->getTxid());
-    CPPUNIT_ASSERT_EQUAL(target, _msg->getTarget());
-    CPPUNIT_ASSERT_EQUAL(seq, _msg->getSequenceNumber());
+    CPPUNIT_ASSERT(_msg->getType() == Message::Type::REQUEST);
+    CPPUNIT_ASSERT(_msg->getMethod() == Message::Method::FIND_VALUE);
+    CPPUNIT_ASSERT(_msg->getId() == nodeId);
+    CPPUNIT_ASSERT(_msg->getTxid() == txid);
+    CPPUNIT_ASSERT(_msg->getVersion() == 0);
+    CPPUNIT_ASSERT(_msg->getTarget() == target);
+    CPPUNIT_ASSERT(_msg->getSequenceNumber() == seq);
     CPPUNIT_ASSERT(_msg->doesWant4());
     CPPUNIT_ASSERT(_msg->doesWant6());
 }
 
-void
-FindValueTests::testFindValueResponseSize() {
+void FindValueTests::testFindValueResponseSize() {
     std::list<std::shared_ptr<NodeInfo>> nodes4 {};
     nodes4.push_back(std::make_shared<NodeInfo>(Id::random(), "251.251.251.251", 65535));
     nodes4.push_back(std::make_shared<NodeInfo>(Id::random(), "251.251.251.251", 65534));
@@ -171,21 +180,29 @@ FindValueTests::testFindValueResponseSize() {
 
     Value value = Value::of(Id::random().blob(), {}, Id::random().blob(), nonce, 0x77654321, sig, data);
 
+    auto nodeId = Id::random();
     auto msg = FindValueResponse(0xF7654321);
-    msg.setId(Id::random());
+    msg.setId(nodeId);
     msg.setVersion(VERSION);
     msg.setNodes4(nodes4);
     msg.setNodes6(nodes6);
     msg.setToken(0xF8765432);
     msg.setValue(value);
 
+    CPPUNIT_ASSERT(msg.getType() == Message::Type::RESPONSE);
+    CPPUNIT_ASSERT(msg.getMethod() == Message::Method::FIND_VALUE);
+    CPPUNIT_ASSERT(msg.getId() == nodeId);
+    CPPUNIT_ASSERT(msg.getTxid() == 0xF7654321);
+    CPPUNIT_ASSERT(msg.getVersion() == VERSION);
+    CPPUNIT_ASSERT(msg.getToken() == 0xF8765432);
+    CPPUNIT_ASSERT(msg.getValue() == value);
+
     auto serialized = msg.serialize();
     printMessage(msg, serialized);
     CPPUNIT_ASSERT(serialized.size() <= msg.estimateSize());
 }
 
-void
-FindValueTests::testFindValueResponse4() {
+void FindValueTests::testFindValueResponse4() {
     auto id = Id::random();
     int txid = Utils::getRandomValue();
     auto pk = Id::random();
@@ -222,16 +239,15 @@ FindValueTests::testFindValueResponse4() {
     parsed->setId(id);
     auto _msg = std::static_pointer_cast<FindValueResponse>(parsed);
 
-    CPPUNIT_ASSERT_EQUAL(Message::Type::RESPONSE, _msg->getType());
-    CPPUNIT_ASSERT_EQUAL(Message::Method::FIND_VALUE, _msg->getMethod());
-    CPPUNIT_ASSERT_EQUAL(id, _msg->getId());
-    CPPUNIT_ASSERT_EQUAL(txid, _msg->getTxid());
-    CPPUNIT_ASSERT_EQUAL(VERSION_STR, _msg->getReadableVersion());
+    CPPUNIT_ASSERT(_msg->getType() == Message::Type::RESPONSE);
+    CPPUNIT_ASSERT(_msg->getMethod() == Message::Method::FIND_VALUE);
+    CPPUNIT_ASSERT(_msg->getId() == id);
+    CPPUNIT_ASSERT(_msg->getTxid() == txid);
+    CPPUNIT_ASSERT(_msg->getReadableVersion() == VERSION_STR);
+    CPPUNIT_ASSERT(_msg->getToken() == token);
+    CPPUNIT_ASSERT(_msg->getValue() == value);
     CPPUNIT_ASSERT(_msg->getNodes6().empty());
     CPPUNIT_ASSERT(!_msg->getNodes4().empty());
-    CPPUNIT_ASSERT_EQUAL(token, _msg->getToken());
-
-    CPPUNIT_ASSERT(value == _msg->getValue());
 
     auto nodes = _msg->getNodes4();
     CPPUNIT_ASSERT(Utils::arrayEquals(nodes4, nodes));
@@ -268,16 +284,15 @@ void FindValueTests::testFindValueResponse4Immutable() {
     parsed->setId(id);
     auto _msg = std::static_pointer_cast<FindValueResponse>(parsed);
 
-    CPPUNIT_ASSERT_EQUAL(Message::Type::RESPONSE, _msg->getType());
-    CPPUNIT_ASSERT_EQUAL(Message::Method::FIND_VALUE, _msg->getMethod());
-    CPPUNIT_ASSERT_EQUAL(id, _msg->getId());
-    CPPUNIT_ASSERT_EQUAL(txid, _msg->getTxid());
-    CPPUNIT_ASSERT_EQUAL(VERSION_STR, _msg->getReadableVersion());
+    CPPUNIT_ASSERT(_msg->getType() == Message::Type::RESPONSE);
+    CPPUNIT_ASSERT(_msg->getMethod() == Message::Method::FIND_VALUE);
+    CPPUNIT_ASSERT(_msg->getId() == id);
+    CPPUNIT_ASSERT(_msg->getTxid() == txid);
+    CPPUNIT_ASSERT(_msg->getReadableVersion() == VERSION_STR);
+    CPPUNIT_ASSERT(_msg->getToken() == token);
+    CPPUNIT_ASSERT(_msg->getValue() == value);
     CPPUNIT_ASSERT(_msg->getNodes6().empty());
     CPPUNIT_ASSERT(!_msg->getNodes4().empty());
-    CPPUNIT_ASSERT_EQUAL(token, _msg->getToken());
-
-    CPPUNIT_ASSERT(value == _msg->getValue());
 
     auto nodes = _msg->getNodes4();
     CPPUNIT_ASSERT(Utils::arrayEquals(nodes4, nodes));
@@ -320,16 +335,15 @@ void FindValueTests::testFindValueResponse6() {
     parsed->setId(id);
     auto _msg = std::static_pointer_cast<FindValueResponse>(parsed);
 
-    CPPUNIT_ASSERT_EQUAL(Message::Type::RESPONSE, _msg->getType());
-    CPPUNIT_ASSERT_EQUAL(Message::Method::FIND_VALUE, _msg->getMethod());
-    CPPUNIT_ASSERT_EQUAL(id, _msg->getId());
-    CPPUNIT_ASSERT_EQUAL(txid, _msg->getTxid());
-    CPPUNIT_ASSERT_EQUAL(VERSION_STR, _msg->getReadableVersion());
+    CPPUNIT_ASSERT(_msg->getType() == Message::Type::RESPONSE);
+    CPPUNIT_ASSERT(_msg->getMethod() == Message::Method::FIND_VALUE);
+    CPPUNIT_ASSERT(_msg->getId() == id);
+    CPPUNIT_ASSERT(_msg->getTxid() == txid);
+    CPPUNIT_ASSERT(_msg->getReadableVersion() == VERSION_STR);
+    CPPUNIT_ASSERT(_msg->getToken() == token);
+    CPPUNIT_ASSERT(_msg->getValue() == value);
+    CPPUNIT_ASSERT(!_msg->getNodes6().empty());
     CPPUNIT_ASSERT(_msg->getNodes4().empty());
-    CPPUNIT_ASSERT(false == _msg->getNodes6().empty());
-    CPPUNIT_ASSERT_EQUAL(token, _msg->getToken());
-
-    CPPUNIT_ASSERT(value == _msg->getValue());
 
     auto nodes = _msg->getNodes6();
     CPPUNIT_ASSERT(Utils::arrayEquals(nodes6, nodes));
@@ -379,16 +393,15 @@ void FindValueTests::testFindValueResponse46() {
     parsed->setId(id);
     auto _msg = std::static_pointer_cast<FindValueResponse>(parsed);
 
-    CPPUNIT_ASSERT_EQUAL(Message::Type::RESPONSE, _msg->getType());
-    CPPUNIT_ASSERT_EQUAL(Message::Method::FIND_VALUE, _msg->getMethod());
-    CPPUNIT_ASSERT_EQUAL(id, _msg->getId());
-    CPPUNIT_ASSERT_EQUAL(txid, _msg->getTxid());
-    CPPUNIT_ASSERT_EQUAL(0, _msg->getVersion());
-    CPPUNIT_ASSERT(!_msg->getNodes4().empty());
+    CPPUNIT_ASSERT(_msg->getType() == Message::Type::RESPONSE);
+    CPPUNIT_ASSERT(_msg->getMethod() == Message::Method::FIND_VALUE);
+    CPPUNIT_ASSERT(_msg->getId() == id);
+    CPPUNIT_ASSERT(_msg->getTxid() == txid);
+    CPPUNIT_ASSERT(_msg->getVersion() == 0);
+    CPPUNIT_ASSERT(_msg->getToken() == token);
+    CPPUNIT_ASSERT(_msg->getValue() == value);
     CPPUNIT_ASSERT(!_msg->getNodes6().empty());
-    CPPUNIT_ASSERT_EQUAL(token, _msg->getToken());
-
-    CPPUNIT_ASSERT(value == _msg->getValue());
+    CPPUNIT_ASSERT(!_msg->getNodes4().empty());
 
     auto nodes = _msg->getNodes4();
     CPPUNIT_ASSERT(Utils::arrayEquals(nodes4, nodes));
@@ -397,6 +410,4 @@ void FindValueTests::testFindValueResponse46() {
     CPPUNIT_ASSERT(Utils::arrayEquals(nodes6, nodes));
 }
 
-void FindValueTests::tearDown() {
-}
 }
