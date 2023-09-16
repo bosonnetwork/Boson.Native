@@ -30,36 +30,50 @@
 namespace test {
 CPPUNIT_TEST_SUITE_REGISTRATION(AnnouncePeerTests);
 
-void AnnouncePeerTests::setUp() {
-}
-
 void AnnouncePeerTests::testAnnouncePeerRequestSize() {
+    auto origin = Id::random();
     std::vector<uint8_t> sig(64);
-    PeerInfo peer = PeerInfo::of(Id::random().blob(), {}, Id::random().blob(), {}, 65535, {}, sig);
+    auto peer = PeerInfo::of(Id::random().blob(), {}, Id::random().blob(), {}, 65535, {}, sig);
 
     auto msg = AnnouncePeerRequest();
-    msg.setId(Id::random());
+    msg.setId(origin);
     msg.setTxid(0x87654321);
     msg.setToken(0x88888888);
     msg.setVersion(VERSION);
     msg.setPeer(peer);
 
+    CPPUNIT_ASSERT(msg.getType() == Message::Type::REQUEST);
+    CPPUNIT_ASSERT(msg.getMethod() == Message::Method::ANNOUNCE_PEER);
+    CPPUNIT_ASSERT(msg.getId() == origin);
+    CPPUNIT_ASSERT(msg.getTxid() == 0x87654321);
+    CPPUNIT_ASSERT(msg.getVersion() == VERSION);
+    CPPUNIT_ASSERT(msg.getToken() == 0x88888888);
+    CPPUNIT_ASSERT(msg.getPeer() == peer);
+
     auto serialized = msg.serialize();
-    printMessage(msg, serialized);
     CPPUNIT_ASSERT(serialized.size() <= msg.estimateSize());
 }
 
 void AnnouncePeerTests::testAnnouncePeerRequestSize2() {
+    auto origin = Id::random();
     std::vector<uint8_t> sig(64);
     Random::buffer(sig.data(), sig.size());
-    PeerInfo peer = PeerInfo::of(Id::random().blob(), {}, Id::random().blob(), {}, 65535, "https://abc.pc2.net", sig);
+    auto peer = PeerInfo::of(Id::random().blob(), {}, Id::random().blob(), {}, 65535, "https://abc.pc2.net", sig);
 
     auto msg = AnnouncePeerRequest();
-    msg.setId(Id::random());
+    msg.setId(origin);
     msg.setTxid(0x87654321);
     msg.setToken(0x88888888);
     msg.setVersion(VERSION);
     msg.setPeer(peer);
+
+    CPPUNIT_ASSERT(msg.getType() == Message::Type::REQUEST);
+    CPPUNIT_ASSERT(msg.getMethod() == Message::Method::ANNOUNCE_PEER);
+    CPPUNIT_ASSERT(msg.getId() == origin);
+    CPPUNIT_ASSERT(msg.getTxid() == 0x87654321);
+    CPPUNIT_ASSERT(msg.getVersion() == VERSION);
+    CPPUNIT_ASSERT(msg.getToken() == 0x88888888);
+    CPPUNIT_ASSERT(msg.getPeer() == peer);
 
     auto bin = msg.serialize();
     CPPUNIT_ASSERT(bin.size() <= msg.estimateSize());
@@ -69,13 +83,12 @@ void AnnouncePeerTests::testAnnouncePeerRequest() {
     auto nodeId = Id::random();
     auto peerId = Id::random();
     int txid  = Utils::getRandomValue();
+    int token = Utils::getRandomValue();
 
     uint16_t port  = Utils::getRandom(1, 65535);
-    int token = Utils::getRandomValue();
     std::vector<uint8_t> sig(64);
     Random::buffer(sig.data(), sig.size());
-
-    PeerInfo peer = PeerInfo::of(peerId.blob(), {}, nodeId.blob(), {}, port, {}, sig);
+    auto peer = PeerInfo::of(peerId.blob(), {}, nodeId.blob(), {}, port, {}, sig);
 
     auto msg = AnnouncePeerRequest();
     msg.setId(nodeId);
@@ -85,34 +98,30 @@ void AnnouncePeerTests::testAnnouncePeerRequest() {
     msg.setPeer(peer);
 
     auto serialized = msg.serialize();
-    printMessage(msg, serialized);
-
     auto parsed = Message::parse(serialized.data(), serialized.size());
     parsed->setId(nodeId);
     auto _msg = std::static_pointer_cast<AnnouncePeerRequest>(parsed);
 
-    CPPUNIT_ASSERT_EQUAL(Message::Type::REQUEST, _msg->getType());
-    CPPUNIT_ASSERT_EQUAL(Message::Method::ANNOUNCE_PEER, _msg->getMethod());
-    CPPUNIT_ASSERT_EQUAL(nodeId, _msg->getId());
-    CPPUNIT_ASSERT_EQUAL(txid,   _msg->getTxid());
-    CPPUNIT_ASSERT_EQUAL(VERSION_STR, _msg->getReadableVersion());
-    CPPUNIT_ASSERT_EQUAL(token,  _msg->getToken());
-
-    CPPUNIT_ASSERT(peer == _msg->getPeer());
+    CPPUNIT_ASSERT(_msg->getType() == Message::Type::REQUEST);
+    CPPUNIT_ASSERT(_msg->getMethod() == Message::Method::ANNOUNCE_PEER);
+    CPPUNIT_ASSERT(_msg->getId() == nodeId);
+    CPPUNIT_ASSERT(_msg->getTxid() == txid);
+    CPPUNIT_ASSERT(_msg->getReadableVersion() == VERSION_STR);
+    CPPUNIT_ASSERT(_msg->getToken() == token);
+    CPPUNIT_ASSERT(_msg->getPeer() == peer);
 }
 
 void AnnouncePeerTests::testAnnouncePeerRequest2() {
     auto nodeId = Id::random();
     auto origin = Id::random();
     auto peerId = Id::random();
-    int txid  = Utils::getRandomValue();
+    auto txid  = Utils::getRandomValue();
+    auto port  = Utils::getRandom(1, 65535);
+    auto token = Utils::getRandomValue();
 
-    uint16_t port  = Utils::getRandom(1, 65535);
-    int token = Utils::getRandomValue();
     std::vector<uint8_t> sig(64);
     Random::buffer(sig.data(), sig.size());
-
-    PeerInfo peer = PeerInfo::of(peerId.blob(), {}, nodeId.blob(), origin.blob(), port, "http://abc.pc2.net/", sig);
+    auto peer = PeerInfo::of(peerId.blob(), {}, nodeId.blob(), origin.blob(), port, "http://abc.pc2.net/", sig);
 
     auto msg = AnnouncePeerRequest();
     msg.setId(origin);
@@ -122,27 +131,31 @@ void AnnouncePeerTests::testAnnouncePeerRequest2() {
     msg.setPeer(peer);
 
     auto serialized = msg.serialize();
-    printMessage(msg, serialized);
-
     auto parsed = Message::parse(serialized.data(), serialized.size());
     parsed->setId(origin);
     auto _msg = std::static_pointer_cast<AnnouncePeerRequest>(parsed);
 
-    CPPUNIT_ASSERT_EQUAL(Message::Type::REQUEST, _msg->getType());
-    CPPUNIT_ASSERT_EQUAL(Message::Method::ANNOUNCE_PEER, _msg->getMethod());
-    CPPUNIT_ASSERT_EQUAL(origin, _msg->getId());
-    CPPUNIT_ASSERT_EQUAL(txid,   _msg->getTxid());
-    CPPUNIT_ASSERT_EQUAL(VERSION_STR, _msg->getReadableVersion());
-    CPPUNIT_ASSERT_EQUAL(token,  _msg->getToken());
-
-    CPPUNIT_ASSERT_EQUAL(peer, _msg->getPeer());
+    CPPUNIT_ASSERT(_msg->getType() == Message::Type::REQUEST);
+    CPPUNIT_ASSERT(_msg->getMethod() == Message::Method::ANNOUNCE_PEER);
+    CPPUNIT_ASSERT(_msg->getId() == origin);
+    CPPUNIT_ASSERT(_msg->getTxid() == txid);
+    CPPUNIT_ASSERT(_msg->getReadableVersion() == VERSION_STR);
+    CPPUNIT_ASSERT(_msg->getToken() == token);
+    CPPUNIT_ASSERT(_msg->getPeer() == peer);
 }
 
 void AnnouncePeerTests::testAnnouncePeerResponseSize() {
+    auto origin = Id::random();
     auto msg = AnnouncePeerResponse(0xf7654321);
-    msg.setId(Id::random());
+    msg.setId(origin);
     msg.setTxid(0x87654321);
     msg.setVersion(VERSION);
+
+    CPPUNIT_ASSERT(msg.getType() == Message::Type::RESPONSE);
+    CPPUNIT_ASSERT(msg.getMethod() == Message::Method::ANNOUNCE_PEER);
+    CPPUNIT_ASSERT(msg.getId() == origin);
+    CPPUNIT_ASSERT(msg.getTxid() == 0x87654321);
+    CPPUNIT_ASSERT(msg.getVersion() == VERSION);
 
     auto serialized = msg.serialize();
     CPPUNIT_ASSERT(serialized.size() <= msg.estimateSize());
@@ -163,13 +176,11 @@ void AnnouncePeerTests::testAnnouncePeerResponse() {
     parsed->setId(id);
     auto _msg = std::static_pointer_cast<AnnouncePeerResponse>(parsed);
 
-    CPPUNIT_ASSERT_EQUAL(Message::Type::RESPONSE, _msg->getType());
-    CPPUNIT_ASSERT_EQUAL(Message::Method::ANNOUNCE_PEER, _msg->getMethod());
-    CPPUNIT_ASSERT_EQUAL(id, _msg->getId());
-    CPPUNIT_ASSERT_EQUAL(txid, _msg->getTxid());
-    CPPUNIT_ASSERT_EQUAL(VERSION_STR, _msg->getReadableVersion());
+    CPPUNIT_ASSERT(_msg->getType() == Message::Type::RESPONSE);
+    CPPUNIT_ASSERT(_msg->getMethod() == Message::Method::ANNOUNCE_PEER);
+    CPPUNIT_ASSERT(_msg->getId() == id);
+    CPPUNIT_ASSERT(_msg->getTxid() == txid);
+    CPPUNIT_ASSERT(_msg->getReadableVersion() == VERSION_STR);
 }
 
-void AnnouncePeerTests::tearDown() {
-}
 }
