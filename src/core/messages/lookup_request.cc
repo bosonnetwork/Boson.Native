@@ -40,8 +40,8 @@ void LookupRequest::setWant(int want) {
 
 void LookupRequest::serializeInternal(nlohmann::json& root) const {
     nlohmann::json json = {
-        {Message::KEY_REQ_TARGET, target},
-        {Message::KEY_REQ_WANT, getWant()}
+        {KEY_REQ_TARGET, target},
+        {KEY_REQ_WANT, getWant()}
     };
     _serialize(json);
 
@@ -50,13 +50,13 @@ void LookupRequest::serializeInternal(nlohmann::json& root) const {
 }
 
 void LookupRequest::parse(const std::string& fieldName, nlohmann::json& object) {
-    if (fieldName != Message::KEY_REQUEST || !object.is_object())
+    if (fieldName != KEY_REQUEST || !object.is_object())
         throw MessageError("Invalid request message");
 
     for (const auto& [key, value]: object.items()) {
-        if (key == Message::KEY_REQ_TARGET) {
+        if (key == KEY_REQ_TARGET) {
             value.get_to(target);
-        } else if(key == Message::KEY_REQ_WANT) {
+        } else if(key == KEY_REQ_WANT) {
             setWant(value.get<int>());
         } else {
             _parse(key, value);

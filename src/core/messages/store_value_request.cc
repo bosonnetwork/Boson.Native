@@ -51,45 +51,45 @@ Value StoreValueRequest::getValue() const {
 void StoreValueRequest::serializeInternal(nlohmann::json& root) const {
     nlohmann::json object = nlohmann::json::object();
 
-    object[Message::KEY_REQ_TOKEN] = token;
+    object[KEY_REQ_TOKEN] = token;
     if (isMutable()) {
-        object[Message::KEY_REQ_PUBLICKEY] = publicKey.value();
+        object[KEY_REQ_PUBLICKEY] = publicKey.value();
         if (isEncrypted())
-            object[Message::KEY_REQ_RECIPIENT] = recipient.value();
-        object[Message::KEY_REQ_NONCE] = nlohmann::json::binary_t {{nonce.value().cbegin(), nonce.value().cend()}};
-        object[Message::KEY_REQ_SIGNATURE] = nlohmann::json::binary_t {signature.value()};
+            object[KEY_REQ_RECIPIENT] = recipient.value();
+        object[KEY_REQ_NONCE] = nlohmann::json::binary_t {{nonce.value().cbegin(), nonce.value().cend()}};
+        object[KEY_REQ_SIGNATURE] = nlohmann::json::binary_t {signature.value()};
         if (sequenceNumber >= 0)
-            object[Message::KEY_REQ_SEQ] = sequenceNumber;
+            object[KEY_REQ_SEQ] = sequenceNumber;
         if (expectedSequenceNumber >= 0)
-            object[Message::KEY_REQ_CAS] = expectedSequenceNumber;
+            object[KEY_REQ_CAS] = expectedSequenceNumber;
     }
 
-    object[Message::KEY_REQ_VALUE] = nlohmann::json::binary_t {value};
+    object[KEY_REQ_VALUE] = nlohmann::json::binary_t {value};
 
     Message::serializeInternal(root);
     root[getKeyString()] = object;
 }
 
 void StoreValueRequest::parse(const std::string& fieldName, nlohmann::json& object) {
-    if (fieldName != Message::KEY_REQUEST || !object.is_object())
+    if (fieldName != KEY_REQUEST || !object.is_object())
         throw MessageError("Invalid request message");
 
     for (const auto& [key, object] : object.items()) {
-        if (key == Message::KEY_REQ_PUBLICKEY) {
+        if (key == KEY_REQ_PUBLICKEY) {
             publicKey = object.get<Id>();
-        } else if (key == Message::KEY_REQ_RECIPIENT) {
+        } else if (key == KEY_REQ_RECIPIENT) {
             recipient = object.get<Id>();
-        } else if (key == Message::KEY_REQ_NONCE) {
+        } else if (key == KEY_REQ_NONCE) {
             nonce = CryptoBox::Nonce(Blob(object.get_binary()));
-        } else if (key == Message::KEY_REQ_SIGNATURE) {
+        } else if (key == KEY_REQ_SIGNATURE) {
            signature = object.get_binary();
-        } else if (key == Message::KEY_REQ_SEQ) {
+        } else if (key == KEY_REQ_SEQ) {
             sequenceNumber = object.get<uint16_t>();
-        } else if (key == Message::KEY_REQ_CAS) {
+        } else if (key == KEY_REQ_CAS) {
             object.get_to(expectedSequenceNumber);
-        } else if (key == Message::KEY_REQ_TOKEN) {
+        } else if (key == KEY_REQ_TOKEN) {
             object.get_to(token);
-        } else if (key == Message::KEY_RES_VALUE) {
+        } else if (key == KEY_RES_VALUE) {
             value = object.get_binary();
         } else {
             throw MessageError("Unknown field: " + key);

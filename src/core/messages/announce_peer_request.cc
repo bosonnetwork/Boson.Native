@@ -32,38 +32,38 @@ namespace carrier {
 
 void AnnouncePeerRequest::serializeInternal(nlohmann::json& root) const {
     nlohmann::json object = {
-        {Message::KEY_REQ_TOKEN, token},
-        {Message::KEY_REQ_TARGET, peerId},
-        {Message::KEY_REQ_PORT, port},
-        {Message::KEY_REQ_SIGNATURE, nlohmann::json::binary_t {signature}}
+        {KEY_REQ_TOKEN, token},
+        {KEY_REQ_TARGET, peerId},
+        {KEY_REQ_PORT, port},
+        {KEY_REQ_SIGNATURE, nlohmann::json::binary_t {signature}}
     };
 
     if (nodeId.has_value())
-        object[Message::KEY_REQ_PROXY_ID] = nodeId.value();
+        object[KEY_REQ_PROXY_ID] = nodeId.value();
 
     if (!alternativeURL.empty())
-        object[Message::KEY_REQ_ALT] = alternativeURL;
+        object[KEY_REQ_ALT] = alternativeURL;
 
     Message::serializeInternal(root);
     root[getKeyString()] = object;
 }
 
 void AnnouncePeerRequest::parse(const std::string& fieldName, nlohmann::json& object) {
-    if (fieldName != Message::KEY_REQUEST || !object.is_object())
+    if (fieldName != KEY_REQUEST || !object.is_object())
         throw MessageError("Invalid " + std::to_string((int)getMethod()) + "reqeust message");
 
     for (const auto& [key, value] : object.items()) {
-        if (key == Message::KEY_REQ_TARGET)
+        if (key == KEY_REQ_TARGET)
             value.get_to(peerId);
-        else if(key == Message::KEY_REQ_PROXY_ID)
+        else if(key == KEY_REQ_PROXY_ID)
             value.get_to(nodeId);
-        else if(key == Message::KEY_REQ_PORT)
+        else if(key == KEY_REQ_PORT)
             value.get_to(port);
-        else if(key == Message::KEY_REQ_ALT)
+        else if(key == KEY_REQ_ALT)
             value.get_to(alternativeURL);
-        else if(key == Message::KEY_REQ_SIGNATURE)
+        else if(key == KEY_REQ_SIGNATURE)
             signature = value.get_binary();
-        else if(key == Message::KEY_REQ_TOKEN)
+        else if(key == KEY_REQ_TOKEN)
             value.get_to(token);
         else
             throw MessageError("Invalid message with unkown key: " + key);

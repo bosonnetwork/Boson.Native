@@ -27,11 +27,11 @@ namespace carrier {
 
 void FindValueRequest::_serialize(nlohmann::json& object) const {
     if (sequenceNumber >= 0)
-        object[Message::KEY_RES_SEQ] = sequenceNumber;
+        object[KEY_RES_SEQ] = sequenceNumber;
 }
 
 void FindValueRequest::_parse(const std::string& fieldName, nlohmann::json& object) {
-    if (fieldName != Message::KEY_RES_SEQ)
+    if (fieldName != KEY_RES_SEQ)
         throw MessageError(std::string("Unknown field: ") + fieldName);
 
     object.get_to(sequenceNumber);

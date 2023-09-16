@@ -38,47 +38,6 @@
 
 namespace carrier {
 
-const std::string Message::KEY_REQ_NODES4     = "n4";
-const std::string Message::KEY_REQ_NODES6     = "n6";
-
-const std::string Message::KEY_TYPE           = "y";
-const std::string Message::KEY_ID             = "i";
-const std::string Message::KEY_TXID           = "t";
-const std::string Message::KEY_VERSION        = "v";
-
-const std::string Message::KEY_REQUEST        = "q";
-const std::string Message::KEY_REQ_TARGET     = "t";
-const std::string Message::KEY_REQ_WANT       = "w";
-const std::string Message::KEY_REQ_PORT       = "p";
-const std::string Message::KEY_REQ_TOKEN      = "tok";
-const std::string Message::KEY_REQ_PUBLICKEY  = "k";
-const std::string Message::KEY_REQ_RECIPIENT  = "rec";
-const std::string Message::KEY_REQ_NONCE      = "n";
-const std::string Message::KEY_REQ_SIGNATURE  = "sig";
-const std::string Message::KEY_REQ_VALUE      = "v";
-const std::string Message::KEY_REQ_CAS        = "cas";
-const std::string Message::KEY_REQ_SEQ        = "seq";
-const std::string Message::KEY_REQ_PROXY_ID   = "x";
-const std::string Message::KEY_REQ_ALT        = "alt";
-
-const std::string Message::KEY_RESPONSE       = "r";
-const std::string Message::KEY_RES_NODES4     = "n4";
-const std::string Message::KEY_RES_NODES6     = "n6";
-const std::string Message::KEY_RES_TOKEN      = "tok";
-const std::string Message::KEY_RES_PEERS      = "p";
-const std::string Message::KEY_RES_PEERS4     = "p4";
-const std::string Message::KEY_RES_PEERS6     = "p6";
-const std::string Message::KEY_RES_PUBLICKEY  = "k";
-const std::string Message::KEY_RES_RECIPIENT  = "rec";
-const std::string Message::KEY_RES_NONCE      = "n";
-const std::string Message::KEY_RES_SIGNATURE  = "sig";
-const std::string Message::KEY_RES_VALUE      = "v";
-const std::string Message::KEY_RES_SEQ        = "seq";
-
-const std::string Message::KEY_ERROR          = "e";
-const std::string Message::KEY_ERR_CODE       = "c";
-const std::string Message::KEY_ERR_MESSAGE    = "m";
-
 const int Message::MSG_TYPE_MASK = 0xE0;
 const int Message::MSG_METHOD_MASK = 0x1F;
 
