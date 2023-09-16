@@ -31,6 +31,7 @@
 #include "messages/message.h"
 #include "rpccall.h"
 #include "scheduler.h"
+#include "rpcstatistics.h"
 
 namespace carrier {
 
@@ -85,6 +86,10 @@ public:
 
     void sendError(Sp<Message> msg, int code, const std::string& err);
 
+    RPCStatistics& getStatistics() {
+        return stats;
+    }
+
 private:
     void bindSockets(const SocketAddress& bind4, const SocketAddress& bind6);
     void openSockets();
@@ -117,6 +122,8 @@ private:
     uint64_t lastReachableCheck {0};
     uint64_t startTime;
     std::atomic<uint64_t> receivedMessages {0};
+
+    RPCStatistics stats {};
 
     mutable std::mutex lock;
 
