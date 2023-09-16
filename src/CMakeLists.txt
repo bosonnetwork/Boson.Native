@@ -71,6 +71,7 @@ list(APPEND CARRIER_SOURCES
     core/token_manager.cc
     core/rpccall.cc
     core/rpcserver.cc
+    core/rpcstatistics.cc
     core/sqlite_storage.cc
     core/default_configuration.cc
     core/constants.cc
