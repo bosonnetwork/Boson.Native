@@ -41,69 +41,44 @@ namespace carrier {
 const int Message::MSG_TYPE_MASK = 0xE0;
 const int Message::MSG_METHOD_MASK = 0x1F;
 
-Message::Type Message::ofType(int messageType) {
-    static const std::unordered_map<int, Type> typeMap {
-        {0x20, Type::REQUEST},
-        {0x40, Type::RESPONSE},
-        {0x00, Type::ERR}
-    };
-
-    int type = messageType & MSG_TYPE_MASK;
-    auto it = typeMap.find(type);
-    if (it == typeMap.end())
-        throw std::invalid_argument("Invalid message type: " + std::to_string(type));
-
-    return it->second;
+Sp<Message> Message::Method::createRequest() const {
+    switch(e) {
+    case Method::PING:
+        return std::make_shared<PingRequest>();
+    case Method::FIND_NODE:
+        return std::make_shared<FindNodeRequest>();
+    case Method::ANNOUNCE_PEER:
+        return std::make_shared<AnnouncePeerRequest>();
+    case Method::FIND_PEER:
+        return std::make_shared<FindPeerRequest>();
+    case Method::STORE_VALUE:
+        return std::make_shared<StoreValueRequest>();
+    case Method::FIND_VALUE:
+        return std::make_shared<FindValueRequest>();
+    case Method::UNKNOWN:
+    default:
+        throw MessageError("Invalid request method: " + std::to_string(e));
+    }
 }
 
-Message::Method Message::ofMethod(int messageType) {
-    static const std::unordered_map<int, Method> methodMap {
-        {0x01, Method::PING},
-        {0x02, Method::FIND_NODE},
-        {0x03, Method::ANNOUNCE_PEER},
-        {0x04, Method::FIND_PEER},
-        {0x05, Method::STORE_VALUE},
-        {0x06, Method::FIND_VALUE},
-        {0x00, Method::UNKNOWN}
-    };
-
-    int method = messageType & MSG_METHOD_MASK;
-    auto it = methodMap.find(method);
-    if (it == methodMap.end())
-        throw MessageError("Invalid message method: " + std::to_string(method));
-
-    return it->second;
-}
-
-const std::string& Message::getKeyString() const {
-    static std::unordered_map<Message::Type, std::string> keyMap = {
-        { Type::REQUEST, KEY_REQUEST },
-        { Type::RESPONSE, KEY_RESPONSE },
-        { Type::ERR, KEY_ERROR }
-    };
-    return keyMap[getType()];
-}
-
-const std::string& Message::getTypeString() const {
-    static std::unordered_map<Message::Type, std::string> nameMap = {
-        { Type::REQUEST, KEY_REQUEST },
-        { Type::RESPONSE, KEY_RESPONSE },
-        { Type::ERR, KEY_ERROR }
-    };
-    return nameMap[getType()];
-}
-
-const std::string& Message::getMethodString() const {
-    static std::unordered_map<Message::Method, std::string> nameMap = {
-        { Method::UNKNOWN, "unknown" },
-        { Method::PING, "ping" },
-        { Method::FIND_NODE, "find_node" },
-        { Method::ANNOUNCE_PEER, "announce_peer" },
-        { Method::FIND_PEER, "find_peer" },
-        { Method::STORE_VALUE, "store_value" },
-        { Method::FIND_VALUE, "find_value" }
-    };
-    return nameMap[getMethod()];
+Sp<Message> Message::Method::createResponse() const {
+    switch(e) {
+    case Method::PING:
+        return std::make_shared<PingResponse>();
+    case Method::FIND_NODE:
+        return std::make_shared<FindNodeResponse>();
+    case Method::ANNOUNCE_PEER:
+        return std::make_shared<AnnouncePeerResponse>();
+    case Method::FIND_PEER:
+        return std::make_shared<FindPeerResponse>();
+    case Method::STORE_VALUE:
+        return std::make_shared<StoreValueResponse>();
+    case Method::FIND_VALUE:
+        return std::make_shared<FindValueResponse>();
+    case Method::UNKNOWN:
+    default:
+        throw MessageError("Invalid response method: " + std::to_string(e));
+    }
 }
 
 Sp<Message> Message::parse(const uint8_t* buf, size_t buflen) {
@@ -130,45 +105,21 @@ Sp<Message> Message::parse(const uint8_t* buf, size_t buflen) {
 }
 
 Sp<Message> Message::createMessage(int messageType) {
-    static const std::map<Method, std::function<Sp<Message>()>> reqFactory = {
-        { Method::PING, []{ return std::make_shared<PingRequest>(); }},
-        { Method::FIND_NODE, []{ return std::make_shared<FindNodeRequest>(); }},
-        { Method::ANNOUNCE_PEER, []{ return std::make_shared<AnnouncePeerRequest>(); }},
-        { Method::FIND_PEER, []{ return std::make_shared<FindPeerRequest>(); }},
-        { Method::STORE_VALUE, []{ return std::make_shared<StoreValueRequest>(); }},
-        { Method::FIND_VALUE, []{ return std::make_shared<FindValueRequest>(); }}
-    };
-    static const std::map<Method, std::function<Sp<Message>()>> rspFactory = {
-        { Method::PING, []{ return std::make_shared<PingResponse>(); }},
-        { Method::FIND_NODE, []{ return std::make_shared<FindNodeResponse>(); }},
-        { Method::ANNOUNCE_PEER, []{ return std::make_shared<AnnouncePeerResponse>(); }},
-        { Method::FIND_PEER, []{ return std::make_shared<FindPeerResponse>(); }},
-        { Method::STORE_VALUE, []{ return std::make_shared<StoreValueResponse>(); }},
-        { Method::FIND_VALUE, []{ return std::make_shared<FindValueResponse>(); }}
-    };
-
-    auto type = ofType(messageType);
-    auto method = ofMethod(messageType);
+    auto type = Type::valueOf(messageType);
+    auto method = Method::valueOf(messageType);
 
     switch (type) {
-    case Type::REQUEST: {
-        auto reqCreator = reqFactory.find(method);
-        if (reqCreator == reqFactory.end())
-            throw MessageError("Invalid request method: " + std::to_string(static_cast<int>(method)));
-        return reqCreator->second();
-    }
-    case Type::RESPONSE: {
-        auto rspCreator = rspFactory.find(method);
-        if (rspCreator == rspFactory.end())
-            throw MessageError("Invalid response method: " + std::to_string(static_cast<int>(method)));
-        return rspCreator->second();
-    }
-    case Type::ERR: {
+    case Type::REQUEST:
+        return method.createRequest();
+
+    case Type::RESPONSE:
+        return method.createResponse();
+
+    case Type::ERR:
         return std::make_shared<ErrorMessage>(method);
-    }
-    default: {
+
+    default:
         throw MessageError("INTERNAL ERROR: should never happen.");
-    }
     }
 }
 

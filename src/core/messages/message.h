@@ -44,37 +44,153 @@ public:
     static const int BASE_SIZE = 56;
 
 public:
-    enum class Method {
-        UNKNOWN     = 0x00,
-        PING        = 0x01,
-        FIND_NODE   = 0x02,
-        ANNOUNCE_PEER   = 0x03,
-        FIND_PEER   = 0x04,
-        STORE_VALUE = 0x05,
-        FIND_VALUE  = 0x06
+    class Method {
+    public:
+        enum Enum : uint8_t {
+            UNKNOWN     = 0x00,
+            PING        = 0x01,
+            FIND_NODE   = 0x02,
+            ANNOUNCE_PEER   = 0x03,
+            FIND_PEER   = 0x04,
+            STORE_VALUE = 0x05,
+            FIND_VALUE  = 0x06
+        };
+
+        constexpr Method() = delete;
+        constexpr Method(Enum _e) : e(_e) {};
+
+        constexpr operator Enum() const noexcept {
+            return e;
+        }
+
+        explicit operator bool() const = delete;
+
+        int ordinal() const noexcept {
+            return static_cast<int>(e);
+        }
+
+        static int total() noexcept {
+            return FIND_VALUE + 1;
+        }
+
+        Sp<Message> createRequest() const;
+        Sp<Message> createResponse() const;
+
+        std::string toString() const noexcept {
+            switch (e) {
+                case UNKNOWN: default: return "unknown";
+                case PING: return "ping";
+                case FIND_NODE: return "find_node";
+                case ANNOUNCE_PEER: return "announce_peer";
+                case FIND_PEER: return "find_peer";
+                case STORE_VALUE: return "store_value";
+                case FIND_VALUE: return "find_value";
+            }
+        }
+
+        static Method valueOf(int value) {
+            auto method = value & MSG_METHOD_MASK;
+            switch(method) {
+                case 0x00: return UNKNOWN;
+                case 0x01: return PING;
+                case 0x02: return FIND_NODE;
+                case 0x03: return ANNOUNCE_PEER;
+                case 0x04: return FIND_PEER;
+                case 0x05: return STORE_VALUE;
+                case 0x06: return FIND_VALUE;
+                default:
+                    throw std::invalid_argument("Invalid message method: " + std::to_string(method));
+            }
+        }
+
+    private:
+        Enum e {};
     };
 
-    enum class Type {
-        ERR         = 0x00,
-        REQUEST     = 0x20,
-        RESPONSE    = 0x40
+    class Type {
+    public:
+        enum Enum : uint8_t {
+            ERR         = 0x00,
+            REQUEST     = 0x20,
+            RESPONSE    = 0x40
+        };
+
+        constexpr Type() = delete;
+        constexpr Type(Enum _e) : e(_e) {};
+
+        explicit operator bool() const = delete;
+        constexpr operator Enum() const noexcept {
+            return e;
+        }
+
+        int ordinal() const noexcept {
+            switch(e) {
+                default: case ERR: return 0;
+                case REQUEST: return 1;
+                case RESPONSE: return 2;
+            }
+        }
+
+        static int total() noexcept {
+            return 3;
+        }
+
+        std::string toString() const noexcept {
+            switch (e) {
+                case ERR: default: return "e";
+                case REQUEST: return "q";
+                case RESPONSE: return "r";
+            }
+        }
+
+        static int ordinalOf(Type type) {
+            return type.ordinal();
+        }
+
+        static Type valueOf(int value) {
+            auto type = value & MSG_TYPE_MASK;
+            switch(type) {
+                case 0x00: return ERR;
+                case 0x20: return REQUEST;
+                case 0x40: return RESPONSE;
+                default:
+                    throw std::invalid_argument("Invalid message type: " + std::to_string(type));
+            }
+        }
+    private:
+        Enum e {};
     };
 
     Message() = delete;
     Message(const Message&) = delete;
 
-
     Method getMethod() const {
-        return ofMethod(type);
+        return Method::valueOf(type & MSG_METHOD_MASK);
     }
 
     Type getType() const {
-        return ofType(type);
+        return Type::valueOf(type & MSG_TYPE_MASK);
     }
 
-    const std::string& getMethodString() const;
-    const std::string& getTypeString() const;
-    const std::string& getKeyString() const;
+    std::string getMethodString() const {
+        return getMethod().toString();
+    }
+
+    std::string getTypeString() const {
+        return getType().toString();
+    }
+
+    std::string getKeyString() const {
+        return getType().toString();
+    }
+
+    static std::string getMethodString(Method method) {
+        return method.toString();
+    }
+
+    static std::string getTypeString(Type type) {
+        return type.toString();
+    }
 
     void setId(const Id& id) noexcept {
         this->id = id;
@@ -144,7 +260,7 @@ public:
 
 protected:
     explicit Message(Type _type, Method _method, int _txid = 0)
-        : type((int)_type | (int)_method), txid(_txid), version(0) {}
+        : type(static_cast<int>(_type) | static_cast<int>(_method)), txid(_txid), version(0) {}
 
     virtual void parse(const std::string& fieldName, nlohmann::json& object) {}
     virtual void toString(std::stringstream& ss) const {}
@@ -152,8 +268,6 @@ protected:
 
 private:
     static Sp<Message> createMessage(int type);
-    static Type ofType(int messageType);
-    static Method ofMethod(int messageType);
 
     static const int MSG_TYPE_MASK;
     static const int MSG_METHOD_MASK;
