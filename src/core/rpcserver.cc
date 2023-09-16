@@ -38,6 +38,7 @@
 #include "constants.h"
 #include "rpcserver.h"
 #include "dht.h"
+#include "rpcstatistics.h"
 
 namespace carrier {
 
@@ -162,6 +163,9 @@ int RPCServer::sendData(Sp<Message>& msg) {
         log->debug("Failed to send message to {}: {}", remoteAddr.toString(), std::strerror(errno));
         return errno;
     } else {
+        stats.onSentBytes(buffer.size());
+        stats.onSentMessage(*msg);
+
         log->debug("Sent {}/{} to {}: [{}] {}", msg->getMethodString(), msg->getTypeString(),
                 msg->getRemoteAddress().toString(), buffer.size(), msg->toString());
         return 0;
@@ -416,6 +420,7 @@ void RPCServer::dispatchCall(Sp<RPCCall>& call) {
 
     auto responseHandler = [](RPCCall*, Sp<Message>&) {};
     auto timeoutHandler = [=](RPCCall* _call) {
+        stats.onTimeoutMessage(*_call->getRequest());
         auto it = calls.find(_call->getRequest()->getTxid());
         if (it != calls.end()) {
             it->second->getDHT().onTimeout(_call);
@@ -460,6 +465,7 @@ void RPCServer::handlePacket(const uint8_t *buf, size_t buflen, const SocketAddr
     try {
         buffer = node.decrypt(sender, {buf + ID_BYTES, buflen - ID_BYTES});
     } catch(std::exception &e) {
+        stats.onDroppedPacket(buflen);
         log->warn("Decrypt packet error from {}, ignored: len {}, {}", from.toString(), buflen, e.what());
         return;
     }
@@ -467,11 +473,14 @@ void RPCServer::handlePacket(const uint8_t *buf, size_t buflen, const SocketAddr
     try {
         msg = Message::parse(buffer.data(), buffer.size());
     } catch(std::exception& e) {
+        stats.onDroppedPacket(buflen);
         log->warn("Got a wrong packet from {}, ignored.", from.toString());
         return;
     }
 
     receivedMessages++;
+    stats.onReceivedBytes(buflen);
+    stats.onReceivedMessage(*msg);
     msg->setId(sender);
     msg->setOrigin(from);
 
