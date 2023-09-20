@@ -52,13 +52,13 @@ public:
         closest[cn->getId()] = cn;
         if (closest.size() > capacity) {
             auto last = std::prev(closest.cend());
-            closest.erase(last);
-
             if (last->second == cn) {
                 insertAttemptsSinceTailModification++;
             } else {
                 insertAttemptsSinceTailModification = 0;
             }
+
+            closest.erase(last->first);
         }
 
         const auto head = closest.cbegin()->second;
@@ -102,7 +102,7 @@ public:
 
 private:
     const Id& target;
-    int capacity;
+    int capacity {0};
 
     std::map<Id, Sp<CandidateNode>> closest {};
 
