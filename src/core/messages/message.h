@@ -38,6 +38,9 @@ namespace carrier {
 class RPCCall;
 class RPCServer;
 
+#define METHOD_TOTAL 7
+#define TYPE_TOTAL 3
+
 class Message: protected MessageKey {
 public:
     static const int MSG_VERSION = 0x01;
@@ -70,7 +73,7 @@ public:
         }
 
         static int total() noexcept {
-            return FIND_VALUE + 1;
+            return METHOD_TOTAL;
         }
 
         Sp<Message> createRequest() const;
@@ -132,7 +135,7 @@ public:
         }
 
         static int total() noexcept {
-            return 3;
+            return TYPE_TOTAL;
         }
 
         std::string toString() const noexcept {

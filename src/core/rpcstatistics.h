@@ -30,7 +30,7 @@ namespace carrier {
 
 class RPCStatistics {
 public:
-    RPCStatistics();
+    RPCStatistics() {};
 
     uint32_t getReceivedBytes() const noexcept{
         return receivedBytes.load();
@@ -94,9 +94,9 @@ private:
     volatile uint32_t receivedBytesPerSec {0};
     volatile uint32_t sentBytesPerSec {0};
 
-    std::vector<std::vector<std::atomic_uint32_t>> receivedMessages {};
-    std::vector<std::vector<std::atomic_uint32_t>> sentMessages {};
-    std::vector<std::atomic_uint32_t> timeoutMessages {};
+    std::array<std::array<std::atomic_uint32_t, TYPE_TOTAL>, METHOD_TOTAL> receivedMessages {};
+    std::array<std::array<std::atomic_uint32_t, TYPE_TOTAL>, METHOD_TOTAL> sentMessages {};
+    std::array<std::atomic_uint32_t, TYPE_TOTAL> timeoutMessages {};
 
     std::atomic_uint32_t droppedPackets {0};
     std::atomic_uint32_t droppedBytes {0};

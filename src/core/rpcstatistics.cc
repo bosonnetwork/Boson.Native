@@ -26,20 +26,6 @@
 
 namespace carrier {
 
-RPCStatistics::RPCStatistics() {
-    auto methods = Message::Method::total();
-    auto types = Message::Type::total();
-
-    sentMessages.reserve(methods);
-    receivedMessages.reserve(methods);
-    timeoutMessages = std::vector<std::atomic_uint32_t>(types);
-
-    for (auto i = 0; i < methods; i++) {
-        sentMessages[i] = std::vector<std::atomic_uint32_t>(types);
-        receivedMessages[i] = std::vector<std::atomic_uint32_t>(types);
-    }
-}
-
 uint32_t RPCStatistics::getReceivedBytesPerSec() noexcept {
     uint64_t now = currentTimeMillis();
     uint64_t d = now - lastReceivedTimestamp;
