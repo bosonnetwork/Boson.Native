@@ -26,9 +26,9 @@
 
 #include <sstream>
 #include <stdexcept>
-#include <utf8proc.h>
 
 #include "carrier/peer_info.h"
+#include "utils/common.h"
 
 namespace carrier {
 
@@ -60,7 +60,7 @@ PeerInfo::PeerInfo(const Blob& peerId, const Blob& privateKey, const Blob& nodeI
     this->origin = Id(origin.empty() ? nodeId : origin);
     this->port = port;
     if (!alternativeURL.empty())
-        this->alternativeURL = (const char *)utf8proc_NFC((unsigned char *)(alternativeURL.c_str()));
+        this->alternativeURL = utf8NFC(alternativeURL);
     else
         this->alternativeURL = std::nullopt;
     this->signature = std::vector<uint8_t>(signature.cbegin(), signature.cend());
@@ -77,7 +77,7 @@ PeerInfo::PeerInfo(const Signature::KeyPair& keypair, const Id& nodeId, const Id
     this->origin = origin == Id::MIN_ID ? nodeId : origin;
     this->port = port;
     if (!alternativeURL.empty())
-        this->alternativeURL = (char *)utf8proc_NFC((unsigned char *)(alternativeURL.c_str()));
+        this->alternativeURL = utf8NFC(alternativeURL);
     this->signature = Signature::sign(getSignData(), this->privateKey.value());
 }
 
