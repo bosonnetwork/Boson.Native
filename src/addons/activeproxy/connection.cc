@@ -919,7 +919,7 @@ void ProxyConnection::openUpstream() noexcept
 }
 
 void ProxyConnection::closeUpstream2() noexcept {
-    if (state == ConnectionState::Closed || state == ConnectionState::Idling || upstreamClosed)
+    if (state == ConnectionState::Closed || state == ConnectionState::Idling)
         return;
 
     upstreamClosed = true;
