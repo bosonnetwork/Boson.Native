@@ -84,6 +84,7 @@ public:
 						type == PacketType::DATA;
 
             case Closed:
+            default:
                 return false;
         }
     }
@@ -96,7 +97,8 @@ public:
             case Idling: return "Idling";
             case Relaying: return "Relaying";
             case Disconnecting: return "Disconnecting";
-            case Closed: return "Closed";
+            case Closed:
+            default: return "Closed";
         }
     }
 

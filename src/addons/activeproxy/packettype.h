@@ -93,7 +93,8 @@ public:
             case DISCONNECT: return random(DISCONNECT_MIN, DISCONNECT_MAX);
             case DISCONNECT_ACK: return random(DISCONNECT_MIN, DISCONNECT_MAX) | ACK_MASK;
             case DATA: return random(DATA_MIN, DATA_MAX);
-            case ERROR: return random(ERROR_MIN, ERROR_MAX) | ACK_MASK;
+            case ERROR:
+            default: return random(ERROR_MIN, ERROR_MAX) | ACK_MASK;
         }
     }
 
@@ -149,7 +150,8 @@ public:
             case DISCONNECT: return "DISCONNECT";
             case DISCONNECT_ACK: return "DISCONNECT ACK";
             case DATA: return "DATA";
-            case ERROR: return "ERROR";
+            case ERROR:
+            default: return "ERROR";
         }
     }
 
