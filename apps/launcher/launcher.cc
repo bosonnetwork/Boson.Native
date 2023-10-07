@@ -159,6 +159,8 @@ static void stop(Sp<Node> node)
     if (node != nullptr) {
         node->stop();
     }
+
+    spdlog::shutdown();
 }
 
 static void signal_handler(int sig)
