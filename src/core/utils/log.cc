@@ -47,6 +47,8 @@ namespace carrier {
 struct UserSettings {
     level::level_enum defalutLevel = level::info;
     Sp<sinks::basic_file_sink_mt> fileSink = nullptr;
+    int flushInterval = 5;
+    level::level_enum flushLevel = level::warn;
     std::string pattern {};
 };
 
@@ -65,6 +67,8 @@ std::shared_ptr<Logger> Logger::get(const std::string& name) {
         else {
             spd_logger = std::make_shared<spdlog::logger>(name, userSettings.fileSink);
             spdlog::register_logger(spd_logger);
+            spd_logger->flush_on(userSettings.flushLevel);
+            spdlog::flush_every(std::chrono::seconds(userSettings.flushInterval));
         }
     }
 
@@ -96,6 +100,15 @@ void Logger::setDefaultSettings(std::any value) {
     if (settings.count("pattern")) {
         userSettings.pattern = std::any_cast<std::string>(settings.at("pattern"));
     }
+
+    if (settings.count("flushInterval")) {
+        userSettings.flushInterval = (uint16_t)std::any_cast<int64_t>(settings.at("flushInterval"));
+    }
+
+    if (settings.count("flushLevel")) {
+        std::string level = std::any_cast<std::string>(settings.at("flushLevel"));
+        setFlushOnLevel(level);
+    }
 }
 
 void Logger::setLogFile(const std::string& filename) {
@@ -121,6 +134,16 @@ void Logger::setLogLevel(const std::string& level) {
 void Logger::setLogPattern(const std::string& pattern) {
     userSettings.pattern = pattern;
 }
+
+void Logger::setFlushInterval(uint16_t seconds) {
+    userSettings.flushInterval = seconds;
+}
+
+void Logger::setFlushOnLevel(const std::string& level) {
+    if (levelMap.count(level))
+        userSettings.flushLevel = levelMap[level];
+}
+
 
 void Logger::setLevel(Level level) {
     auto log_level =  spdlog::level::level_enum(level);
