@@ -204,7 +204,7 @@ private:
 
     uv_loop_t loop { 0 };
     uv_async_t stopHandle { 0 };
-    uv_prepare_t prepareHandle { 0 };
+    uv_check_t checkHandle { 0 };
     uv_timer_t timerHandle { 0 };
 
     uint64_t lastConnectTimestamp { 0 };
