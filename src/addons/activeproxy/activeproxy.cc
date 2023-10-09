@@ -46,6 +46,8 @@ static const uint32_t MAX_IDLE_TIME = 5 * 60 * 1000;            // 5 minutes
 static const uint32_t RE_ANNOUNCE_INTERVAL = 60 * 60 * 1000;    // 1 hour
 static const uint32_t HEALTH_CHECK_INTERVAL = 10 * 1000;        // 10 seconds
 
+static const size_t MAX_DATA_PACKET_SIZE = 0x7FFF;      // 32767
+
 std::future<void> ActiveProxy::initialize(Sp<Node> node, const std::map<std::string, std::any>& configure) {
     log = Logger::get("AcriveProxy");
 
@@ -139,6 +141,8 @@ std::future<void> ActiveProxy::initialize(Sp<Node> node, const std::map<std::str
 
     serverName.append(serverHost).append(":").append(std::to_string(serverPort));
     upstreamName.append(upstreamHost).append(":").append(std::to_string(upstreamPort));
+
+    readBuffer.resize(MAX_DATA_PACKET_SIZE);
 
     //start
     startPromise = std::promise<void>();
