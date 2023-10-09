@@ -48,9 +48,9 @@ const static size_t PACKET_HEADER_BYTES = sizeof(uint16_t) + sizeof(uint8_t);
 const static uint32_t KEEP_ALIVE_INTERVAL = 60000;      // 60 seconds
 const static uint32_t MAX_KEEP_ALIVE_RETRY = 3;
 
-static const size_t MAX_DATA_PACKET_SIZE = 0x7FFF;      // 32767
-static const size_t MAX_CONTROL_PACKET_SIZE = 0x1000;   // 4096
-static const size_t MAX_UPSTREAM_READ_BUFFER_SIZE = MAX_DATA_PACKET_SIZE - PACKET_HEADER_BYTES - CryptoBox::MAC_BYTES;
+//static const size_t MAX_DATA_PACKET_SIZE = 0x7FFF;      // 32767
+//static const size_t MAX_CONTROL_PACKET_SIZE = 0x1000;   // 4096
+//static const size_t MAX_UPSTREAM_READ_BUFFER_SIZE = MAX_DATA_PACKET_SIZE - PACKET_HEADER_BYTES - CryptoBox::MAC_BYTES;
 
 static const size_t MAX_RELAY_WRITE_QUEUE_SIZE = 2 * 1024 * 1024; // 2M bytes
 
@@ -223,30 +223,12 @@ int ProxyConnection::connectServer() noexcept
 }
 
 void ProxyConnection::establish() noexcept {
-    // The server/Java side not support the socket keep-alive idle time,
-    // so we don't use the built-in socket keep-alive mechanism.
-    /*
-    auto rc = uv_tcp_keepalive(&relay, true, KEEP_ALIVE_INTERVAL);
-    if (rc < 0) {
-        log->error("Set socket keep-alive failed({}): {}", rc, uv_strerror(rc));
-        close()
-        return;
-    }
-    */
-
     log->trace("Connection {} start reading from the server.", id);
     auto rc = uv_read_start((uv_stream_t*)&relay, [](uv_handle_t* handle, size_t suggested_size, uv_buf_t* buf) {
         ProxyConnection* pc = (ProxyConnection*)handle->data;
+        buf->base = (char *)pc->proxy.getReadBuffer().data();
+        buf->len  = pc->proxy.getReadBuffer().size();
 
-        if (pc->state != ConnectionState::Relaying) {
-            suggested_size = MAX_CONTROL_PACKET_SIZE;
-        } else {
-            if (suggested_size > MAX_DATA_PACKET_SIZE)
-                suggested_size = MAX_DATA_PACKET_SIZE;
-        }
-
-        buf->base = (char*)new char[suggested_size];
-        buf->len = buf->base ? suggested_size : 0;
     }, [](uv_stream_t* handle, ssize_t nread, const uv_buf_t* buf) {
         ProxyConnection* pc = (ProxyConnection*)handle->data;
         if (nread > 0) {
@@ -262,8 +244,6 @@ void ProxyConnection::establish() noexcept {
         // Regarding to the libuv document: nread might be 0,
         // which does not indicate an error or EOF.
         // This is equivalent to EAGAIN or EWOULDBLOCK under read(2).
-
-        delete[] buf->base;
     });
     if (rc < 0) {
         log->error("Connection {} start read from server {} failed({}): {}",
@@ -973,12 +953,8 @@ void ProxyConnection::startReadUpstream() noexcept
 
     auto rc = uv_read_start((uv_stream_t*)&upstream, [](uv_handle_t* handle, size_t suggested_size, uv_buf_t* buf) {
         ProxyConnection* pc = (ProxyConnection*)handle->data;
-
-       if (suggested_size > MAX_UPSTREAM_READ_BUFFER_SIZE)
-            suggested_size = MAX_UPSTREAM_READ_BUFFER_SIZE;
-
-        buf->base = new char[suggested_size];
-        buf->len = buf->base ? suggested_size : 0;
+        buf->base = (char *)pc->proxy.getReadBuffer().data();
+        buf->len  = pc->proxy.getReadBuffer().size();
    }, [](uv_stream_t* stream, ssize_t nread, const uv_buf_t* buf) {
         ProxyConnection* pc = (ProxyConnection*)stream->data;
         if (nread > 0) {
@@ -995,8 +971,6 @@ void ProxyConnection::startReadUpstream() noexcept
         // Regarding to the libuv document: nread might be 0,
         // which does not indicate an error or EOF.
         // This is equivalent to EAGAIN or EWOULDBLOCK under read(2).
-
-        delete[] buf->base;
    });
    if (rc < 0) {
         log->error("Connection {} start read from upstream {} failed({}): {}",

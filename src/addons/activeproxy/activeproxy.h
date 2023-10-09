@@ -153,6 +153,10 @@ public:
         return logLevel;
     }
 
+    std::vector<uint8_t>& getReadBuffer() noexcept {
+        return readBuffer;
+    }
+
 protected:
     void onStop() noexcept;
     void onIteration() noexcept;
@@ -233,6 +237,7 @@ private:
     std::promise<void> stopPromise {};
 
     std::string logLevel {};
+    std::vector<uint8_t> readBuffer {};
 };
 
 } // namespace activeproxy
