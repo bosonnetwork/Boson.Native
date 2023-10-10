@@ -779,7 +779,7 @@ void ProxyConnection::onConnectRequest(const uint8_t* packet, size_t size) noexc
     SocketAddress client{{addr, addrLen}, port};
 
     if (proxy.allow(client)) {
-        state = ConnectionState::Relaying;
+        // state = ConnectionState::Relaying;
         openUpstream();
     } else {
         sendConnectResponse(false);
@@ -863,6 +863,7 @@ void ProxyConnection::openUpstream() noexcept
         sendConnectResponse(false);
         state = ConnectionState::Idling;
         onIdle();
+        return;
     }
     upstream.data = (void*)ref(); // release in closeUpstream() or close()
     upstreamClosed = false;
