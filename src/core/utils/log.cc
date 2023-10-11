@@ -20,23 +20,21 @@
  * SOFTWARE.
  */
 
+#include <iostream>
+#include "spdlog/sinks/stdout_color_sinks.h"
+#include "spdlog/sinks/basic_file_sink.h"
+
 #ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #pragma GCC diagnostic ignored "-Wunqualified-std-cast-call"
 #endif
 
-#include <iostream>
-
-#include "spdlog/sinks/stdout_color_sinks.h"
-#include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog_setup/conf.h"
 
 #ifdef __GNUC__
 #pragma GCC diagnostic pop
 #endif
-
-#include <iostream>
 
 #include "log.h"
 
@@ -102,7 +100,7 @@ void Logger::setDefaultSettings(std::any value) {
     }
 
     if (settings.count("flushInterval")) {
-        userSettings.flushInterval = (uint16_t)std::any_cast<int64_t>(settings.at("flushInterval"));
+        userSettings.flushInterval = (int)std::any_cast<int64_t>(settings.at("flushInterval"));
     }
 
     if (settings.count("flushLevel")) {
@@ -135,7 +133,7 @@ void Logger::setLogPattern(const std::string& pattern) {
     userSettings.pattern = pattern;
 }
 
-void Logger::setFlushInterval(uint16_t seconds) {
+void Logger::setFlushInterval(int seconds) {
     userSettings.flushInterval = seconds;
 }
 

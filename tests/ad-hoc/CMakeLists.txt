@@ -57,7 +57,6 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
 endif()
 
 set(LIBS
-    sqlite3
     cppunit)
 
 if(WIN32)
@@ -68,15 +67,10 @@ if(WIN32)
 
     set(LIBS
         ${LIBS}
-        libsodium.lib
         Ws2_32
         crypt32
         iphlpapi
         Shlwapi)
-else()
-    set(LIBS
-        ${LIBS}
-        sodium)
 endif()
 
 add_executable(ad-hoc ${TEST_SOURCES})
