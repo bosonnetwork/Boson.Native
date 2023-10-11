@@ -24,6 +24,8 @@
 
 #include <memory>
 #include <algorithm>
+#include <random>
+#include <chrono>
 #include <thread>
 #include <cassert>
 
@@ -71,34 +73,38 @@ std::future<void> ActiveProxy::initialize(Sp<Node> node, const std::map<std::str
         auto id = std::any_cast<std::string>(configure.at("serverPeerId"));
         auto peerId = Id(id);
 
-        log->info("Addon ActiveProxy finding peer {} ...", id);
+        log->info("Addon ActiveProxy is trying to find peer {} ...", id);
         auto future = node->findPeer(peerId, 8);
         auto peers = future.get();
         if (peers.empty())
             throw std::invalid_argument("Addon ActiveProxy can't find a server peer: " + id + "!");
 
-        bool found = false;
-        for (auto peer : peers) {
+        log->info("Addon ActiveProxy found {} peers.", peers.size());
+
+        auto seed = std::chrono::system_clock::now().time_since_epoch().count();
+        std::default_random_engine e(seed);
+        std::shuffle(peers.begin(), peers.end(), e);
+
+        bool found {false};
+        for (const auto& peer: peers) {
             serverPort = peer.getPort();
             serverId = peer.getNodeId();
 
-            log->info("Addon ActiveProxy finding node {} ...", serverId.toString());
+            log->info("Addon ActiveProxy is trying to locate node {} from peer {} ...", serverId.toString(), peer.toString());
             auto future2 = node->findNode(serverId);
             auto nodes = future2.get();
-            if (nodes.empty())
-                throw std::invalid_argument("Addon ActiveProxy can't find node: " + serverId.toString() + "!");
-
-            for (auto node : nodes) {
-                serverHost = node->getAddress().host();
-
-                // TODO: check the service availability
-                found = true;
-                log->info("Addon ActiveProxy server host: {}", node->getAddress().toString());
-                break;
+            if (nodes.empty()) {
+                log->warn("Addon ActiveProxy can't locate node: {}! Go on next ...", serverId.toString());
+                continue;
             }
 
-            if (found)
-                break;
+            std::shuffle(nodes.begin(), nodes.end(), e);
+            serverHost = nodes[0]->getAddress().host();
+            log->info("Addon ActiveProxy server hosting address: {}", nodes[0]->getAddress().toString());
+
+            found = true;
+            // TODO: check the service availability
+            break;
         }
 
         if (!found)
