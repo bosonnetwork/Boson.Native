@@ -20,7 +20,20 @@
 * SOFTWARE.
 */
 
+
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+
+#include <nlohmann/json.hpp>
+
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
+
 #include <map>
+
 #include "utils/time.h"
 #include "kbucket.h"
 #include "routing_table.h"
@@ -28,7 +41,6 @@
 #include "dht.h"
 
 #include <fstream>
-#include <nlohmann/json.hpp>
 
 namespace carrier {
 

@@ -22,10 +22,21 @@
 
 #pragma once
 
+#include <map>
 #include <vector>
 #include <memory>
+#include <sstream>
+
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+
 #include <nlohmann/json.hpp>
-#include <map>
+
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 
 #include "constants.h"
 #include "carrier/socket_address.h"

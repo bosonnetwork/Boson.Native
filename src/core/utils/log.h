@@ -124,7 +124,7 @@ public:
 
     static void setLogFile(const std::string& file);
 
-    static void setFlushInterval(uint16_t seconds);
+    static void setFlushInterval(int seconds);
 
     static void setFlushOnLevel(const std::string& level);
 
