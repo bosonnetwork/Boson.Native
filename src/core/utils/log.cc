@@ -24,7 +24,7 @@
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/sinks/basic_file_sink.h"
 
-#ifdef __GNUC__
+#if defined(__GNUC__) && defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #pragma GCC diagnostic ignored "-Wunqualified-std-cast-call"
@@ -32,7 +32,7 @@
 
 #include "spdlog_setup/conf.h"
 
-#ifdef __GNUC__
+#if defined(__GNUC__) && defined(__clang__)
 #pragma GCC diagnostic pop
 #endif
 
