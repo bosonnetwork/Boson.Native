@@ -49,14 +49,18 @@ protected:
         auto nodeid = Id(id);
 
         LookupOption option {mode} ;
-        auto future = node->findNode(nodeid, option);
-        auto nodeinfos = future.get();
+        auto result = node->findNode(nodeid, option).get();
         std::cout << "----------------------------------------------" << std::endl;
-        if (nodeinfos.empty()) {
-                std::cout << " Not found node [" << id << "]" << std::endl;
+        if (result.hasValue()) {
+            auto ni = result.getV4();
+            if (ni != nullptr)
+                std::cout << Network(Network::IPv4).toString() << ": " << ni->toString() << std::endl;
+
+            ni = result.getV6();
+            if (ni != nullptr)
+                std::cout << Network(Network::IPv6).toString() << ": " << ni->toString() << std::endl;
         } else {
-            for (auto ni: nodeinfos)
-                std::cout << ni->toString() << std::endl;
+            std::cout << " Not found node [" << id << "]" << std::endl;
         }
         std::cout << "----------------------------------------------" << std::endl;
     };

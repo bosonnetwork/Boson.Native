@@ -76,11 +76,11 @@ void NodeTester::testNode() {
     std::cout << "Trying to find Node " << remoteId.toBase58String() << std::endl;
     auto future = node1->findNode(remoteId);
     auto ni2 = future.get();
-    std::cout << "ni2 size: " << ni2.size() << std::endl;
-    CPPUNIT_ASSERT_MESSAGE("Node not found!", ni2.size());
-    for (auto ni: ni2) {
-        std::cout << "ni: " << ni->toString() << std::endl;
-    }
+    CPPUNIT_ASSERT_MESSAGE("Node not found!", ni2.hasValue());
+    if (ni2.getV4() != nullptr)
+        std::cout << "ni ipv4: " << ni2.getV4()->toString() << std::endl;
+    if (ni2.getV6() != nullptr)
+        std::cout << "ni ipv6: " << ni2.getV6()->toString() << std::endl;
 #endif
 
 #if 1

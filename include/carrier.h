@@ -39,6 +39,6 @@
 #include <carrier/value.h>
 #include <carrier/version.h>
 #include <carrier/node_status.h>
-#include <carrier/node_status_listener.h>
+#include <carrier/connection_status.h>
 #include <carrier/node.h>
 #include <carrier/addon.h>

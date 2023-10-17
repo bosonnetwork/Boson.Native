@@ -44,8 +44,8 @@ void ValueLookup::update() {
             return;
 
         auto request = std::make_shared<FindValueRequest>(getTarget());
-        request->setWant4(getDHT().getType() == DHT::Type::IPV4);
-        request->setWant6(getDHT().getType() == DHT::Type::IPV6);
+        request->setWant4(getDHT().getType() == Network::IPv4);
+        request->setWant6(getDHT().getType() == Network::IPv6);
 
         if (expectedSequence != -1)
             request->setSequenceNumber(expectedSequence);

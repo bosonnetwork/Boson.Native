@@ -259,8 +259,47 @@ void RoutingTable::tryPingMaintenance(Sp<KBucket> bucket, const std::vector<Ping
     dht.getTaskManager().add(task);
 }
 
-void RoutingTable::fillBuckets() {
-    for (auto& bucket: getBuckets()) {
+std::future<void> RoutingTable::pingBuckets() {
+    auto promise = std::make_shared<std::promise<void>>();
+    auto bucketsRef = getBuckets();
+
+    auto completion = std::make_shared<std::atomic<int>>(0);
+    int total = 0;
+    for (auto& bucket : bucketsRef) {
+        if (bucket->size() == 0)
+            continue;
+
+        auto p = std::make_shared<std::promise<void>>();
+        std::vector<PingRefreshTask::Options> options{PingRefreshTask::Options::removeOnTimeout};
+        auto task = std::make_shared<PingRefreshTask>(&dht, bucket, options);
+        task->setName("Bootstrap cached table ping for " + bucket->getPrefix().toString());
+        task->addListener([=](Task* t) {
+            (*completion)++;
+            if (*completion >= total) {
+                promise->set_value();
+            }
+        });
+        dht.getTaskManager().add(task);
+        total++;
+    }
+
+    if (total == 0) {
+        promise->set_value();
+    }
+
+    return promise->get_future();
+}
+
+/**
+ * Check if a buckets needs to be refreshed, and refresh if necesarry
+ */
+std::future<void> RoutingTable::fillBuckets() {
+    auto promise = std::make_shared<std::promise<void>>();
+    auto bucketsRef = getBuckets();
+
+    auto completion = std::make_shared<std::atomic<int>>(0);
+    int total = 0;
+    for (auto& bucket : bucketsRef) {
         int num = bucket->size();
 
         // just try to fill partially populated buckets
@@ -268,11 +307,23 @@ void RoutingTable::fillBuckets() {
         if (num < Constants::MAX_ENTRIES_PER_BUCKET) {
             bucket->updateRefreshTimer();
 
-            auto completeHandler = ([](Sp<NodeInfo>) {});
+            auto completeHandler = ([=](Sp<NodeInfo>) {
+                (*completion)++;
+                if (*completion >= total) {
+                    promise->set_value();
+                }
+            });
             auto task = dht.findNode(bucket->getPrefix().createRandomId(), completeHandler);
             task->setName("Filling Bucket - " + bucket->getPrefix().toString());
+            total++;
         }
     }
+
+    if (total == 0) {
+        promise->set_value();
+    }
+
+    return promise->get_future();
 }
 
 void RoutingTable::load(const std::string& path) {
@@ -344,6 +395,63 @@ bool RoutingTable::isHomeBucket(const Prefix& prefix) const {
     return prefix.isPrefixOf(dht.getNode().getId());
 }
 
+std::vector<Sp<NodeInfo>> RoutingTable::getRandomEntries(int expect) {
+    auto bucketsRef = getBuckets();
+
+    int total = 0;
+    for (auto bucket : bucketsRef) {
+        std::list<Sp<KBucketEntry>> entries = bucket->getEntries();
+        total += entries.size();
+    }
+
+    if (total <= expect) {
+        std::vector<Sp<NodeInfo>> reslut(total);
+        for (auto bucket : bucketsRef) {
+            std::list<Sp<KBucketEntry>> entries = bucket->getEntries();
+            reslut.insert(reslut.end(), entries.begin(), entries.end());
+        }
+        return reslut;
+    }
+
+    //Create a sort randoms vector
+    std::vector<int> randoms(expect);
+    for (int i = 0; i < expect; i++) {
+        int random = RandomGenerator<int>(0, total - 1)();
+        bool diff = false;
+        int j;
+        while (!diff && i > 0) {
+            for (j = 0; j < i; j++) {
+                if (random == randoms[j]) {
+                    random = RandomGenerator<int>(0, total - 1)();
+                    break;
+                }
+            }
+            if (j == i)
+                diff = true;
+        }
+        randoms[i] = random;
+    }
+    std::sort(randoms.begin(), randoms.end());
+
+    std::vector<Sp<NodeInfo>> result(expect);
+    int index = 0, entriesCount = 0;
+    for (auto bucket : bucketsRef) {
+        std::list<Sp<KBucketEntry>> entries = bucket->getEntries();
+        auto entriesLenght = entries.size() + entriesCount;
+
+        while (index < expect && randoms[index] < entriesLenght) {
+            int pos = randoms[index] - entriesCount;
+            result[index] = list_get(entries, pos);
+            index++;
+        }
+
+        if (index >= expect) break;
+        entriesCount = entriesLenght;
+    }
+
+    return result;
+}
+
 std::string RoutingTable::toString() const {
     std::string str {};
 
@@ -359,5 +467,7 @@ std::string RoutingTable::toString() const {
     }
     return str;
 }
+
+
 
 } // namespace carrier

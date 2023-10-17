@@ -114,11 +114,11 @@ void NodeTests::testFindNode() {
     std::cout << "Trying to find Node " << remoteId.toString() << std::endl;
     auto future = node1->findNode(remoteId);
     auto result = future.get();
-    std::cout << "ni2 size: " << result.size() << std::endl;
-    CPPUNIT_ASSERT(result.size());
-    for (const auto& item: result) {
-        std::cout << "ni: " << item->toString() << std::endl;
-    }
+    CPPUNIT_ASSERT_MESSAGE("Node not found!", result.hasValue());
+    if (result.getV4() != nullptr)
+        std::cout << "ni ipv4: " << result.getV4()->toString() << std::endl;
+    if (result.getV6() != nullptr)
+        std::cout << "ni ipv6: " << result.getV6()->toString() << std::endl;
 }
 
 void NodeTests::testFindValue() {

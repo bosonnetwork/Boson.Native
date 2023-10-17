@@ -54,8 +54,8 @@ void NodeLookup::update() {
             return;
 
         auto request = std::make_shared<FindNodeRequest>(getTarget(), wantToken);
-        request->setWant4(getDHT().getType() == DHT::Type::IPV4);
-        request->setWant6(getDHT().getType() == DHT::Type::IPV6);
+        request->setWant4(getDHT().getType() == Network::IPv4);
+        request->setWant6(getDHT().getType() == Network::IPv6);
 
         try {
             sendCall(candidate, request, [&](Sp<RPCCall> call) {
@@ -80,6 +80,11 @@ void NodeLookup::callResponsed(RPCCall* call, Sp<Message> response) {
     auto nodes = findNodeResponse->getNodes(getDHT().getType());
     if (!nodes.empty())
         addCandidates(nodes);
+
+    for (auto& node : nodes) {
+        if (node->getId() == getTarget())
+            resultHandler(node);
+    }
 }
 
 } // namespace carrier

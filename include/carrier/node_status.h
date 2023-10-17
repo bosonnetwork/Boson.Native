@@ -21,26 +21,52 @@
  */
 #pragma once
 
+#include <cstdint>
 #include <string>
 #include "def.h"
 
 namespace carrier {
 
-enum class CARRIER_PUBLIC NodeStatus {
-    Stopped,
-    Initializing,
-    Running
+class CARRIER_PUBLIC NodeStatus {
+public:
+    enum Enum : uint8_t {
+        Stopped = 0,
+        Initializing,
+        Running
+    };
+
+    constexpr NodeStatus() = delete;
+    constexpr NodeStatus(Enum e) : e(e) {};
+
+    // Allows comparisons with Enum constants.
+    constexpr operator Enum() const noexcept {
+        return e;
+    }
+
+    // Needed to prevent if(e)
+    explicit operator bool() const = delete;
+
+    std::string toString() const noexcept {
+        switch (e) {
+            case Stopped: return "Stopped";
+            case Initializing: return "Initializing";
+            case Running: return "Running";
+            default:
+                return "Invalid value";
+        }
+    }
+
+private:
+    Enum e {};
 };
 
-inline std::string statusToString(NodeStatus status) noexcept {
-    switch (status) {
-    case NodeStatus::Initializing:
-        return "initializing";
-    case NodeStatus::Running:
-        return "running";
-    default:
-        return "stopped";
-    }
-}
+class CARRIER_PUBLIC NodeStatusListener {
+public:
+    virtual void statusChanged(NodeStatus newStatus, NodeStatus oldStatus) {};
+
+    virtual void started() {}
+
+	virtual void stopped() {}
+};
 
 } // namespace carrier

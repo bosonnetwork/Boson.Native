@@ -95,8 +95,10 @@ list(APPEND CARRIER_HEADERS
     ${INCLUDE_DIR}/carrier/value.h
     ${INCLUDE_DIR}/carrier/version.h
     ${INCLUDE_DIR}/carrier/node_status.h
-    ${INCLUDE_DIR}/carrier/node_status_listener.h
+    ${INCLUDE_DIR}/carrier/connection_status.h
     ${INCLUDE_DIR}/carrier/node.h
+    ${INCLUDE_DIR}/carrier/network.h
+    ${INCLUDE_DIR}/carrier/result.h
 )
 
 include_directories(

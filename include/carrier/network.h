@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 - 2023 trinity-tech.io
+ * Copyright (c) 2023 trinity-tech.io
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,14 +22,48 @@
 
 #pragma once
 
+#include <cstdint>
 #include "def.h"
-#include "node_status.h"
 
 namespace carrier {
 
-class CARRIER_PUBLIC NodeStatusListener {
+class CARRIER_PUBLIC Network {
 public:
-    virtual void statusChanged(NodeStatus newStatus, NodeStatus oldStatus) {};
+    enum Enum : uint8_t {
+        IPv4 = 4,
+        IPv6 = 6
+    };
+
+    constexpr Network() = delete;
+    constexpr Network(Enum e) : e(e) {};
+
+    // Allows comparisons with Enum constants.
+    constexpr operator Enum() const noexcept {
+        return e;
+    }
+
+    // Needed to prevent if(e)
+    explicit operator bool() const = delete;
+
+    bool canUseSocketAddress(const SocketAddress& addr) const {
+        return addr.family() == (e == IPv4 ? AF_INET : AF_INET6);
+    }
+
+    static Network of(const SocketAddress& addr) {
+		return (addr.family() == AF_INET) ? IPv4 : IPv6;
+	}
+
+    std::string toString() const noexcept {
+        switch (e) {
+            case IPv4: return "IPv4";
+            case IPv6: return "IPv6";
+            default:
+                return "Invalid value";
+        }
+    }
+
+private:
+    Enum e {};
 };
 
 } // namespace carrier

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 - 2023 trinity-tech.io
+ * Copyright (c) 2023 trinity-tech.io
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,45 +22,61 @@
 
 #pragma once
 
-#include "lookup_task.h"
+#include "network.h"
 
 namespace carrier {
 
-class DHT;
-class RPCCall;
-class Message;
-class NodeInfo;
+template <class T>
+class CARRIER_PUBLIC Result {
 
-class NodeLookup : public LookupTask {
 public:
-    NodeLookup(DHT* dht, const Id& nodeId): LookupTask(dht, nodeId, "NodeLookup"), resultHandler([](Sp<NodeInfo>){}) {}
+    Result(Sp<T> v4, Sp<T> v6): v4(v4), v6(v6) {};
 
-    void setBootstrap(bool bootstrap) {
-        this->bootstrap = bootstrap;
+    Sp<T> getV4() {
+        return v4;
     }
 
-    void setWantToken(bool token) {
-        this->wantToken = token;
+    Sp<T> getV6() {
+        return v6;
     }
 
-    void injectCandidates(const std::list<Sp<NodeInfo>>& nodes) {
-        addCandidates(nodes);
+    Sp<T> getValue(Network network) {
+        switch (network) {
+        case Network::IPv4:
+            return v4;
+
+        case Network::IPv6:
+            return v6;
+        }
+
+        return nullptr;
     }
 
-    void setResultHandler(std::function<void(Sp<NodeInfo>)> handler) {
-		resultHandler = handler;
-	}
+    bool isEmpty() {
+        return v4 == nullptr && v6 == nullptr;
+    }
 
-protected:
-    void prepare() override;
-    void update() override;
-    void callResponsed(RPCCall* call, Sp<Message> response) override;
+    bool hasValue() {
+        return v4 != nullptr || v6 != nullptr;
+    }
+
+    bool isComplete() {
+        return v4 != nullptr && v6 != nullptr;
+    }
+
+    void setValue(Network network, Sp<T> value) {
+        switch (network) {
+        case Network::IPv4:
+            v4 = value;
+
+        case Network::IPv6:
+            v6 = value;
+        }
+    }
 
 private:
-    bool bootstrap {false};
-    bool wantToken {false};
-
-    std::function<void(Sp<NodeInfo>)> resultHandler;
+    Sp<T> v4 {nullptr};
+    Sp<T> v6 {nullptr};
 };
 
 } // namespace carrier

@@ -22,45 +22,58 @@
 
 #pragma once
 
-#include "lookup_task.h"
+#include <cstdint>
+#include <string>
+#include "def.h"
+#include "network.h"
 
 namespace carrier {
 
-class DHT;
-class RPCCall;
-class Message;
-class NodeInfo;
-
-class NodeLookup : public LookupTask {
+class CARRIER_PUBLIC ConnectionStatus {
 public:
-    NodeLookup(DHT* dht, const Id& nodeId): LookupTask(dht, nodeId, "NodeLookup"), resultHandler([](Sp<NodeInfo>){}) {}
+    enum Enum : uint8_t {
+        Disconnected = 0,
+        Connecting,
+        Connected,
+        Profound
+    };
 
-    void setBootstrap(bool bootstrap) {
-        this->bootstrap = bootstrap;
+    constexpr ConnectionStatus() = delete;
+    constexpr ConnectionStatus(Enum e) : e(e) {};
+
+    // Allows comparisons with Enum constants.
+    constexpr operator Enum() const noexcept {
+        return e;
     }
 
-    void setWantToken(bool token) {
-        this->wantToken = token;
+    // Needed to prevent if(e)
+    explicit operator bool() const = delete;
+
+    std::string toString() const noexcept {
+        switch (e) {
+            case Disconnected: return "Disconnected";
+            case Connecting: return "Connecting";
+            case Connected: return "Connected";
+            case Profound: return "Profound";
+            default:
+                return "Invalid value";
+        }
     }
-
-    void injectCandidates(const std::list<Sp<NodeInfo>>& nodes) {
-        addCandidates(nodes);
-    }
-
-    void setResultHandler(std::function<void(Sp<NodeInfo>)> handler) {
-		resultHandler = handler;
-	}
-
-protected:
-    void prepare() override;
-    void update() override;
-    void callResponsed(RPCCall* call, Sp<Message> response) override;
 
 private:
-    bool bootstrap {false};
-    bool wantToken {false};
+    Enum e {};
+};
 
-    std::function<void(Sp<NodeInfo>)> resultHandler;
+class CARRIER_PUBLIC ConnectionStatusListener {
+public:
+    virtual void statusChanged(Network network, ConnectionStatus newStatus, ConnectionStatus oldStatus) {};
+
+	virtual void connected(Network network) {};
+
+	virtual void profound(Network network) {};
+
+	virtual void disconnected(Network network) {};
+
 };
 
 } // namespace carrier

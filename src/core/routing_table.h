@@ -27,6 +27,7 @@
 #include <functional>
 #include <memory>
 #include <map>
+#include <future>
 
 #include "carrier/id.h"
 #include "carrier/node_info.h"
@@ -95,6 +96,8 @@ public:
         return (it != bucketsRef.end()) ? (*it)->random(): nullptr;
     }
 
+    std::vector<Sp<NodeInfo>> getRandomEntries(int expect);
+
     bool isHomeBucket(const Prefix& prefix) const;
 
     void _refreshOnly(Sp<KBucketEntry> toRefresh) {
@@ -121,7 +124,8 @@ public:
         _maintenance();
     }
 
-    void fillBuckets();
+    std::future<void> pingBuckets();
+    std::future<void> fillBuckets();
 
     void load(const std::string&);
     void save(const std::string&);

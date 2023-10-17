@@ -28,11 +28,11 @@
 
 namespace carrier {
 
-const std::list<Sp<NodeInfo>>& LookupResponse::getNodes(DHT::Type type) const {
+const std::list<Sp<NodeInfo>>& LookupResponse::getNodes(Network type) const {
     switch (type) {
-    case DHT::Type::IPV4:
+    case Network::IPv4:
         return getNodes4();
-    case DHT::Type::IPV6:
+    case Network::IPv6:
         return getNodes6();
     default:
         throw MessageError("Invalid DHT type");
