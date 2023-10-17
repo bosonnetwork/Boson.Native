@@ -31,7 +31,7 @@ void loadAddons(Sp<Node> node, std::map<std::string, std::any>& addons) {
     if (addons.empty())
         return;
 
-    for (auto& [name, value] : addons) {
+    for (const auto& [name, value] : addons) {
         if (value.type() != typeid(std::map<std::string, std::any>)) {
             throw "Addon '" + name + "': invalid configure! ";
             return;

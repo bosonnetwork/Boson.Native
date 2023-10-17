@@ -28,9 +28,9 @@
 
 #include "carrier.h"
 #include "packettype.h"
+#include "utils/log.h"
 
 namespace carrier {
-
 namespace activeproxy {
 
 class ActiveProxy;
@@ -224,6 +224,8 @@ protected:
 private:
     uint32_t id;
     uint32_t refCount { 1 };
+
+    std::shared_ptr<carrier::Logger> log;
 
     ActiveProxy& proxy;
     ConnectionState state { ConnectionState::Initializing };
