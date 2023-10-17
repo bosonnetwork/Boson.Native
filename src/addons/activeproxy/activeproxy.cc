@@ -32,16 +32,11 @@
 #include "activeproxy.h"
 #include "connection.h"
 #include "exceptions.h"
-#include "utils/log.h"
 #include "utils/addr.h"
 #include "crypto/hex.h"
 
 namespace carrier {
 namespace activeproxy {
-
-using Logger = carrier::Logger;
-
-static std::shared_ptr<Logger> log;
 
 static const uint32_t IDLE_CHECK_INTERVAL = 60 * 1000;          // 60 seconds
 static const uint32_t MAX_IDLE_TIME = 5 * 60 * 1000;            // 5 minutes
@@ -203,7 +198,6 @@ bool ActiveProxy::needsNewConnection() noexcept
         return true;
 
     // TODO: other conditions?
-
     return false;
 }
 
@@ -214,9 +208,8 @@ void ActiveProxy::onIteration() noexcept
         first = false;
     }
 
-    if (needsNewConnection()) {
+    if (needsNewConnection())
         connect();
-    }
 
     auto now = uv_now(&loop);
     if (now - lastIdleCheckTimestamp >= IDLE_CHECK_INTERVAL) {
@@ -353,15 +346,16 @@ void ActiveProxy::start()
 
 void ActiveProxy::stop() noexcept
 {
-    if (running) {
-        log->info("Addon ActiveProxy is stopping...");
-        uv_async_send(&stopHandle);
-        try {
-            runner.join();
-        } catch(...) {
-        }
-    } else {
+    if (!running) {
         stopPromise.set_value();
+        return;
+    }
+
+    log->info("Addon ActiveProxy is stopping...");
+    uv_async_send(&stopHandle);
+    try {
+        runner.join();
+    } catch(...) {
     }
 }
 
@@ -377,7 +371,6 @@ void ActiveProxy::connect() noexcept
     connection->onAuthorized([this](ProxyConnection* c, const CryptoBox::PublicKey& serverPk, uint16_t port, bool domainEnabled) {
         this->serverPk = serverPk;
         this->relayPort = port;
-
         this->box = CryptoBox{serverPk, this->sessionKey.privateKey() };
 
         if (peerKeypair.has_value()) {
@@ -406,9 +399,8 @@ void ActiveProxy::connect() noexcept
                 break;
         }
 
-        if (it != connections.end()) {
+        if (it != connections.end())
             connections.erase(it);
-        }
 
         c->unref();
     });
@@ -436,10 +428,10 @@ void ActiveProxy::announcePeer() noexcept
         peer.value().toString());
 
     if (peer.value().hasAlternativeURL())
-        log->info("-**- ActiveProxy: server: {}, port: {}, domain: {} -**-",
+        log->info("-**- ActiveProxy: server: {}:{}, domain: {} -**-",
             serverHost, peer.value().getPort(), peer.value().getAlternativeURL());
     else
-        log->info("-**- ActiveProxy: server: {}, port: {} -**-",
+        log->info("-**- ActiveProxy: server: {}:{} -**-",
             serverHost, peer.value().getPort());
 
     node->announcePeer(peer.value());

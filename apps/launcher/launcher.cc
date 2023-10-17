@@ -153,7 +153,7 @@ static void daemonize() {
 
 static void stop(Sp<Node> node)
 {
-    std::cout << "Launcher stoping....." << std::endl;
+    std::cout << "Launcher stopping..." << std::endl;
     unloadAddons();
 
     if (node != nullptr) {

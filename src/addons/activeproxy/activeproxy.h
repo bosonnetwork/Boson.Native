@@ -33,6 +33,7 @@
 
 #include "carrier.h"
 #include "carrier/blob.h"
+#include "utils/log.h"
 
 namespace carrier {
 namespace activeproxy {
@@ -238,6 +239,7 @@ private:
 
     std::string logLevel {};
     std::vector<uint8_t> readBuffer {};
+    std::shared_ptr<carrier::Logger> log;
 };
 
 } // namespace activeproxy
