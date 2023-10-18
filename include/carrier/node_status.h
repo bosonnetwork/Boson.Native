@@ -66,7 +66,7 @@ public:
 
     virtual void started() {}
 
-	virtual void stopped() {}
+    virtual void stopped() {}
 };
 
 } // namespace carrier

@@ -83,7 +83,7 @@ void NodeLookup::callResponsed(RPCCall* call, Sp<Message> response) {
 
     for (auto& node : nodes) {
         if (node->getId() == getTarget())
-            resultHandler(node);
+            resultHandler(node, this);
     }
 }
 

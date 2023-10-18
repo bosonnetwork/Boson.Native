@@ -68,9 +68,11 @@ public:
         switch (network) {
         case Network::IPv4:
             v4 = value;
+            break;
 
         case Network::IPv6:
             v6 = value;
+            break;
         }
     }
 

@@ -33,7 +33,7 @@ class NodeInfo;
 
 class NodeLookup : public LookupTask {
 public:
-    NodeLookup(DHT* dht, const Id& nodeId): LookupTask(dht, nodeId, "NodeLookup"), resultHandler([](Sp<NodeInfo>){}) {}
+    NodeLookup(DHT* dht, const Id& nodeId): LookupTask(dht, nodeId, "NodeLookup"), resultHandler([](Sp<NodeInfo>, Task*){}) {}
 
     void setBootstrap(bool bootstrap) {
         this->bootstrap = bootstrap;
@@ -47,9 +47,9 @@ public:
         addCandidates(nodes);
     }
 
-    void setResultHandler(std::function<void(Sp<NodeInfo>)> handler) {
+    void setResultHandler(std::function<void(Sp<NodeInfo>, Task*)> handler) {
 		resultHandler = handler;
-	}
+    }
 
 protected:
     void prepare() override;
@@ -60,7 +60,7 @@ private:
     bool bootstrap {false};
     bool wantToken {false};
 
-    std::function<void(Sp<NodeInfo>)> resultHandler;
+    std::function<void(Sp<NodeInfo>, Task*)> resultHandler;
 };
 
 } // namespace carrier

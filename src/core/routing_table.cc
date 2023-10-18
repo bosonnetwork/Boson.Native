@@ -266,6 +266,16 @@ std::future<void> RoutingTable::pingBuckets() {
     auto completion = std::make_shared<std::atomic<int>>(0);
     int total = 0;
     for (auto& bucket : bucketsRef) {
+        if (bucket->size() > 0)
+            total++;
+    }
+
+    if (total == 0) {
+        promise->set_value();
+        return promise->get_future();
+    }
+
+    for (auto& bucket : bucketsRef) {
         if (bucket->size() == 0)
             continue;
 
@@ -280,11 +290,6 @@ std::future<void> RoutingTable::pingBuckets() {
             }
         });
         dht.getTaskManager().add(task);
-        total++;
-    }
-
-    if (total == 0) {
-        promise->set_value();
     }
 
     return promise->get_future();
@@ -299,6 +304,16 @@ std::future<void> RoutingTable::fillBuckets() {
 
     auto completion = std::make_shared<std::atomic<int>>(0);
     int total = 0;
+    for (auto& bucket : bucketsRef) {
+        if (bucket->size() < Constants::MAX_ENTRIES_PER_BUCKET)
+            total++;
+    }
+
+    if (total == 0) {
+        promise->set_value();
+        return promise->get_future();
+    }
+
     for (auto& bucket : bucketsRef) {
         int num = bucket->size();
 
@@ -315,12 +330,8 @@ std::future<void> RoutingTable::fillBuckets() {
             });
             auto task = dht.findNode(bucket->getPrefix().createRandomId(), completeHandler);
             task->setName("Filling Bucket - " + bucket->getPrefix().toString());
-            total++;
-        }
-    }
 
-    if (total == 0) {
-        promise->set_value();
+        }
     }
 
     return promise->get_future();
@@ -467,7 +478,5 @@ std::string RoutingTable::toString() const {
     }
     return str;
 }
-
-
 
 } // namespace carrier

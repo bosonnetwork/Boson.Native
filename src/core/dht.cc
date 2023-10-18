@@ -686,11 +686,11 @@ Sp<Task> DHT::findNode(const Id& id, LookupOption option, std::function<void(Sp<
     // auto nodeRef = std::make_shared<std::atomic<Sp<NodeInfo>>>(routingTable.getEntry(id));
     auto nodeRef = std::make_shared<Sp<NodeInfo>>(routingTable.getEntry(id));
     auto task = std::make_shared<NodeLookup>(this, id);
-    task->setResultHandler([=](Sp<NodeInfo> v) {
+    task->setResultHandler([=](Sp<NodeInfo> v, Task* t) {
         // nodeRef->store(v);
         *nodeRef = v;
         if (option != LookupOption::CONSERVATIVE) {
-			task->cancel();
+			t->cancel();
 		}
     });
 
