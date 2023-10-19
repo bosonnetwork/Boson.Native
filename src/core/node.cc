@@ -45,8 +45,13 @@ namespace fs = std::filesystem;
 #endif
 
 static const std::string PATH_CWD = ".";
-
 namespace carrier {
+
+Result<NodeInfo> Node::getNodeInfo() {
+    auto n4 = dht4 != nullptr ? std::make_shared<NodeInfo>(id, dht4->getOrigin()) : nullptr;
+    auto n6 = dht4 != nullptr ? std::make_shared<NodeInfo>(id, dht6->getOrigin()) : nullptr;
+    return Result<NodeInfo>(n4, n6);
+}
 
 bool Node::checkPersistence(const std::string& path) {
     if (path.empty()) {
@@ -119,15 +124,28 @@ void Node::writeIdFile(const std::string& idPath) {
 
 void Node::setStatus(NodeStatus expected, NodeStatus newStatus) {
     if (status != expected) {
-        log->warn("Set status failed, expected is {}, actual is {}", statusToString(expected), statusToString(status));
+        log->warn("Set node status failed, expected is {}, actual is {}", expected.toString(), status.toString());
         return;
     }
 
     auto old = status;
     status = newStatus;
     if (!statusListeners.empty()) {
-        for (auto& listener: statusListeners)
-            listener.statusChanged(newStatus, old);
+        for (auto& listener: statusListeners) {
+            listener->statusChanged(newStatus, old);
+            switch (newStatus) {
+                case NodeStatus::Running:
+                    listener->started();
+                    break;
+
+                case NodeStatus::Stopped:
+                    listener->stopped();
+                    break;
+
+                default:
+                    break;
+            }
+        }
     }
 }
 
@@ -186,17 +204,15 @@ Node::Node(std::shared_ptr<Configuration> _config): config(_config)
 }
 
 void Node::bootstrap(const NodeInfo& node) {
-    // checkArgument(node != null, "Invalid bootstrap node");
+    std::vector<NodeInfo> nis = {node};
+    bootstrap(nis);
+}
 
-    if (node.getId() == id) {
-        log->warn("Can not bootstrap from local node: {}", node.getId().toString());
-        return;
-    }
-
+void Node::bootstrap(const std::vector<NodeInfo>& nis) {
     if (dht4 != nullptr)
-        dht4->bootstrap(node);
+        dht4->bootstrap(nis);
     if (dht6 != nullptr)
-        dht6->bootstrap(node);
+        dht6->bootstrap(nis);
 }
 
 void Node::start() {
@@ -207,12 +223,12 @@ void Node::start() {
     log->info("Carrier node {} is starting...", id.toString());
 
     if (config->ipv4Address()) {
-        dht4 = std::make_shared<DHT>(DHT::Type::IPV4, *this, config->ipv4Address());
+        dht4 = std::make_shared<DHT>(Network::IPv4, *this, config->ipv4Address());
         if (persistent)
             dht4->enablePersistence(storagePath + "/dht4.cache");
     }
     if (config->ipv6Address()) {
-        dht6 = std::make_shared<DHT>(DHT::Type::IPV6, *this, config->ipv6Address());
+        dht6 = std::make_shared<DHT>(Network::IPv6, *this, config->ipv6Address());
         if (persistent)
             dht6->enablePersistence(storagePath + "/dht6.cache");
     }
@@ -341,38 +357,29 @@ void Node::getNodes(const Id& id, Sp<NodeInfo> node, std::function<void(std::lis
 }
 #endif
 
-std::future<std::vector<Sp<NodeInfo>>> Node::findNode(const Id& id, LookupOption option) const {
+std::future<Result<NodeInfo>> Node::findNode(const Id& id, LookupOption option) const {
     checkState(isRunning(), "Node not running");
     checkArgument(id != Id::MIN_ID, "Invalid peer id");
 
-    auto promise = std::make_shared<std::promise<std::vector<Sp<NodeInfo>>>>();
-    auto results = std::make_shared<std::vector<Sp<NodeInfo>>>();
+    auto promise = std::make_shared<std::promise<Result<NodeInfo>>>();
+    auto results = std::make_shared<Result<NodeInfo>>(
+            dht4 != nullptr ? dht4->getNode(id) : nullptr,
+            dht6 != nullptr ? dht6->getNode(id) : nullptr);
 
-    if (option == LookupOption::ARBITRARY) {
-        if (dht4 != nullptr) {
-            const auto ni = dht4->getNode(id);
-            if (ni != nullptr)
-                results->emplace_back(ni);
-        }
-        if (dht6 != nullptr) {
-            const auto ni = dht6->getNode(id);
-            if (ni != nullptr)
-                results->emplace_back(ni);
-        }
 
-        if (!results->empty()) {
-            promise->set_value(std::move(*results));
-            return promise->get_future();
-        }
+    if (option == LookupOption::ARBITRARY && results->hasValue()) {
+        promise->set_value(std::move(*results));
+        return promise->get_future();
     }
 
     auto completion = std::make_shared<std::atomic<int>>(0);
     auto completeHandler = [=](Sp<NodeInfo> ni) {
         (*completion)++;
-        if (ni != nullptr)
-            results->emplace_back(ni);
+        if (ni != nullptr) {
+            results->setValue(Network::of(ni->getAddress()), ni);
+        }
 
-        if ((option == LookupOption::OPTIMISTIC && !results->empty()) || *completion >= numDHTs) {
+        if ((option == LookupOption::OPTIMISTIC && ni != nullptr) || *completion >= numDHTs) {
             promise->set_value(std::move(*results));
         }
     };
@@ -484,16 +491,6 @@ std::future<std::vector<PeerInfo>> Node::findPeer(const Id& id, int expected, Lo
         promise->set_value(std::move(*results));
         return promise->get_future();
     }
-
-    // TODO exception
-
-    // NOTICE: Concurrent threads adding to ArrayList
-    //
-    // There is no guaranteed behavior for what happens when add is
-    // called concurrently by two threads on ArrayList.
-    // However, it has been my experience that both objects have been
-    // added fine. Most of the thread safety issues related to lists
-    // deal with iteration while adding/removing.
 
     auto completion = std::make_shared<std::atomic<int>>(0);
     auto completeHandler = [=](std::vector<PeerInfo> peers) {
@@ -619,7 +616,7 @@ int Node::getPort() {
 }
 
 Sp<DHT> Node::getDHT(int type) const noexcept {
-    return type == DHT::Type::IPV4 ? dht4 : dht6;
+    return type == Network::IPv4 ? dht4 : dht6;
 }
 
 std::string Node::toString() const {

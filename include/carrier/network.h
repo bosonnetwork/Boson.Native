@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 - 2023 trinity-tech.io
+ * Copyright (c) 2023 trinity-tech.io
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,24 +19,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
 #pragma once
 
 #include <cstdint>
-#include <string>
 #include "def.h"
 
 namespace carrier {
 
-class CARRIER_PUBLIC NodeStatus {
+class CARRIER_PUBLIC Network {
 public:
     enum Enum : uint8_t {
-        Stopped = 0,
-        Initializing,
-        Running
+        IPv4 = 4,
+        IPv6 = 6
     };
 
-    constexpr NodeStatus() = delete;
-    constexpr NodeStatus(Enum e) : e(e) {};
+    constexpr Network() = delete;
+    constexpr Network(Enum e) : e(e) {};
 
     // Allows comparisons with Enum constants.
     constexpr operator Enum() const noexcept {
@@ -46,11 +45,18 @@ public:
     // Needed to prevent if(e)
     explicit operator bool() const = delete;
 
+    bool canUseSocketAddress(const SocketAddress& addr) const {
+        return addr.family() == (e == IPv4 ? AF_INET : AF_INET6);
+    }
+
+    static Network of(const SocketAddress& addr) {
+        return (addr.family() == AF_INET) ? IPv4 : IPv6;
+    }
+
     std::string toString() const noexcept {
         switch (e) {
-            case Stopped: return "Stopped";
-            case Initializing: return "Initializing";
-            case Running: return "Running";
+            case IPv4: return "IPv4";
+            case IPv6: return "IPv6";
             default:
                 return "Invalid value";
         }
@@ -58,15 +64,6 @@ public:
 
 private:
     Enum e {};
-};
-
-class CARRIER_PUBLIC NodeStatusListener {
-public:
-    virtual void statusChanged(NodeStatus newStatus, NodeStatus oldStatus) {};
-
-    virtual void started() {}
-
-    virtual void stopped() {}
 };
 
 } // namespace carrier

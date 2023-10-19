@@ -116,12 +116,18 @@ public:
             auto node = std::make_shared<NodeInfo>(id, address);
             bootstrapNodes.emplace_back(node);
         }
+
         void addBootstrap(const Id& id, SocketAddress addr) {
             auto node = std::make_shared<NodeInfo>(id, addr);
             bootstrapNodes.emplace_back(node);
         }
+
         void addBootstrap(Sp<NodeInfo> node) {
             bootstrapNodes.emplace_back(node);
+        }
+
+        void addBootstrap(std::vector<Sp<NodeInfo>> nodes) {
+            bootstrapNodes.insert(bootstrapNodes.end(), nodes.begin(), nodes.end());
         }
 
         void load(const std::string& path);

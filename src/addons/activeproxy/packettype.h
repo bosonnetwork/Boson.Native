@@ -77,8 +77,8 @@ public:
     explicit operator bool() const = delete;
 
     bool isAck() {
-		return e & ACK_MASK;
-	}
+        return e & ACK_MASK;
+    }
 
     uint8_t value() const noexcept {
         switch (e) {

@@ -105,6 +105,11 @@ nlohmann::json KBucketEntry::toJson() const {
 std::string KBucketEntry::toString() const {
     auto now = currentTimeMillis();
     std::string str {};
+
+#ifdef CARRIER_DEVELOPMENT
+    str.append(getId().toHexString()).append("/");
+#endif
+
     str.append(getId().toString())
         .append(1, '@')
         .append(getAddress().host())

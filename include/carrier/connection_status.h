@@ -22,14 +22,58 @@
 
 #pragma once
 
+#include <cstdint>
+#include <string>
 #include "def.h"
-#include "node_status.h"
+#include "network.h"
 
 namespace carrier {
 
-class CARRIER_PUBLIC NodeStatusListener {
+class CARRIER_PUBLIC ConnectionStatus {
 public:
-    virtual void statusChanged(NodeStatus newStatus, NodeStatus oldStatus) {};
+    enum Enum : uint8_t {
+        Disconnected = 0,
+        Connecting,
+        Connected,
+        Profound
+    };
+
+    constexpr ConnectionStatus() = delete;
+    constexpr ConnectionStatus(Enum e) : e(e) {};
+
+    // Allows comparisons with Enum constants.
+    constexpr operator Enum() const noexcept {
+        return e;
+    }
+
+    // Needed to prevent if(e)
+    explicit operator bool() const = delete;
+
+    std::string toString() const noexcept {
+        switch (e) {
+            case Disconnected: return "Disconnected";
+            case Connecting: return "Connecting";
+            case Connected: return "Connected";
+            case Profound: return "Profound";
+            default:
+                return "Invalid value";
+        }
+    }
+
+private:
+    Enum e {};
+};
+
+class CARRIER_PUBLIC ConnectionStatusListener {
+public:
+    virtual void statusChanged(Network network, ConnectionStatus newStatus, ConnectionStatus oldStatus) {};
+
+    virtual void connected(Network network) {};
+
+    virtual void profound(Network network) {};
+
+    virtual void disconnected(Network network) {};
+
 };
 
 } // namespace carrier

@@ -48,7 +48,7 @@ public:
         return nodes6;
     }
 
-    const std::list<Sp<NodeInfo>>& getNodes(DHT::Type type) const;
+    const std::list<Sp<NodeInfo>>& getNodes(Network type) const;
 
     int getToken() const {
         return token;

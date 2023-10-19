@@ -60,7 +60,23 @@
 
 namespace carrier {
 
-DHT::DHT(Type _type, const Node& _node, const SocketAddress& _addr)
+void DHT::BootstrapStage::updateConnectionStatus() {
+    std::unique_lock<std::mutex> lock(mtx);
+
+    dht->log->debug("BootstrapStage {}: [{}, {}, {}]", dht->getNode().getId().toString(),
+        _fillHomeBucket.toString(), _fillAllBuckets.toString(), _pingCachedRoutingTable.toString());
+
+    if (completed(_fillAllBuckets) && completed(_pingCachedRoutingTable)) {
+        if (dht->routingTable.getNumBucketEntries() > 0)
+            dht->setStatus(ConnectionStatus::Connected, ConnectionStatus::Profound);
+    }
+    else if (completed(_fillHomeBucket) || completed(_pingCachedRoutingTable)) {
+        if (dht->routingTable.getNumBucketEntries() > 0)
+            dht->setStatus(ConnectionStatus::Connecting, ConnectionStatus::Connected);
+    }
+}
+
+DHT::DHT(Network _type, const Node& _node, const SocketAddress& _addr)
     :type(_type), node(_node), addr(_addr), bootstrapping(false) {
 
     log = Logger::get("dht");
@@ -70,27 +86,66 @@ Sp<NodeInfo> DHT::getNode(const Id& nodeId) const {
     return routingTable.getEntry(nodeId);
 }
 
+void DHT::setStatus(ConnectionStatus expected, ConnectionStatus newStatus) {
+    if (status != expected) {
+        log->warn("Set connection status failed, expected is {}, actual is {}", expected.toString(), status.toString());
+        return;
+    }
+
+    auto old = status;
+    status = newStatus;
+    auto statusListeners = node.getConnectionStatusListeners();
+    if (!statusListeners.empty()) {
+        for (auto& listener: statusListeners) {
+            listener->statusChanged(type, newStatus, old);
+            switch (newStatus) {
+                case ConnectionStatus::Connected:
+                        listener->connected(type);
+                        break;
+
+                case ConnectionStatus::Profound:
+                    listener->profound(type);
+                    break;
+
+                case ConnectionStatus::Disconnected:
+                    listener->disconnected(type);
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+}
+
 void DHT::bootstrap() {
   if (!isRunning() || bootstrapNodes.empty()
        || currentTimeMillis() - lastBootstrap < Constants::BOOTSTRAP_MIN_INTERVAL)
        return;
 
+    auto bns = !bootstrapNodes.empty() ?
+                bootstrapNodes : routingTable.getRandomEntries(8);
+    if (bns.empty())
+            return;
+
     bool expected {false};
     if (!bootstrapping.compare_exchange_weak(expected, true))
         return;
 
-    log->info("DHT {} bootstraping...", getTypeName());
+    bootstrapStage.clearBootstrapStatus();
+
+    log->info("DHT {} bootstraping...", type.toString());
 
     auto nodes = std::make_shared<std::list<Sp<NodeInfo>>>();
     auto count = std::make_shared<int>(0);
     int len = bootstrapNodes.size();
 
-    for (auto node: bootstrapNodes) {
+    for (auto node: bns) {
         std::promise<std::list<Sp<NodeInfo>>> promise {};
         auto q = std::make_shared<FindNodeRequest>(Id::random());
 
-        q->setWant4(type == Type::IPV4);
-        q->setWant6(type == Type::IPV6);
+        q->setWant4(type == Network::IPv4);
+        q->setWant6(type == Network::IPv6);
 
         auto call = std::make_shared<RPCCall>(this, node, q);
         call->addStateChangeHandler([=](RPCCall* call, RPCCall::State previous, RPCCall::State current) {
@@ -114,20 +169,40 @@ void DHT::bootstrap() {
 }
 
 void DHT::bootstrap(const NodeInfo& ni) {
-    if (!canUseSocketAddress(ni.getAddress()) || ni.getId() == node.getId())
-        return;
+    std::vector<NodeInfo> nis = {ni};
+    bootstrap(nis);
+}
 
-    auto nodes = getBootstraps();
-    auto pos = std::find_if(nodes.begin(), nodes.end(), [&](Sp<NodeInfo> item) {
-        return (*item == ni);
-    });
+void DHT::bootstrap(const std::vector<NodeInfo>& nis) {
+    int added = 0;
 
-    if (pos == nodes.end()) {
-        bootstrapNodes.push_back(std::make_shared<NodeInfo>(ni));
+    for (NodeInfo ni : nis) {
+        if (!type.canUseSocketAddress(ni.getAddress()))
+            continue;
+
+        if (node.isSelfId(ni.getId())) {
+            log->warn("Can not bootstrap from local node: {}", node.getId().toBase58String());
+            continue;
+        }
+
+        //check the bootstrapNodes contains the ni
+        auto nodes = getBootstraps();
+        auto pos = std::find_if(nodes.begin(), nodes.end(), [&](Sp<NodeInfo> item) {
+            return (*item == ni);
+        });
+
+        if (pos == nodes.end()) {
+            bootstrapNodes.push_back(std::make_shared<NodeInfo>(ni));
+            added++;
+        }
+    }
+
+    if (added > 0) {
         lastBootstrap = 0;
         bootstrap();
     }
 }
+
 
 void DHT::fillHomeBucket(const std::list<Sp<NodeInfo>>& nodes) {
     if (routingTable.getNumBucketEntries() == 0 && nodes.empty()) {
@@ -145,8 +220,15 @@ void DHT::fillHomeBucket(const std::list<Sp<NodeInfo>>& nodes) {
         if (!isRunning())
             return;
 
-        if (routingTable.getNumBucketEntries() > Constants::MAX_ENTRIES_PER_BUCKET + 2)
-            routingTable.fillBuckets();
+        bootstrapStage.fillHomeBucket(CompletionStatus::Completed);
+
+        if (routingTable.getNumBucketEntries() > Constants::MAX_ENTRIES_PER_BUCKET + 2) {
+            routingTable.fillBuckets([=]() {
+                bootstrapStage.fillAllBuckets(CompletionStatus::Completed);
+            });
+        }
+        else
+            bootstrapStage.fillAllBuckets(CompletionStatus::Canceled);
     });
 
     taskMan.add(task);
@@ -156,7 +238,7 @@ void DHT::update () {
     if (!isRunning())
         return;
 
-    log->trace("DHT {} regularly update...", getTypeName());
+    log->trace("DHT {} regularly update...", type.toString());
 
     uint64_t now = currentTimeMillis();
 
@@ -185,13 +267,14 @@ void DHT::start(std::vector<Sp<NodeInfo>>& nodes) {
     }
 
     for (auto node: nodes) {
-        if (canUseSocketAddress(node->getAddress()))
+        if (type.canUseSocketAddress(node->getAddress()))
             bootstrapNodes.emplace_back(node);
     }
 
-    log->info("Starting DHT/{} on {}", getTypeName(), addr.toString());
+    log->info("Starting DHT/{} on {}", type.toString(), addr.toString());
 
     running = true;
+    setStatus(ConnectionStatus::Disconnected, ConnectionStatus::Connecting);
 
     auto& scheduler = rpcServer->getScheduler();
 
@@ -201,17 +284,21 @@ void DHT::start(std::vector<Sp<NodeInfo>>& nodes) {
     }, 5000, Constants::DHT_UPDATE_INTERVAL);
 
     // Ping check if the routing table loaded from cache
-    for (auto& bucket: routingTable.getBuckets()) {
-        if (bucket->size() == 0)
-            continue;
-
-        std::vector<PingRefreshTask::Options> options{PingRefreshTask::Options::removeOnTimeout};
-        auto task = std::make_shared<PingRefreshTask>(this, bucket, options);
-        task->setName("Bootstrap cached table ping for " + bucket->getPrefix().toString());
-        taskMan.add(task);
+    if (routingTable.getNumBucketEntries() > 0) {
+        routingTable.pingBuckets([=]() {
+            bootstrapStage.pingCachedRoutingTable(CompletionStatus::Completed);
+        });
+    }
+    else {
+        bootstrapStage.pingCachedRoutingTable(CompletionStatus::Canceled);
     }
 
-    bootstrap();
+    if (!bootstrapNodes.empty()) {
+        bootstrap();
+    } else {
+        bootstrapStage.fillHomeBucket(CompletionStatus::Canceled);
+        bootstrapStage.fillAllBuckets(CompletionStatus::Canceled);
+    }
 
     // fix the first time to persist the routing table: 2 min
     lastSave = currentTimeMillis() - Constants::ROUTING_TABLE_PERSIST_INTERVAL + (120 * 1000);
@@ -240,7 +327,7 @@ void DHT::start(std::vector<Sp<NodeInfo>>& nodes) {
     scheduler.add([&]() {
         auto task = std::make_shared<NodeLookup>(this, Id::random());
         task->addListener([](Task* t) {});
-        task->setName(getTypeName() + ":Random Refresh Lookup");
+        task->setName(type.toString() + ":Random Refresh Lookup");
         taskMan.add(task);
     }, Constants::RANDOM_LOOKUP_INTERVAL, Constants::RANDOM_LOOKUP_INTERVAL);
 }
@@ -249,7 +336,7 @@ void DHT::stop() {
     if (!running)
         return;
 
-    log->info("{} initated DHT shutdown...", getTypeName());
+    log->info("{} initated DHT shutdown...", type.toString());
     log->info("stopping servers");
     running = false;
 
@@ -578,8 +665,8 @@ void DHT::ping(Sp<NodeInfo> node, std::function<void(Sp<NodeInfo>)> completeHand
 void DHT::getNodes(const Id& id, Sp<NodeInfo> node, std::function<void(std::list<Sp<NodeInfo>>)> completeHandler) {
     auto q = std::make_shared<FindNodeRequest>(id);
 
-    q->setWant4(type == Type::IPV4);
-    q->setWant6(type == Type::IPV6);
+    q->setWant4(type == Network::IPv4);
+    q->setWant6(type == Network::IPv6);
 
     auto call = std::make_shared<RPCCall>(this, node, q);
     call->addStateChangeHandler([=](RPCCall* call, RPCCall::State previous, RPCCall::State current) {
@@ -597,12 +684,21 @@ void DHT::getNodes(const Id& id, Sp<NodeInfo> node, std::function<void(std::list
 }
 #endif
 
-Sp<Task> DHT::findNode(const Id& id, std::function<void(Sp<NodeInfo>)> completeHandler) {
+Sp<Task> DHT::findNode(const Id& id, LookupOption option, std::function<void(Sp<NodeInfo>)> completeHandler) {
+    // auto nodeRef = std::make_shared<std::atomic<Sp<NodeInfo>>>(routingTable.getEntry(id));
+    auto nodeRef = std::make_shared<Sp<NodeInfo>>(routingTable.getEntry(id));
     auto task = std::make_shared<NodeLookup>(this, id);
+    task->setResultHandler([=](Sp<NodeInfo> v, Task* t) {
+        // nodeRef->store(v);
+        *nodeRef = v;
+        if (option != LookupOption::CONSERVATIVE) {
+            t->cancel();
+        }
+    });
 
     task->addListener([=](Task* t) {
-        Sp<NodeInfo> ni = routingTable.getEntry(id);
-        completeHandler(ni);
+        // completeHandler(nodeRef->load());
+        completeHandler(*nodeRef);
     });
     task->setName("User-level node lookup");
     taskMan.add(task);
@@ -666,13 +762,6 @@ Sp<Task> DHT::storeValue(const Value& value, std::function<void(std::list<Sp<Nod
 }
 
 Sp<Task> DHT::findPeer(const Id& id, int expected, LookupOption option, std::function<void(std::vector<PeerInfo>)> completeHandler) {
-    // NOTICE: Concurrent threads adding to ArrayList
-    //
-    // There is no guaranteed behavior for what happens when add is
-    // called concurrently by two threads on ArrayList.
-    // However, it has been my experience that both objects have been
-    // added fine. Most of the thread safety issues related to lists
-    // deal with iteration while adding/removing.
     auto task = std::make_shared<PeerLookup>(this, id);
     auto peers = std::make_shared<std::vector<PeerInfo>>();
 
@@ -730,17 +819,17 @@ Sp<Task> DHT::announcePeer(const PeerInfo& peer, const std::function<void(std::l
 
 void DHT::populateClosestNodes(Sp<LookupResponse> response, const Id& target, int v4, int v6) {
     if (v4 > 0) {
-        auto& dht4 = (type == Type::IPV4) ? *this : *node.getDHT(Type::IPV4);
+        auto& dht4 = (type == Network::IPv4) ? *this : *node.getDHT(Network::IPv4);
         auto kclosestNodes = std::make_shared<KClosestNodes>(dht4, target, v4);
-        kclosestNodes->fill(type == Type::IPV4);
+        kclosestNodes->fill(type == Network::IPv4);
         auto nodes = kclosestNodes->asNodeList();
         response->setNodes4(nodes);
     }
 
     if (v6 > 0) {
-        auto& dht6 = (type == Type::IPV6) ? *this : *node.getDHT(Type::IPV6);
+        auto& dht6 = (type == Network::IPv6) ? *this : *node.getDHT(Network::IPv6);
         auto kclosestNodes = std::make_shared<KClosestNodes>(dht6, target, v6);
-        kclosestNodes->fill(type == Type::IPV6);
+        kclosestNodes->fill(type == Network::IPv6);
         auto nodes = kclosestNodes->asNodeList();
         response->setNodes6(nodes);
     }
@@ -749,7 +838,7 @@ void DHT::populateClosestNodes(Sp<LookupResponse> response, const Id& target, in
 std::string DHT::toString() const {
     std::string str {};
 
-    str.append("DHT: ").append(getTypeName()).append(1, '\n');
+    str.append("DHT: ").append(type.toString()).append(1, '\n');
     str.append("Address: ").append(addr.toString()).append(1, '\n');
     str.append(routingTable.toString());
 

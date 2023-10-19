@@ -207,7 +207,7 @@ std::string Task::toString() const {
     if (!name.empty())
         ss << "[" << name << "]";
 
-    ss << " DHT: " << dht.getTypeName()
+    ss << " DHT: " << dht.getType().toString()
         << ", state: " << stateName[(int)state];
 
     return ss.str();

@@ -27,6 +27,7 @@
 #include <cstdio>
 #include <atomic>
 #include <map>
+#include <mutex>
 
 #include "carrier/id.h"
 #include "carrier/value.h"
@@ -34,6 +35,7 @@
 #include "carrier/peer_info.h"
 #include "carrier/lookup_option.h"
 #include "carrier/types.h"
+#include "carrier/connection_status.h"
 
 #include "task/task_manager.h"
 #include "rpcserver.h"
@@ -47,33 +49,86 @@ class PingRequest;
 class RoutingTable;
 class LookupResponse;
 class Node;
+class DHT;
+
 
 class DHT {
-public:
-    enum Type {
-        IPV4,
-        IPV6
+    class CompletionStatus {
+    public:
+        enum Enum : uint8_t {
+            Pending = 0,
+            Canceled,
+            Completed
+        };
+
+        constexpr CompletionStatus() = delete;
+        constexpr CompletionStatus(Enum e) : e(e) {};
+
+        // Allows comparisons with Enum constants.
+        constexpr operator Enum() const noexcept {
+            return e;
+        }
+
+        // Needed to prevent if(e)
+        explicit operator bool() const = delete;
+
+        std::string toString() const noexcept {
+            switch (e) {
+                case Pending: return "Pending";
+                case Canceled: return "Canceled";
+                case Completed: return "Completed";
+                default:
+                    return "Invalid value";
+            }
+        }
+
+    private:
+        Enum e {};
+    };
+    class BootstrapStage {
+    public:
+        BootstrapStage(DHT* dht): dht(dht) {};
+
+        void fillHomeBucket(CompletionStatus status) {
+            _fillHomeBucket = status;
+            updateConnectionStatus();
+        }
+
+        void fillAllBuckets(CompletionStatus status) {
+            _fillAllBuckets = status;
+            updateConnectionStatus();
+        }
+
+        void pingCachedRoutingTable(CompletionStatus status) {
+            _pingCachedRoutingTable = status;
+            updateConnectionStatus();
+        }
+
+        void clearBootstrapStatus() {
+            _fillHomeBucket = CompletionStatus::Pending;
+            _fillAllBuckets = CompletionStatus::Pending;
+        }
+
+    private:
+        bool completed(CompletionStatus status) {
+            return status > CompletionStatus::Pending;
+        }
+
+        void updateConnectionStatus();
+
+        CompletionStatus _fillHomeBucket {CompletionStatus::Pending};
+        CompletionStatus _fillAllBuckets {CompletionStatus::Pending};
+        CompletionStatus _pingCachedRoutingTable {CompletionStatus::Pending};
+
+        DHT* dht;
+        mutable std::mutex mtx {};
     };
 
-    explicit DHT(Type _type, const Node& _node, const SocketAddress& _addr);
+public:
+    explicit DHT(Network _type, const Node& _node, const SocketAddress& _addr);
 
-    bool canUseSocketAddress(const SocketAddress& addr) const {
-        return addr.family() == (type == Type::IPV4 ? AF_INET : AF_INET6);
-    }
-
-    Type getType() const noexcept {
+    Network getType() const noexcept {
         return type;
-    }
-
-    const std::string getTypeName() const noexcept {
-        switch (type) {
-        case Type::IPV4:
-            return "IPV4";
-        case Type::IPV6:
-            return "IPV6";
-        default:
-            return "Invalid Type";
-        }
     }
 
     const Node& getNode() const noexcept {
@@ -125,6 +180,7 @@ public:
 
     void bootstrap();
     void bootstrap(const NodeInfo&);
+    void bootstrap(const std::vector<NodeInfo>&);
 
     void fillHomeBucket(const std::list<Sp<NodeInfo>>&);
 
@@ -140,7 +196,11 @@ public:
     void getNodes(const Id& id, Sp<NodeInfo> node, std::function<void(std::list<Sp<NodeInfo>>)> completeHandler);
 #endif
 
-    Sp<Task> findNode(const Id& id, std::function<void(Sp<NodeInfo>)> completeHandler);
+    Sp<Task> findNode(const Id& id, std::function<void(Sp<NodeInfo>)> completeHandler) {
+        return findNode(id, LookupOption::CONSERVATIVE, completeHandler);
+    };
+
+    Sp<Task> findNode(const Id& id, LookupOption option, std::function<void(Sp<NodeInfo>)> completeHandler);
     Sp<Task> findValue(const Id& id, LookupOption option, std::function<void(Sp<Value>)> completeHandler);
     Sp<Task> storeValue(const Value& value, std::function<void(std::list<Sp<NodeInfo>>)> completeHandler);
     Sp<Task> findPeer(const Id& id, int expected, LookupOption option, std::function<void(std::vector<PeerInfo>)> completeHandler);
@@ -174,8 +234,11 @@ private:
 
     void populateClosestNodes(Sp<LookupResponse> r, const Id& target, int v4, int v6);
 
+    void setStatus(ConnectionStatus expected, ConnectionStatus newStatus);
+
 private:
-    Type type;
+    Network type {Network::IPv4};
+    ConnectionStatus status {ConnectionStatus::Disconnected};
 
     const Node& node;
     Sp<RPCServer> rpcServer {};
@@ -190,6 +253,7 @@ private:
     std::map<SocketAddress, Id> knownNodes = {};
     std::atomic<bool> bootstrapping;
     uint64_t lastBootstrap {0};
+    BootstrapStage bootstrapStage {this};
 
     uint64_t lastSave {0};
     bool running = false;

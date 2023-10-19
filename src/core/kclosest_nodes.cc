@@ -113,7 +113,7 @@ void KClosestNodes::fill(bool includeSelf) {
 
     if (entries.size() < maxEntries) {
         for (const auto& bootstrapNode : dht.getNode().getConfig()->getBootstrapNodes()) {
-            if (dht.canUseSocketAddress(bootstrapNode->getAddress()))
+            if (dht.getType().canUseSocketAddress(bootstrapNode->getAddress()))
                 entries.push_back(std::static_pointer_cast<KBucketEntry>(bootstrapNode));
         }
     }

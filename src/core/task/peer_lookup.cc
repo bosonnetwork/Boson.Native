@@ -44,8 +44,8 @@ void PeerLookup::update() {
             break;
 
         auto request = std::make_shared<FindPeerRequest>(getTarget());
-        request->setWant4(getDHT().getType() == DHT::Type::IPV4);
-        request->setWant6(getDHT().getType() == DHT::Type::IPV6);
+        request->setWant4(getDHT().getType() == Network::IPv4);
+        request->setWant6(getDHT().getType() == Network::IPv6);
 
         try {
             sendCall(candidate, request, [&](Sp<RPCCall> call) {

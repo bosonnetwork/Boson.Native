@@ -75,7 +75,7 @@ void NodeAutomationTester::testAutomaticNode() {
     std::cout << "Trying to find node: " << bn->getId() << std::endl;
     auto future = node->findNode(bn->getId());
     auto n = future.get();
-    CPPUNIT_ASSERT(!n.empty());
+    CPPUNIT_ASSERT(n.hasValue());
 
     std::cout << "----------" << std::endl;
     std::vector<uint8_t> data({0,1,2,3,4});

@@ -86,16 +86,15 @@ std::future<void> ActiveProxy::initialize(Sp<Node> node, const std::map<std::str
             serverId = peer.getNodeId();
 
             log->info("Addon ActiveProxy is trying to locate node {} from peer {} ...", serverId.toString(), peer.toString());
-            auto future2 = node->findNode(serverId);
-            auto nodes = future2.get();
-            if (nodes.empty()) {
+            auto nis = node->findNode(serverId).get();
+            if (!nis.hasValue()) {
                 log->warn("Addon ActiveProxy can't locate node: {}! Go on next ...", serverId.toString());
                 continue;
             }
 
-            std::shuffle(nodes.begin(), nodes.end(), e);
-            serverHost = nodes[0]->getAddress().host();
-            log->info("Addon ActiveProxy server hosting address: {}", nodes[0]->getAddress().toString());
+            auto ni = (nis.getV4() != nullptr) ? nis.getV4() : nis.getV6();
+            serverHost = ni->getAddress().host();
+            log->info("Addon ActiveProxy server hosting address: {}", ni->getAddress().toString());
 
             found = true;
             // TODO: check the service availability

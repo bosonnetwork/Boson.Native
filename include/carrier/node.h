@@ -37,7 +37,8 @@
 #include "configuration.h"
 #include "lookup_option.h"
 #include "node_status.h"
-#include "node_status_listener.h"
+#include "connection_status.h"
+#include "result.h"
 
 namespace carrier {
 
@@ -56,6 +57,8 @@ public:
 
     ~Node() {}
 
+    Result<NodeInfo> getNodeInfo();
+
     const Id& getId() const {
         return id;
     }
@@ -72,17 +75,28 @@ public:
         defaultLookupOption = option;
     }
 
-    inline void addStatusListener(NodeStatusListener& listener) {
+    void addStatusListener(Sp<NodeStatusListener> listener) {
         statusListeners.emplace_back(listener);
     }
 
-    void removeStatusListener(const NodeStatusListener& listener) {
-        //TODO:: need to implement the NodeStatusListener operator '=='
-        //       Or use Sp<NodeStatusListener>?
-        // statusListeners.remove(listener);
+    void removeStatusListener(const Sp<NodeStatusListener>& listener) {
+        statusListeners.remove(listener);
+    }
+
+    void addConnectionStatusListener(Sp<ConnectionStatusListener> listener) {
+        connectionStatusListeners.emplace_back(listener);
+    }
+
+    void removeConnectionStatusListener(const Sp<ConnectionStatusListener>& listener) {
+        connectionStatusListeners.remove(listener);
+    }
+
+    std::list<Sp<ConnectionStatusListener>> getConnectionStatusListeners() const {
+        return connectionStatusListeners;
     }
 
     void bootstrap(const NodeInfo& node);
+    void bootstrap(const std::vector<NodeInfo>& nis);
     void start();
     void stop();
 
@@ -90,7 +104,7 @@ public:
         return status == NodeStatus::Running;
     }
 
-    std::future<std::vector<Sp<NodeInfo>>> findNode(const Id& id) const {
+    std::future<Result<NodeInfo>> findNode(const Id& id) const {
         return findNode(id, defaultLookupOption);
     }
 
@@ -107,7 +121,7 @@ public:
     void getNodes(const Id& id, Sp<NodeInfo> node, std::function<void(std::list<Sp<NodeInfo>>)> completeHandler) const;
 #endif
 
-    std::future<std::vector<Sp<NodeInfo>>> findNode(const Id& id, LookupOption option) const;
+    std::future<Result<NodeInfo>> findNode(const Id& id, LookupOption option) const;
     std::future<Sp<Value>> findValue(const Id& id, LookupOption option) const;
     std::future<void> storeValue(const Value& value, bool persistent = false) const;
     std::future<std::vector<PeerInfo>> findPeer(const Id &id, int expectedNum, LookupOption option) const;
@@ -160,9 +174,10 @@ private:
     int numDHTs {0};
     LookupOption defaultLookupOption { LookupOption::CONSERVATIVE };
 
-    NodeStatus status;
+    NodeStatus status {NodeStatus::Stopped};
     StatusCallback statusCb {nullptr};
-    std::list<NodeStatusListener> statusListeners {};
+    std::list<Sp<NodeStatusListener>> statusListeners {};
+    std::list<Sp<ConnectionStatusListener>> connectionStatusListeners {};
 
     Sp<Configuration> config {};
     Sp<TokenManager> tokenManager {};

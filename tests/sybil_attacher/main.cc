@@ -150,13 +150,20 @@ static void run()
         for (int j = 0; j < Utils::getRandom(2, 5); j++) {
             auto future = node->findNode(remoteNode.getId());
             auto nis = future.get();
-            if (nis.size() == 0) {
-                std::cout << "       find node " << j << ": get no node" << std::endl;
-            } else {
+            if (nis.hasValue()) {
                 std::cout << "       find node " << j << ": get node";
-                for (auto ni: nis)
-                    std::cout << " [" << ni->toString() << "] ";
+                auto ni = nis.getV4();
+                if (ni != nullptr)
+                    std::cout << " [" << Network(Network::IPv4).toString() << ": " << ni->toString() << "] "<< std::endl;
+
+                ni = nis.getV6();
+                if (ni != nullptr)
+                    std::cout << " [" << Network(Network::IPv6).toString() << ": " << ni->toString() << "] "<< std::endl;
+
                 std::cout << "" << std::endl;
+            }
+            else {
+                std::cout << "       find node " << j << ": get no node" << std::endl;
             }
             std::this_thread::sleep_for(std::chrono::milliseconds(options.interval * 1000));
         }

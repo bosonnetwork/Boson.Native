@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 - 2023 trinity-tech.io
+ * Copyright (c) 2023 trinity-tech.io
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,54 +19,66 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
 #pragma once
 
-#include <cstdint>
-#include <string>
-#include "def.h"
+#include "network.h"
 
 namespace carrier {
 
-class CARRIER_PUBLIC NodeStatus {
+template <class T>
+class CARRIER_PUBLIC Result {
+
 public:
-    enum Enum : uint8_t {
-        Stopped = 0,
-        Initializing,
-        Running
-    };
+    Result(Sp<T> v4, Sp<T> v6): v4(v4), v6(v6) {};
 
-    constexpr NodeStatus() = delete;
-    constexpr NodeStatus(Enum e) : e(e) {};
-
-    // Allows comparisons with Enum constants.
-    constexpr operator Enum() const noexcept {
-        return e;
+    Sp<T> getV4() {
+        return v4;
     }
 
-    // Needed to prevent if(e)
-    explicit operator bool() const = delete;
+    Sp<T> getV6() {
+        return v6;
+    }
 
-    std::string toString() const noexcept {
-        switch (e) {
-            case Stopped: return "Stopped";
-            case Initializing: return "Initializing";
-            case Running: return "Running";
-            default:
-                return "Invalid value";
+    Sp<T> getValue(Network network) {
+        switch (network) {
+        case Network::IPv4:
+            return v4;
+
+        case Network::IPv6:
+            return v6;
+        }
+
+        return nullptr;
+    }
+
+    bool isEmpty() {
+        return v4 == nullptr && v6 == nullptr;
+    }
+
+    bool hasValue() {
+        return v4 != nullptr || v6 != nullptr;
+    }
+
+    bool isComplete() {
+        return v4 != nullptr && v6 != nullptr;
+    }
+
+    void setValue(Network network, Sp<T> value) {
+        switch (network) {
+        case Network::IPv4:
+            v4 = value;
+            break;
+
+        case Network::IPv6:
+            v6 = value;
+            break;
         }
     }
 
 private:
-    Enum e {};
-};
-
-class CARRIER_PUBLIC NodeStatusListener {
-public:
-    virtual void statusChanged(NodeStatus newStatus, NodeStatus oldStatus) {};
-
-    virtual void started() {}
-
-    virtual void stopped() {}
+    Sp<T> v4 {nullptr};
+    Sp<T> v6 {nullptr};
 };
 
 } // namespace carrier
