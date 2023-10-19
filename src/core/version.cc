@@ -62,7 +62,7 @@ const std::string Version::toString(int version) {
 
     std::string n = std::string(code);
     std::string v = std::to_string((version & 0x0000ff00) |
-				(version & 0x000000ff));
+                (version & 0x000000ff));
 
     auto result = names.find(n);
     return result != names.end() ? (result->second + "/" + v) : (n + "/" + v);

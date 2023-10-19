@@ -50,7 +50,7 @@ namespace carrier {
 Result<NodeInfo> Node::getNodeInfo() {
     auto n4 = dht4 != nullptr ? std::make_shared<NodeInfo>(id, dht4->getOrigin()) : nullptr;
     auto n6 = dht4 != nullptr ? std::make_shared<NodeInfo>(id, dht6->getOrigin()) : nullptr;
-	return Result<NodeInfo>(n4, n6);
+    return Result<NodeInfo>(n4, n6);
 }
 
 bool Node::checkPersistence(const std::string& path) {

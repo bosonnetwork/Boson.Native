@@ -87,13 +87,13 @@ public:
         connectionStatusListeners.emplace_back(listener);
     }
 
-	void removeConnectionStatusListener(const Sp<ConnectionStatusListener>& listener) {
+    void removeConnectionStatusListener(const Sp<ConnectionStatusListener>& listener) {
         connectionStatusListeners.remove(listener);
     }
 
     std::list<Sp<ConnectionStatusListener>> getConnectionStatusListeners() const {
-		return connectionStatusListeners;
-	}
+        return connectionStatusListeners;
+    }
 
     void bootstrap(const NodeInfo& node);
     void bootstrap(const std::vector<NodeInfo>& nis);

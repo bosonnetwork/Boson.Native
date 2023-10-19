@@ -81,7 +81,7 @@ public:
 
             case Disconnecting:
                 return type == PacketType::DISCONNECT || type == PacketType::DISCONNECT_ACK ||
-						type == PacketType::DATA;
+                        type == PacketType::DATA;
 
             case Closed:
             default:

@@ -128,7 +128,7 @@ public:
 
         void addBootstrap(std::vector<Sp<NodeInfo>> nodes) {
             bootstrapNodes.insert(bootstrapNodes.end(), nodes.begin(), nodes.end());
-		}
+        }
 
         void load(const std::string& path);
         void reset();

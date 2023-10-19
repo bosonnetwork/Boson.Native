@@ -48,7 +48,7 @@ public:
     }
 
     void setResultHandler(std::function<void(Sp<NodeInfo>, Task*)> handler) {
-		resultHandler = handler;
+        resultHandler = handler;
     }
 
 protected:

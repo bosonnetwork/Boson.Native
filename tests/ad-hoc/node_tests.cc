@@ -92,7 +92,7 @@ void NodeTester::testNode() {
     future1.get();
     std::cout << "Store value succeeeed." << std::endl;
 
-	auto signedValue = Value::createSignedValue(data);
+    auto signedValue = Value::createSignedValue(data);
     future1 = node1->storeValue(signedValue);
     future1.get();
     std::cout << "Store signedValue succeeeed." << std::endl;

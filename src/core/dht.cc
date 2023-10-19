@@ -100,8 +100,8 @@ void DHT::setStatus(ConnectionStatus expected, ConnectionStatus newStatus) {
             listener->statusChanged(type, newStatus, old);
             switch (newStatus) {
                 case ConnectionStatus::Connected:
-						listener->connected(type);
-						break;
+                        listener->connected(type);
+                        break;
 
                 case ConnectionStatus::Profound:
                     listener->profound(type);
@@ -124,9 +124,9 @@ void DHT::bootstrap() {
        return;
 
     auto bns = !bootstrapNodes.empty() ?
-				bootstrapNodes : routingTable.getRandomEntries(8);
-	if (bns.empty())
-			return;
+                bootstrapNodes : routingTable.getRandomEntries(8);
+    if (bns.empty())
+            return;
 
     bool expected {false};
     if (!bootstrapping.compare_exchange_weak(expected, true))
@@ -690,8 +690,8 @@ Sp<Task> DHT::findNode(const Id& id, LookupOption option, std::function<void(Sp<
         // nodeRef->store(v);
         *nodeRef = v;
         if (option != LookupOption::CONSERVATIVE) {
-			t->cancel();
-		}
+            t->cancel();
+        }
     });
 
     task->addListener([=](Task* t) {

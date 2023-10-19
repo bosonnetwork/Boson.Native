@@ -674,7 +674,7 @@ void ProxyConnection::processRelayPacket(const uint8_t* packet, size_t size) noe
         return onDisconnectResponse(packet, size);
 
     default:
-		log->error("INTERNAL ERROR: Connection {} got wrong {} packet in {} state", id, type.toString(), state.toString());
+        log->error("INTERNAL ERROR: Connection {} got wrong {} packet in {} state", id, type.toString(), state.toString());
     }
 }
 

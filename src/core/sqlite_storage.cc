@@ -97,7 +97,7 @@ static std::string UPSERT_PEER = "INSERT INTO peers(\
         persistent=excluded.persistent, privateKey=excluded.privateKey, \
         port=excluded.port, alternativeURL=excluded.alternativeURL, \
         signature=excluded.signature, timestamp=excluded.timestamp, \
-		announced=excluded.announced";
+        announced=excluded.announced";
 
 static std::string SELECT_PEER = "SELECT * from peers \
         WHERE id = ? and timestamp >= ? \

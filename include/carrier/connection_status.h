@@ -68,11 +68,11 @@ class CARRIER_PUBLIC ConnectionStatusListener {
 public:
     virtual void statusChanged(Network network, ConnectionStatus newStatus, ConnectionStatus oldStatus) {};
 
-	virtual void connected(Network network) {};
+    virtual void connected(Network network) {};
 
-	virtual void profound(Network network) {};
+    virtual void profound(Network network) {};
 
-	virtual void disconnected(Network network) {};
+    virtual void disconnected(Network network) {};
 
 };
 

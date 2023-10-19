@@ -50,8 +50,8 @@ public:
     }
 
     static Network of(const SocketAddress& addr) {
-		return (addr.family() == AF_INET) ? IPv4 : IPv6;
-	}
+        return (addr.family() == AF_INET) ? IPv4 : IPv6;
+    }
 
     std::string toString() const noexcept {
         switch (e) {
