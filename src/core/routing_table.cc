@@ -259,11 +259,10 @@ void RoutingTable::tryPingMaintenance(Sp<KBucket> bucket, const std::vector<Ping
     dht.getTaskManager().add(task);
 }
 
-std::future<void> RoutingTable::pingBuckets() {
+void RoutingTable::pingBuckets(std::function<void()> completeHandler) {
     auto promise = std::make_shared<std::promise<void>>();
     auto bucketsRef = getBuckets();
 
-    auto completion = std::make_shared<std::atomic<int>>(0);
     int total = 0;
     for (auto& bucket : bucketsRef) {
         if (bucket->size() > 0)
@@ -271,10 +270,11 @@ std::future<void> RoutingTable::pingBuckets() {
     }
 
     if (total == 0) {
-        promise->set_value();
-        return promise->get_future();
+        completeHandler();
+        return;
     }
 
+    auto completion = std::make_shared<std::atomic<int>>(0);
     for (auto& bucket : bucketsRef) {
         if (bucket->size() == 0)
             continue;
@@ -286,23 +286,20 @@ std::future<void> RoutingTable::pingBuckets() {
         task->addListener([=](Task* t) {
             (*completion)++;
             if (*completion >= total) {
-                promise->set_value();
+                completeHandler();
             }
         });
         dht.getTaskManager().add(task);
     }
 
-    return promise->get_future();
+    return;
 }
 
 /**
  * Check if a buckets needs to be refreshed, and refresh if necesarry
  */
-std::future<void> RoutingTable::fillBuckets() {
-    auto promise = std::make_shared<std::promise<void>>();
+void RoutingTable::fillBuckets(std::function<void()> completeHandler) {
     auto bucketsRef = getBuckets();
-
-    auto completion = std::make_shared<std::atomic<int>>(0);
     int total = 0;
     for (auto& bucket : bucketsRef) {
         if (bucket->size() < Constants::MAX_ENTRIES_PER_BUCKET)
@@ -310,31 +307,31 @@ std::future<void> RoutingTable::fillBuckets() {
     }
 
     if (total == 0) {
-        promise->set_value();
-        return promise->get_future();
+        completeHandler();
+        return;
     }
 
+    auto completion = std::make_shared<std::atomic<int>>(0);
     for (auto& bucket : bucketsRef) {
         int num = bucket->size();
-
         // just try to fill partially populated buckets
         // not empty ones, they may arise as artifacts from deep splitting
         if (num < Constants::MAX_ENTRIES_PER_BUCKET) {
             bucket->updateRefreshTimer();
 
-            auto completeHandler = ([=](Sp<NodeInfo>) {
+            auto handler = ([=](Sp<NodeInfo>) {
                 (*completion)++;
                 if (*completion >= total) {
-                    promise->set_value();
+                    completeHandler();
                 }
             });
-            auto task = dht.findNode(bucket->getPrefix().createRandomId(), completeHandler);
+            auto task = dht.findNode(bucket->getPrefix().createRandomId(), handler);
             task->setName("Filling Bucket - " + bucket->getPrefix().toString());
 
         }
     }
 
-    return promise->get_future();
+    return;
 }
 
 void RoutingTable::load(const std::string& path) {

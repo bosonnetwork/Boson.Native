@@ -223,8 +223,9 @@ void DHT::fillHomeBucket(const std::list<Sp<NodeInfo>>& nodes) {
         bootstrapStage.fillHomeBucket(CompletionStatus::Completed);
 
         if (routingTable.getNumBucketEntries() > Constants::MAX_ENTRIES_PER_BUCKET + 2) {
-            routingTable.fillBuckets().get();
-            bootstrapStage.fillAllBuckets(CompletionStatus::Completed);
+            routingTable.fillBuckets([=]() {
+                bootstrapStage.fillAllBuckets(CompletionStatus::Completed);
+            });
         }
         else
             bootstrapStage.fillAllBuckets(CompletionStatus::Canceled);
@@ -284,8 +285,9 @@ void DHT::start(std::vector<Sp<NodeInfo>>& nodes) {
 
     // Ping check if the routing table loaded from cache
     if (routingTable.getNumBucketEntries() > 0) {
-        routingTable.pingBuckets().get();
-        bootstrapStage.pingCachedRoutingTable(CompletionStatus::Completed);
+        routingTable.pingBuckets([=]() {
+            bootstrapStage.pingCachedRoutingTable(CompletionStatus::Completed);
+        });
     }
     else {
         bootstrapStage.pingCachedRoutingTable(CompletionStatus::Canceled);

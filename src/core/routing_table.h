@@ -124,8 +124,8 @@ public:
         _maintenance();
     }
 
-    std::future<void> pingBuckets();
-    std::future<void> fillBuckets();
+    void pingBuckets(std::function<void()> completeHandler);
+    void fillBuckets(std::function<void()> completeHandler);
 
     void load(const std::string&);
     void save(const std::string&);
