@@ -28,6 +28,18 @@
 #include <chrono>
 #include <thread>
 #include <cassert>
+#include <fstream>
+
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+
+#include <nlohmann/json.hpp>
+
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 
 #include "activeproxy.h"
 #include "connection.h"
@@ -42,6 +54,7 @@ static const uint32_t IDLE_CHECK_INTERVAL = 60 * 1000;          // 60 seconds
 static const uint32_t MAX_IDLE_TIME = 5 * 60 * 1000;            // 5 minutes
 static const uint32_t RE_ANNOUNCE_INTERVAL = 60 * 60 * 1000;    // 1 hour
 static const uint32_t HEALTH_CHECK_INTERVAL = 10 * 1000;        // 10 seconds
+static const uint32_t PERSISTENCE_INTERVAL = 60 * 60 * 1000;    // 1 hour
 
 static const size_t MAX_DATA_PACKET_SIZE = 0x7FFF;      // 32767
 
@@ -51,6 +64,11 @@ std::future<void> ActiveProxy::initialize(Sp<Node> node, const std::map<std::str
     if (configure.count("logLevel")) {
         logLevel = std::any_cast<std::string>(configure.at("logLevel"));
         log->setLevel(logLevel);
+    }
+
+    if (configure.count("persistPath")) {
+        auto dirPath = std::any_cast<std::string>(configure.at("persistPath"));
+        persistPath = dirPath + "/activeProxy.cache";
     }
 
     if (!configure.count("upstreamHost"))
@@ -65,44 +83,12 @@ std::future<void> ActiveProxy::initialize(Sp<Node> node, const std::map<std::str
         throw std::invalid_argument("Addon ActiveProxy's configure item has error: empty upstreamHost or upstreamPort is not allowed");
 
     if (configure.count("serverPeerId")) {
-        auto id = std::any_cast<std::string>(configure.at("serverPeerId"));
-        auto peerId = Id(id);
-
-        log->info("Addon ActiveProxy is trying to find peer {} ...", id);
-        auto future = node->findPeer(peerId, 8);
-        auto peers = future.get();
-        if (peers.empty())
-            throw std::invalid_argument("Addon ActiveProxy can't find a server peer: " + id + "!");
-
-        log->info("Addon ActiveProxy found {} peers.", peers.size());
-
-        auto seed = std::chrono::system_clock::now().time_since_epoch().count();
-        std::default_random_engine e(seed);
-        std::shuffle(peers.begin(), peers.end(), e);
-
-        bool found {false};
-        for (const auto& peer: peers) {
-            serverPort = peer.getPort();
-            serverId = peer.getNodeId();
-
-            log->info("Addon ActiveProxy is trying to locate node {} from peer {} ...", serverId.toString(), peer.toString());
-            auto nis = node->findNode(serverId).get();
-            if (!nis.hasValue()) {
-                log->warn("Addon ActiveProxy can't locate node: {}! Go on next ...", serverId.toString());
-                continue;
-            }
-
-            auto ni = (nis.getV4() != nullptr) ? nis.getV4() : nis.getV6();
-            serverHost = ni->getAddress().host();
-            log->info("Addon ActiveProxy server hosting address: {}", ni->getAddress().toString());
-
-            found = true;
-            // TODO: check the service availability
-            break;
-        }
-
+        serverPeerId = std::any_cast<std::string>(configure.at("serverPeerId"));
+        auto found = loadServicePeer();
         if (!found)
-            throw std::invalid_argument("Addon ActiveProxy can't find available service for peer: " + id + "!");
+            found = lookupServicePeer(node);
+        if (!found)
+            throw std::invalid_argument("Addon ActiveProxy can't find available service for peer: " + serverPeerId + "!");
     } else if (configure.count("serverId") && configure.count("serverHost") && configure.count("serverPort")) {
         // TODO: to be remove
         std::string id = std::any_cast<std::string>(configure.at("serverId"));
@@ -147,11 +133,13 @@ std::future<void> ActiveProxy::initialize(Sp<Node> node, const std::map<std::str
     //start
     startPromise = std::promise<void>();
     start();
+    startCheckServicePeer();
     return startPromise.get_future();
 }
 
 std::future<void> ActiveProxy::deinitialize() {
     stopPromise = std::promise<void>();
+    stopCheckServicePeer();
     stop();
     return stopPromise.get_future();
 }
@@ -434,6 +422,171 @@ void ActiveProxy::announcePeer() noexcept
             serverHost, peer.value().getPort());
 
     node->announcePeer(peer.value());
+}
+
+bool ActiveProxy::loadServicePeer() {
+    if (persistPath.empty() || serverPeerId.empty())
+        return false;
+
+    std::ifstream file(persistPath, std::ios::binary);
+    if (!file.is_open())
+        return false;
+
+    std::vector<uint8_t> data{};
+    if (!file.bad()) {
+        auto length = file.rdbuf()->pubseekoff(0, std::ios_base::end);
+        if (length == 0) {
+            file.close();
+            return false;
+        }
+
+        data.resize(length);
+        file.rdbuf()->pubseekoff(0, std::ios_base::beg);
+        file.read(reinterpret_cast<char*>(data.data()), length);
+    }
+
+    try {
+        nlohmann::json root = nlohmann::json::from_cbor(data);
+
+        auto getPeerId = root.at("peerId").get<std::string>();
+        if (serverPeerId != getPeerId) {
+            log->warn("The cached peerId {} is different from the one {} being used, discard cached peer.",
+                serverPeerId, getPeerId);
+            file.close();
+            return false;
+        }
+
+        serverHost = root.at("serverHost").get<std::string>();
+        serverPort = root.at("serverPort").get<int>();
+        auto idstr = root.at("serverId").get<std::string>();
+        if (serverHost.empty() || serverPort == 0 || idstr.empty()) {
+            log->warn("The cached peer information is invalid, discorded cached data",
+                serverPeerId, getPeerId);
+            return false;
+        }
+        serverId = Id(idstr);
+
+        log->info("Load peer {} with server {}:{} from persistence file.", getPeerId, serverHost, serverPort);
+    } catch (const std::exception& e) {
+        log->warn("read persistence file '{}' error: {}", persistPath, e.what());
+        file.close();
+        return false;
+    }
+
+    file.close();
+    return true;
+}
+
+void ActiveProxy::saveServicePeer() {
+    if (persistPath.empty())
+        return;
+
+    std::ofstream file(persistPath, std::ios::binary);
+    if (!file.is_open())
+        return;
+
+    if (serverHost.empty() || serverPort == 0) {
+        log->trace("Skip to save server information");
+        return;
+    }
+
+    nlohmann::json root = nlohmann::json::object();
+    root["peerId"] = serverPeerId;
+    root["serverHost"] = serverHost;
+    root["serverPort"] = serverPort;
+    root["serverId"] = serverId.toString();
+
+    auto data = nlohmann::json::to_cbor(root);
+    file.write(reinterpret_cast<char*>(data.data()), data.size());
+    file.close();
+
+    log->info("-**- Saved the service peer: peerId {}, nodeId: {}, server address: {}:{}.",
+        serverPeerId, serverId.toString(), serverHost, serverPort);
+}
+
+bool ActiveProxy::lookupServicePeer(Sp<Node> node) {
+    auto peerId = Id(serverPeerId);
+
+    log->info("Addon ActiveProxy is trying to find peer {} ...", serverPeerId);
+    auto future = node->findPeer(peerId, 8);
+    auto peers = future.get();
+    if (peers.empty()) {
+        log->warn("Cannot find a server peer {} at this moment, please try it later!!!", serverPeerId);
+        return false;
+    }
+    log->info("Addon ActiveProxy found {} peers.", peers.size());
+
+    auto seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::default_random_engine e(seed);
+    std::shuffle(peers.begin(), peers.end(), e);
+
+    auto found {false};
+    for (const auto& peer: peers) {
+        serverPort = peer.getPort();
+        serverId = peer.getNodeId();
+
+        log->info("Trying to locate node {} hosting service peer {} ...", serverId.toString(), peer.toString());
+        auto nis = node->findNode(serverId).get();
+        if (!nis.hasValue()) {
+            log->warn("Addon ActiveProxy can't locate node: {}! Go on next ...", serverId.toString());
+            continue;
+        }
+
+        auto ni = (nis.getV4() != nullptr) ? nis.getV4() : nis.getV6();
+        serverHost = ni->getAddress().host();
+        log->info("A server node {} hosting address: {} found", serverId.toString(), ni->getAddress().toString());
+
+        found = true;
+        break;
+    }
+    return found;
+}
+
+void ActiveProxy::startCheckServicePeer() {
+    if (persistPath.empty())
+        return;
+
+    uv_loop_init(&assstLoop);
+    uv_async_init(&assstLoop, &assistAsync, [](uv_async_t* handle) {
+        ActiveProxy* ap = (ActiveProxy*)handle->data;
+        uv_close((uv_handle_t*)&ap->assistTimer, nullptr);
+        uv_close((uv_handle_t*)&ap->assistAsync, nullptr);
+    });
+    assistAsync.data = this;
+
+    uv_timer_init(&assstLoop, &assistTimer);
+    assistTimer.data = this;
+    auto rc = uv_timer_start(&assistTimer, [](uv_timer_t* handle) {
+        ActiveProxy* ap = (ActiveProxy*)handle->data;
+        ap->lookupServicePeer(ap->node);
+        ap->saveServicePeer();
+    }, PERSISTENCE_INTERVAL, PERSISTENCE_INTERVAL);
+    if (rc < 0) {
+        uv_close((uv_handle_t*)&assistTimer, nullptr);
+        uv_close((uv_handle_t*)&assistAsync, nullptr);
+        uv_loop_close(&assstLoop);
+        return;
+    }
+
+    assistRunner = std::thread([&]() {
+        int rc = uv_run(&assstLoop, UV_RUN_DEFAULT);
+        if (rc < 0) {
+            uv_timer_stop(&assistTimer);
+            uv_close((uv_handle_t*)&assistTimer, nullptr);
+            uv_close((uv_handle_t*)&assistAsync, nullptr);
+        }
+        uv_loop_close(&assstLoop);
+    });
+}
+
+void ActiveProxy::stopCheckServicePeer() noexcept {
+    uv_timer_stop(&assistTimer);
+    uv_async_send(&assistAsync);
+
+    try {
+        assistRunner.join();
+    } catch(...) {
+    }
 }
 
 } // namespace activeproxy

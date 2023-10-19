@@ -186,6 +186,12 @@ protected:
         inFlights = 0;
     }
 
+    bool loadServicePeer();
+    void saveServicePeer();
+    bool lookupServicePeer(Sp<Node> node);
+    void startCheckServicePeer();
+    void stopCheckServicePeer() noexcept;
+
 private:
     Sp<Node> node;
 
@@ -194,6 +200,7 @@ private:
     CryptoBox box;
 
     Id serverId {};
+    std::string serverPeerId {};
     std::string serverHost {};
     int serverPort {0};
     std::string serverName {};
@@ -221,6 +228,7 @@ private:
     uint64_t lastIdleCheckTimestamp { 0 };
     uint64_t lastHealthCheckTimestamp { 0 };
     uint64_t lastAnnouncePeerTimestamp { 0 };
+    uint64_t lastPersistTimestamp {0};
 
     std::optional<Signature::KeyPair> peerKeypair {};
     std::optional<PeerInfo> peer {};
@@ -240,6 +248,13 @@ private:
     std::string logLevel {};
     std::vector<uint8_t> readBuffer {};
     std::shared_ptr<carrier::Logger> log;
+
+    std::string persistPath {};
+
+    uv_loop_t assstLoop { 0 };
+    uv_async_t assistAsync { 0 };
+    uv_timer_t assistTimer { 0 };
+    std::thread assistRunner;
 };
 
 } // namespace activeproxy
