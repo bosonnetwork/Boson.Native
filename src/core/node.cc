@@ -130,21 +130,19 @@ void Node::setStatus(NodeStatus expected, NodeStatus newStatus) {
 
     auto old = status;
     status = newStatus;
-    if (!statusListeners.empty()) {
-        for (auto& listener: statusListeners) {
-            listener->statusChanged(newStatus, old);
-            switch (newStatus) {
-                case NodeStatus::Running:
-                    listener->started();
-                    break;
+    for (auto& listener: statusListeners) {
+        listener->statusChanged(newStatus, old);
+        switch (newStatus) {
+            case NodeStatus::Running:
+                listener->started();
+                break;
 
-                case NodeStatus::Stopped:
-                    listener->stopped();
-                    break;
+            case NodeStatus::Stopped:
+                listener->stopped();
+                break;
 
-                default:
-                    break;
-            }
+            default:
+                break;
         }
     }
 }
