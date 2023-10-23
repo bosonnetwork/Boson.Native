@@ -99,11 +99,6 @@ class DHT {
             updateConnectionStatus();
         }
 
-        void pingCachedRoutingTable(CompletionStatus status) {
-            _pingCachedRoutingTable = status;
-            updateConnectionStatus();
-        }
-
         void clearBootstrapStatus() {
             _fillHomeBucket = CompletionStatus::Pending;
             _fillAllBuckets = CompletionStatus::Pending;
@@ -118,7 +113,6 @@ class DHT {
 
         CompletionStatus _fillHomeBucket {CompletionStatus::Pending};
         CompletionStatus _fillAllBuckets {CompletionStatus::Pending};
-        CompletionStatus _pingCachedRoutingTable {CompletionStatus::Pending};
 
         DHT* dht;
         mutable std::mutex mtx {};

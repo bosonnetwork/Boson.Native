@@ -63,16 +63,19 @@ namespace carrier {
 void DHT::BootstrapStage::updateConnectionStatus() {
     std::unique_lock<std::mutex> lock(mtx);
 
-    dht->log->debug("BootstrapStage {}: [{}, {}, {}]", dht->getNode().getId().toString(),
-        _fillHomeBucket.toString(), _fillAllBuckets.toString(), _pingCachedRoutingTable.toString());
+    dht->log->debug("BootstrapStage {}: [{}, {}]", dht->getNode().getId().toString(),
+        _fillHomeBucket.toString(), _fillAllBuckets.toString());
 
-    if (completed(_fillAllBuckets) && completed(_pingCachedRoutingTable)) {
-        if (dht->routingTable.getNumBucketEntries() > 0)
-            dht->setStatus(ConnectionStatus::Connected, ConnectionStatus::Profound);
+    if (dht->routingTable.getNumBucketEntries() == 0)
+        return;
+
+    if (completed(_fillHomeBucket)) {
+        dht->setStatus(ConnectionStatus::Connecting, ConnectionStatus::Connected);
+        return;
     }
-    else if (completed(_fillHomeBucket) || completed(_pingCachedRoutingTable)) {
-        if (dht->routingTable.getNumBucketEntries() > 0)
-            dht->setStatus(ConnectionStatus::Connecting, ConnectionStatus::Connected);
+    if (completed(_fillAllBuckets)) {
+        dht->setStatus(ConnectionStatus::Connected, ConnectionStatus::Profound);
+        return;
     }
 }
 
@@ -95,38 +98,36 @@ void DHT::setStatus(ConnectionStatus expected, ConnectionStatus newStatus) {
     auto old = status;
     status = newStatus;
     auto statusListeners = node.getConnectionStatusListeners();
-    if (!statusListeners.empty()) {
-        for (auto& listener: statusListeners) {
-            listener->statusChanged(type, newStatus, old);
-            switch (newStatus) {
-                case ConnectionStatus::Connected:
-                        listener->connected(type);
-                        break;
+    for (auto& listener: statusListeners) {
+        listener->statusChanged(type, newStatus, old);
+        switch (newStatus) {
+            case ConnectionStatus::Connected:
+                listener->connected(type);
+                break;
 
-                case ConnectionStatus::Profound:
-                    listener->profound(type);
-                    break;
+            case ConnectionStatus::Profound:
+                listener->profound(type);
+                break;
 
-                case ConnectionStatus::Disconnected:
-                    listener->disconnected(type);
-                    break;
+            case ConnectionStatus::Disconnected:
+                listener->disconnected(type);
+                break;
 
-                default:
-                    break;
-            }
+            default:
+                break;
         }
     }
 }
 
 void DHT::bootstrap() {
-  if (!isRunning() || bootstrapNodes.empty()
+    if (!isRunning() || bootstrapNodes.empty()
        || currentTimeMillis() - lastBootstrap < Constants::BOOTSTRAP_MIN_INTERVAL)
        return;
 
     auto bns = !bootstrapNodes.empty() ?
-                bootstrapNodes : routingTable.getRandomEntries(8);
+            bootstrapNodes : routingTable.getRandomEntries(8);
     if (bns.empty())
-            return;
+        return;
 
     bool expected {false};
     if (!bootstrapping.compare_exchange_weak(expected, true))
@@ -140,7 +141,7 @@ void DHT::bootstrap() {
     auto count = std::make_shared<int>(0);
     int len = bootstrapNodes.size();
 
-    for (auto node: bns) {
+    for (auto& node: bns) {
         std::promise<std::list<Sp<NodeInfo>>> promise {};
         auto q = std::make_shared<FindNodeRequest>(Id::random());
 
@@ -176,7 +177,7 @@ void DHT::bootstrap(const NodeInfo& ni) {
 void DHT::bootstrap(const std::vector<NodeInfo>& nis) {
     int added = 0;
 
-    for (NodeInfo ni : nis) {
+    for (const auto& ni: nis) {
         if (!type.canUseSocketAddress(ni.getAddress()))
             continue;
 
@@ -203,7 +204,6 @@ void DHT::bootstrap(const std::vector<NodeInfo>& nis) {
     }
 }
 
-
 void DHT::fillHomeBucket(const std::list<Sp<NodeInfo>>& nodes) {
     if (routingTable.getNumBucketEntries() == 0 && nodes.empty()) {
         bootstrapping = false;
@@ -226,9 +226,9 @@ void DHT::fillHomeBucket(const std::list<Sp<NodeInfo>>& nodes) {
             routingTable.fillBuckets([=]() {
                 bootstrapStage.fillAllBuckets(CompletionStatus::Completed);
             });
-        }
-        else
+        } else {
             bootstrapStage.fillAllBuckets(CompletionStatus::Canceled);
+        }
     });
 
     taskMan.add(task);
@@ -261,12 +261,12 @@ void DHT::start(std::vector<Sp<NodeInfo>>& nodes) {
     if (running)
         return;
 
-    if (persistFile != "" /* && persistFile.exists() && persistFile.isFile()*/) {
+    if (!persistFile.empty()) {
         log->info("Loading routing table from {} ...", persistFile);
         routingTable.load(persistFile);
     }
 
-    for (auto node: nodes) {
+    for (auto& node: nodes) {
         if (type.canUseSocketAddress(node->getAddress()))
             bootstrapNodes.emplace_back(node);
     }
@@ -282,16 +282,6 @@ void DHT::start(std::vector<Sp<NodeInfo>>& nodes) {
         // tasks maintenance that should run all the time, before the first queries
         taskMan.dequeue();
     }, 5000, Constants::DHT_UPDATE_INTERVAL);
-
-    // Ping check if the routing table loaded from cache
-    if (routingTable.getNumBucketEntries() > 0) {
-        routingTable.pingBuckets([=]() {
-            bootstrapStage.pingCachedRoutingTable(CompletionStatus::Completed);
-        });
-    }
-    else {
-        bootstrapStage.pingCachedRoutingTable(CompletionStatus::Canceled);
-    }
 
     if (!bootstrapNodes.empty()) {
         bootstrap();
@@ -685,19 +675,15 @@ void DHT::getNodes(const Id& id, Sp<NodeInfo> node, std::function<void(std::list
 #endif
 
 Sp<Task> DHT::findNode(const Id& id, LookupOption option, std::function<void(Sp<NodeInfo>)> completeHandler) {
-    // auto nodeRef = std::make_shared<std::atomic<Sp<NodeInfo>>>(routingTable.getEntry(id));
     auto nodeRef = std::make_shared<Sp<NodeInfo>>(routingTable.getEntry(id));
     auto task = std::make_shared<NodeLookup>(this, id);
     task->setResultHandler([=](Sp<NodeInfo> v, Task* t) {
-        // nodeRef->store(v);
         *nodeRef = v;
-        if (option != LookupOption::CONSERVATIVE) {
+        if (option != LookupOption::CONSERVATIVE)
             t->cancel();
-        }
     });
 
     task->addListener([=](Task* t) {
-        // completeHandler(nodeRef->load());
         completeHandler(*nodeRef);
     });
     task->setName("User-level node lookup");
