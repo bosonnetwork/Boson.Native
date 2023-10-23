@@ -210,7 +210,7 @@ int ProxyConnection::connectServer() noexcept
         delete request;
     });
     if (rc < 0) {
-        log->error("Connection {} connect to server {} failed({}): {}", id, rc, uv_strerror(rc));
+        log->error("Connection {} connect to server {} failed({}): {}", id, proxy.serverEndpoint(), rc, uv_strerror(rc));
         delete request;
         unref(); // relay.data
         uv_close((uv_handle_t*)&relay, nullptr);

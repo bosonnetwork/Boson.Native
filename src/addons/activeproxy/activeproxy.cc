@@ -450,7 +450,7 @@ bool ActiveProxy::loadServicePeer() {
 
         auto getPeerId = root.at("peerId").get<std::string>();
         if (serverPeerId != getPeerId) {
-            log->warn("The cached peerId {} is different from the one {} being used, discard cached peer.",
+            log->warn("The cached peerId {} is different from the config peerId {}, discarded cached peer.",
                 serverPeerId, getPeerId);
             file.close();
             return false;
@@ -460,8 +460,7 @@ bool ActiveProxy::loadServicePeer() {
         serverPort = root.at("serverPort").get<int>();
         auto idstr = root.at("serverId").get<std::string>();
         if (serverHost.empty() || serverPort == 0 || idstr.empty()) {
-            log->warn("The cached peer information is invalid, discorded cached data",
-                serverPeerId, getPeerId);
+            log->warn("The cached peer {} information is invalid, discorded cached data", serverPeerId);
             return false;
         }
         serverId = Id(idstr);
