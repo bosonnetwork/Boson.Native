@@ -69,12 +69,12 @@ void DHT::BootstrapStage::updateConnectionStatus() {
     if (dht->routingTable.getNumBucketEntries() == 0)
         return;
 
-    if (completed(_fillHomeBucket)) {
-        dht->setStatus(ConnectionStatus::Connecting, ConnectionStatus::Connected);
-        return;
-    }
     if (completed(_fillAllBuckets)) {
         dht->setStatus(ConnectionStatus::Connected, ConnectionStatus::Profound);
+        return;
+    }
+    if (completed(_fillHomeBucket)) {
+        dht->setStatus(ConnectionStatus::Connecting, ConnectionStatus::Connected);
         return;
     }
 }
