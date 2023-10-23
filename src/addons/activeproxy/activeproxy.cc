@@ -557,8 +557,8 @@ void ActiveProxy::startCheckServicePeer() {
     assistTimer.data = this;
     auto rc = uv_timer_start(&assistTimer, [](uv_timer_t* handle) {
         ActiveProxy* ap = (ActiveProxy*)handle->data;
-        ap->lookupServicePeer(ap->node);
-        ap->saveServicePeer();
+        if (ap->lookupServicePeer(ap->node))
+            ap->saveServicePeer();
     }, PERSISTENCE_INTERVAL, PERSISTENCE_INTERVAL);
     if (rc < 0) {
         uv_close((uv_handle_t*)&assistTimer, nullptr);
