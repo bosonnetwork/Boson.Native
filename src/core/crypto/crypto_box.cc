@@ -206,8 +206,8 @@ void CryptoBox::decrypt(Blob& plain, const Blob& cipher, const Nonce &nonce) con
         throw CryptoError(std::string("Decrypt data failed."));
 }
 
-void CryptoBox::decrypt(Blob& plain, const Blob& cipher, const Nonce& nonce,
-        const PublicKey& pk, const PrivateKey& sk)
+void CryptoBox::decrypt(Blob& plain, const Blob& cipher,
+        const PublicKey& pk, const PrivateKey& sk, const Nonce& nonce)
 {
     assert(plain.size() >= cipher.size() - crypto_box_MACBYTES);
     if (plain.size() < cipher.size() - crypto_box_MACBYTES)

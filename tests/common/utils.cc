@@ -123,7 +123,8 @@ std::string Utils::getPwdStorage(const std::string dir) {
 
 void Utils::removeStorage(const std::string path) {
     fs::path tmp{path};
-    fs::remove_all(tmp);
+    if (fs::exists(tmp))
+        fs::remove_all(tmp);
 }
 
 bool Utils::isFileExists(const std::string path) {

@@ -398,14 +398,14 @@ public:
         return plain;
     }
 
-    static void decrypt(Blob& plain, const Blob& cipher, const Nonce& nonce,
-            const PublicKey& pk, const PrivateKey& sk);
+    static void decrypt(Blob& plain, const Blob& cipher, const PublicKey& pk,
+            const PrivateKey& sk, const Nonce& nonce);
 
-    static std::vector<uint8_t> decrypt(const Blob& cipher, const Nonce &nonce,
-            const PublicKey& pk, const PrivateKey& sk) {
+    static std::vector<uint8_t> decrypt(const Blob& cipher, const PublicKey& pk,
+            const PrivateKey& sk, const Nonce &nonce) {
         std::vector<uint8_t> plain(cipher.size() - MAC_BYTES);
         Blob _plain{plain};
-        decrypt(_plain, cipher, nonce, pk, sk);
+        decrypt(_plain, cipher, pk, sk, nonce);
         return plain;
     }
 

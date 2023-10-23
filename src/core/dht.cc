@@ -169,19 +169,19 @@ void DHT::bootstrap() {
     }
 }
 
-void DHT::bootstrap(const NodeInfo& ni) {
-    std::vector<NodeInfo> nis = {ni};
+void DHT::bootstrap(const Sp<NodeInfo> ni) {
+    std::vector<Sp<NodeInfo>> nis = {ni};
     bootstrap(nis);
 }
 
-void DHT::bootstrap(const std::vector<NodeInfo>& nis) {
+void DHT::bootstrap(const std::vector<Sp<NodeInfo>>& nis) {
     int added = 0;
 
     for (const auto& ni: nis) {
-        if (!type.canUseSocketAddress(ni.getAddress()))
+        if (!type.canUseSocketAddress(ni->getAddress()))
             continue;
 
-        if (node.isSelfId(ni.getId())) {
+        if (node.isSelfId(ni->getId())) {
             log->warn("Can not bootstrap from local node: {}", node.getId().toBase58String());
             continue;
         }
@@ -189,11 +189,11 @@ void DHT::bootstrap(const std::vector<NodeInfo>& nis) {
         //check the bootstrapNodes contains the ni
         auto nodes = getBootstraps();
         auto pos = std::find_if(nodes.begin(), nodes.end(), [&](Sp<NodeInfo> item) {
-            return (*item == ni);
+            return (*item == *ni);
         });
 
         if (pos == nodes.end()) {
-            bootstrapNodes.push_back(std::make_shared<NodeInfo>(ni));
+            bootstrapNodes.push_back(ni);
             added++;
         }
     }

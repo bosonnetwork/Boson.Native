@@ -66,7 +66,7 @@ void NodeTester::setUp() {
 void NodeTester::testNode() {
     //Maybe set to java node ip
     Id javaId("MzDfxDmCpgX6J9DtvttUsXDyTDwNJKKAmWaUW4XGRfs");
-    auto nij = NodeInfo {javaId, Utils::getLocalIpAddresses(), 39001};
+    auto nij = std::make_shared<NodeInfo>(javaId, Utils::getLocalIpAddresses(), 39001);
     node1->bootstrap(nij);
 
     auto remoteId = javaId;

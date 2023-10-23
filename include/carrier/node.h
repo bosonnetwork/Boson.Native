@@ -96,7 +96,8 @@ public:
     }
 
     void bootstrap(const NodeInfo& node);
-    void bootstrap(const std::vector<NodeInfo>& nis);
+    void bootstrap(const Sp<NodeInfo> ni);
+    void bootstrap(const std::vector<Sp<NodeInfo>>& nis);
     void start();
     void stop();
 

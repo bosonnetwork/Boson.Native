@@ -24,6 +24,7 @@
 
 #include <cstdint>
 #include <string>
+#include <functional>
 #include "def.h"
 #include "network.h"
 
@@ -66,14 +67,16 @@ private:
 
 class CARRIER_PUBLIC ConnectionStatusListener {
 public:
-    virtual void statusChanged(Network network, ConnectionStatus newStatus, ConnectionStatus oldStatus) {};
+    ConnectionStatusListener() :
+        statusChanged([](Network, ConnectionStatus, ConnectionStatus){}),
+        connected([](Network){}),
+        profound([](Network){}),
+        disconnected([](Network){}) {};
 
-    virtual void connected(Network network) {};
-
-    virtual void profound(Network network) {};
-
-    virtual void disconnected(Network network) {};
-
+    std::function<void(Network, ConnectionStatus, ConnectionStatus)> statusChanged;
+    std::function<void(Network)> connected;
+    std::function<void(Network)> profound;
+    std::function<void(Network)> disconnected;
 };
 
 } // namespace carrier

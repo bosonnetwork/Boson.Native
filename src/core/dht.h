@@ -178,8 +178,8 @@ public:
     }
 
     void bootstrap();
-    void bootstrap(const NodeInfo&);
-    void bootstrap(const std::vector<NodeInfo>&);
+    void bootstrap(const Sp<NodeInfo> ni);
+    void bootstrap(const std::vector<Sp<NodeInfo>>&);
 
     void fillHomeBucket(const std::list<Sp<NodeInfo>>&);
 
