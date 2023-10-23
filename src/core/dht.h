@@ -90,11 +90,16 @@ class DHT {
         BootstrapStage(DHT* dht): dht(dht) {};
 
         void fillHomeBucket(CompletionStatus status) {
+            if (_fillHomeBucket == status)
+                return;
+
             _fillHomeBucket = status;
             updateConnectionStatus();
         }
 
         void fillAllBuckets(CompletionStatus status) {
+            if (_fillAllBuckets == status)
+                return;
             _fillAllBuckets = status;
             updateConnectionStatus();
         }
