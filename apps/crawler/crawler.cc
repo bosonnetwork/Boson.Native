@@ -244,7 +244,7 @@ void Crawler::initCarrierNode() {
     builder.setAutoIPv4Address(true);
 
     for (auto ni: setting.bootstrapNodes)
-        builder.addBootstrap(ni);
+        builder.addBootstrap(*ni);
 
     auto config = builder.build();
 

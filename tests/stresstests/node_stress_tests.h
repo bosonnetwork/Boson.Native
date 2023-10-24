@@ -70,7 +70,7 @@ private:
     std::shared_ptr<Node> node3 {};
 
     std::vector<Sp<Node>> bootstrapNodes {};
-    std::vector<Sp<NodeInfo>> bootstraps {};
+    std::vector<NodeInfo> bootstraps {};
 
     std::vector<Sp<Node>> testNodes {};
 

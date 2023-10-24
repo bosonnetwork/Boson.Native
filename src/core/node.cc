@@ -201,16 +201,12 @@ Node::Node(std::shared_ptr<Configuration> _config): config(_config)
     status = NodeStatus::Stopped;
 }
 
-void Node::bootstrap(const NodeInfo& node) {
-    bootstrap(std::make_shared<NodeInfo>(node));
-}
-
-void Node::bootstrap(const Sp<NodeInfo> ni) {
-    std::vector<Sp<NodeInfo>> nis = {ni};
+void Node::bootstrap(const NodeInfo& ni) {
+    std::vector<NodeInfo> nis = {ni};
     bootstrap(nis);
 }
 
-void Node::bootstrap(const std::vector<Sp<NodeInfo>>& nis) {
+void Node::bootstrap(const std::vector<NodeInfo>& nis) {
     if (dht4 != nullptr)
         dht4->bootstrap(nis);
     if (dht6 != nullptr)

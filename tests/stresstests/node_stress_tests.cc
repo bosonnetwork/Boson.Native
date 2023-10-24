@@ -100,7 +100,7 @@ void NodeStressTests::startBootstraps() {
         bootstrap->start();
 
         bootstrapNodes.emplace_back(bootstrap);
-        bootstraps.emplace_back(bootstrap->getNodeInfo().getV4());
+        bootstraps.emplace_back(*(bootstrap->getNodeInfo().getV4()));
     }
 
     int i = 0;

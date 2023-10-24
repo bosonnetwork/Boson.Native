@@ -63,7 +63,7 @@ void RoutingTableTester::setUp() {
 void RoutingTableTester::testRoutingTable() {
     //Maybe set to java node ip
     Id javaId("MzDfxDmCpgX6J9DtvttUsXDyTDwNJKKAmWaUW4XGRfs");
-    auto nij = std::make_shared<NodeInfo>(javaId, Utils::getLocalIpAddresses(), 39001);
+    auto nij = NodeInfo(javaId, Utils::getLocalIpAddresses(), 39001);
 
     auto builder = DefaultConfiguration::Builder {};
     auto ipAddresses = Utils::getLocalIpAddresses();

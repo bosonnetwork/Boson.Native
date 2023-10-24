@@ -114,7 +114,7 @@ static void run()
     int i = 0;
     std::string storagePath;
 
-    auto remoteNode = std::make_shared<NodeInfo>(options.id, options.ip, options.port);
+    auto remoteNode = NodeInfo(options.id, options.ip, options.port);
 
     auto builder = DefaultConfiguration::Builder {};
     auto ipAddresses = Utils::getLocalIpAddresses();
@@ -148,7 +148,7 @@ static void run()
         std::cout << "-------- create new node " << i++ << " /" << node->getId().toBase58String() << std::endl;
 
         for (int j = 0; j < Utils::getRandom(2, 5); j++) {
-            auto future = node->findNode(remoteNode->getId());
+            auto future = node->findNode(remoteNode.getId());
             auto nis = future.get();
             if (nis.hasValue()) {
                 std::cout << "       find node " << j << ": get node";
