@@ -124,6 +124,7 @@ public:
 
         void addBootstrap(const NodeInfo& ni) {
             auto node = std::make_shared<NodeInfo>(ni);
+            bootstrapNodes.emplace_back(node);
         }
 
         void addBootstrap(const std::vector<NodeInfo>& nis) {
