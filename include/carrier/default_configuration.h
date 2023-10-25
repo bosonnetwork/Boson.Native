@@ -122,12 +122,16 @@ public:
             bootstrapNodes.emplace_back(node);
         }
 
-        void addBootstrap(Sp<NodeInfo> node) {
+        void addBootstrap(const NodeInfo& ni) {
+            auto node = std::make_shared<NodeInfo>(ni);
             bootstrapNodes.emplace_back(node);
         }
 
-        void addBootstrap(std::vector<Sp<NodeInfo>> nodes) {
-            bootstrapNodes.insert(bootstrapNodes.end(), nodes.begin(), nodes.end());
+        void addBootstrap(const std::vector<NodeInfo>& nis) {
+            for (auto& ni : nis) {
+                auto node = std::make_shared<NodeInfo>(ni);
+                bootstrapNodes.emplace_back(node);
+            }
         }
 
         void load(const std::string& path);

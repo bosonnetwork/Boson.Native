@@ -134,6 +134,19 @@ bool Value::isValid() const {
     return true;
 }
 
+std::vector<uint8_t> Value::decryptData(Signature::PrivateKey recipientSk) {
+    if (!isValid())
+        return {};
+
+    if (!recipient.has_value() || !publicKey.has_value() || !nonce.has_value())
+        return {};
+
+    CryptoBox::PublicKey pk = publicKey.value().toEncryptionKey();
+    CryptoBox::PrivateKey sk = CryptoBox::PrivateKey::fromSignatureKey(recipientSk);
+
+    return CryptoBox::decrypt(data, pk, sk, CryptoBox::Nonce::fromBytes(nonce.value().blob()));
+}
+
 Value Value::update(const std::vector<uint8_t>& data) {
     if (!isMutable())
         throw StateError("Immutable value " + getId().toBase58String());

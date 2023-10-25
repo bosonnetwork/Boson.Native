@@ -48,7 +48,7 @@ protected:
         }
 
         auto nodeid = Id(id);
-        auto ni = NodeInfo {nodeid, address, port};
+        auto ni = NodeInfo(nodeid, address, port);
         node->bootstrap(ni);
     };
 

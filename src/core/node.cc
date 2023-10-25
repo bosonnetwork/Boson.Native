@@ -49,7 +49,7 @@ namespace carrier {
 
 Result<NodeInfo> Node::getNodeInfo() {
     auto n4 = dht4 != nullptr ? std::make_shared<NodeInfo>(id, dht4->getOrigin()) : nullptr;
-    auto n6 = dht4 != nullptr ? std::make_shared<NodeInfo>(id, dht6->getOrigin()) : nullptr;
+    auto n6 = dht6 != nullptr ? std::make_shared<NodeInfo>(id, dht6->getOrigin()) : nullptr;
     return Result<NodeInfo>(n4, n6);
 }
 
@@ -201,8 +201,8 @@ Node::Node(std::shared_ptr<Configuration> _config): config(_config)
     status = NodeStatus::Stopped;
 }
 
-void Node::bootstrap(const NodeInfo& node) {
-    std::vector<NodeInfo> nis = {node};
+void Node::bootstrap(const NodeInfo& ni) {
+    std::vector<NodeInfo> nis = {ni};
     bootstrap(nis);
 }
 

@@ -131,6 +131,8 @@ public:
         return data;
     }
 
+    std::vector<uint8_t> decryptData(Signature::PrivateKey recipientSk);
+
     Value update(const std::vector<uint8_t>& data);
 
     size_t size() const noexcept {

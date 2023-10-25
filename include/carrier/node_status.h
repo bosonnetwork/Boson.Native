@@ -62,11 +62,14 @@ private:
 
 class CARRIER_PUBLIC NodeStatusListener {
 public:
-    virtual void statusChanged(NodeStatus newStatus, NodeStatus oldStatus) {};
+    NodeStatusListener() :
+        statusChanged([](NodeStatus, NodeStatus){}),
+        started([](){}),
+        stopped([](){}) {};
 
-    virtual void started() {}
-
-    virtual void stopped() {}
+    std::function<void(NodeStatus, NodeStatus)> statusChanged;
+    std::function<void()> started;
+    std::function<void()> stopped;
 };
 
 } // namespace carrier

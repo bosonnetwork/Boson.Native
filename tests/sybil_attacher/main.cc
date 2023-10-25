@@ -114,7 +114,7 @@ static void run()
     int i = 0;
     std::string storagePath;
 
-    auto remoteNode = NodeInfo{options.id, options.ip, options.port};
+    auto remoteNode = NodeInfo(options.id, options.ip, options.port);
 
     auto builder = DefaultConfiguration::Builder {};
     auto ipAddresses = Utils::getLocalIpAddresses();

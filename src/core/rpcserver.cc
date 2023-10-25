@@ -410,7 +410,7 @@ void RPCServer::sendCall(Sp<RPCCall>& call) {
         throw std::runtime_error("Transaction ID already exists");
 
     call->getRequest()->setTxid(txid);
-    calls.insert({txid, call});
+    calls[txid] = call;
     dispatchCall(call);
 }
 

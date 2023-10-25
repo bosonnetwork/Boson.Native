@@ -63,7 +63,7 @@ void CryptoTester::testEncryption()
 
     std::vector<uint8_t> encrypted2 = encryptedBox.encrypt(data2, nonce);
     std::vector<uint8_t> decrypted2 = decryptedBox.decrypt(encrypted2, nonce);
-    std::vector<uint8_t> decrypted3 = CryptoBox::decrypt(encrypted2, nonce, senderKeyPair.publicKey(), receiverKeyPair.privateKey());
+    std::vector<uint8_t> decrypted3 = CryptoBox::decrypt(encrypted2, senderKeyPair.publicKey(), receiverKeyPair.privateKey(), nonce);
     CPPUNIT_ASSERT(data2 == decrypted2);
     CPPUNIT_ASSERT(data2 == decrypted3);
 
