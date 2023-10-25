@@ -112,20 +112,36 @@ static Sp<Configuration> initConfigure(Options& options)
     return config;
 }
 
-static Sp<Node> initCarrierNode(Sp<Configuration> config)
+static Sp<Node> startCarrierNode(Sp<Configuration> config)
 {
     auto node = std::make_shared<Node>(config);
     if (node) {
-        node->start();
-    }
-    else {
-        throw std::runtime_error("Can't create a Node.");
-    }
+        auto listener = std::make_shared<ConnectionStatusListener>();
+        auto barrier = std::promise<void>();
 
+        listener->connected = [&](Network network) {
+            std::cout << "The launcher node is connected to carrier network." << std::endl;
+            try {
+                barrier.set_value();
+            } catch (const std::future_error& e) {
+            }
+        };
+        listener->disconnected = [&](Network network) {
+            std::cout << "The launcher node is disonnected to carrier network." << std::endl;
+        };
+
+        node->addConnectionStatusListener(listener);
+        node->start();
+        std::cout << "The launcher node is waiting for itself to connect to carrier network." << std::endl;
+        barrier.get_future().wait();
+        std::cout << "The launcher node is connected to carrier network." << std::endl;
+    } else {
+        throw std::runtime_error("Creating a Node failed.");
+    }
     return node;
 }
 
-static void checkAnotherInstance(Sp<Configuration> config) {
+static void checkExistingInstance(Sp<Configuration> config) {
     std::string lockfile = config->getStoragePath() + "/lock";
     if(lock.acquire(lockfile) < 0) {
         throw std::runtime_error("Another instance already running.");
@@ -205,11 +221,9 @@ int main(int argc, char *argv[])
     Sp<Node> node = nullptr;
     try {
         auto config = initConfigure(options);
+        checkExistingInstance(config);
 
-        checkAnotherInstance(config);
-
-        node = initCarrierNode(config);
-
+        node = startCarrierNode(config);
         loadAddons(node, config->getAddons());
 
     } catch(std::exception& e) {
