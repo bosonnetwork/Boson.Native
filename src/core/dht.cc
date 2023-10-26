@@ -120,8 +120,7 @@ void DHT::setStatus(ConnectionStatus expected, ConnectionStatus newStatus) {
 }
 
 void DHT::bootstrap() {
-    if (!isRunning() || bootstrapNodes.empty()
-       || currentTimeMillis() - lastBootstrap < Constants::BOOTSTRAP_MIN_INTERVAL)
+    if (!isRunning() || currentTimeMillis() - lastBootstrap < Constants::BOOTSTRAP_MIN_INTERVAL)
        return;
 
     auto bns = !bootstrapNodes.empty() ?

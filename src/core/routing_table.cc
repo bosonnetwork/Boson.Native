@@ -407,22 +407,24 @@ std::vector<Sp<NodeInfo>> RoutingTable::getRandomEntries(int expect) {
     auto bucketsRef = getBuckets();
 
     int total = 0;
-    for (auto bucket : bucketsRef) {
-        std::list<Sp<KBucketEntry>> entries = bucket->getEntries();
+    for (auto& bucket: bucketsRef) {
+        auto entries = bucket->getEntries();
         total += entries.size();
     }
 
     if (total <= expect) {
-        std::vector<Sp<NodeInfo>> reslut(total);
-        for (auto bucket : bucketsRef) {
-            std::list<Sp<KBucketEntry>> entries = bucket->getEntries();
-            reslut.insert(reslut.end(), entries.begin(), entries.end());
+        std::vector<Sp<NodeInfo>> result;
+        result.reserve(total);
+        for (auto& bucket: bucketsRef) {
+            auto entries = bucket->getEntries();
+            result.insert(result.end(), entries.begin(), entries.end());
         }
-        return reslut;
+        return result;
     }
 
     //Create a sort randoms vector
-    std::vector<int> randoms(expect);
+    std::vector<int> randoms;
+    randoms.reserve(expect);
     for (int i = 0; i < expect; i++) {
         int random = RandomGenerator<int>(0, total - 1)();
         bool diff = false;
@@ -441,10 +443,13 @@ std::vector<Sp<NodeInfo>> RoutingTable::getRandomEntries(int expect) {
     }
     std::sort(randoms.begin(), randoms.end());
 
-    std::vector<Sp<NodeInfo>> result(expect);
-    int index = 0, entriesCount = 0;
-    for (auto bucket : bucketsRef) {
-        std::list<Sp<KBucketEntry>> entries = bucket->getEntries();
+    std::vector<Sp<NodeInfo>> result;
+    result.reserve(expect);
+
+    int index = 0;
+    int entriesCount = 0;
+    for (auto& bucket: bucketsRef) {
+        auto entries = bucket->getEntries();
         auto entriesLenght = entries.size() + entriesCount;
 
         while (index < expect && randoms[index] < entriesLenght) {
@@ -453,7 +458,8 @@ std::vector<Sp<NodeInfo>> RoutingTable::getRandomEntries(int expect) {
             index++;
         }
 
-        if (index >= expect) break;
+        if (index >= expect)
+            break;
         entriesCount = entriesLenght;
     }
 
