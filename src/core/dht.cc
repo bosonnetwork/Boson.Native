@@ -168,11 +168,6 @@ void DHT::bootstrap() {
     }
 }
 
-void DHT::bootstrap(const NodeInfo& ni) {
-    std::vector<NodeInfo> nis = {ni};
-    bootstrap(nis);
-}
-
 void DHT::bootstrap(const std::vector<NodeInfo>& nis) {
     int added = 0;
 
@@ -257,7 +252,7 @@ void DHT::update () {
 }
 
 void DHT::start(std::vector<Sp<NodeInfo>>& nodes) {
-    if (running)
+    if (isRunning())
         return;
 
     if (!persistFile.empty()) {
@@ -322,7 +317,7 @@ void DHT::start(std::vector<Sp<NodeInfo>>& nodes) {
 }
 
 void DHT::stop() {
-    if (!running)
+    if (!isRunning())
         return;
 
     log->info("{} initated DHT shutdown...", type.toString());
@@ -426,11 +421,9 @@ void DHT::received(Sp<Message> msg) {
     if (call != nullptr) {
         newEntry->signalResponse();
         newEntry->mergeRequestTime(call->getSentTime());
-    }
-    else if (old == nullptr) {
+    } else if (old == nullptr) {
         // Verify the node, speedup the bootstrap process
         auto q = std::make_shared<PingRequest>();
-
         auto c = std::make_shared<RPCCall>(this, newEntry, q);
         // Maybe we are in the RPCSever's callback
         rpcServer->sendCall(c);
