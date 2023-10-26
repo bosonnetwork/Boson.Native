@@ -61,6 +61,7 @@ void Shell::setupOptions()
     add_flag("--debug", waitForDebugAttach, "Waiting for the debuger attach.");
 
     addSubCommand(idCommand);
+    addSubCommand(statCommand);
     addSubCommand(announcePeerCommand);
     addSubCommand(bootstrapCommand);
     addSubCommand(findNodeCommand);
