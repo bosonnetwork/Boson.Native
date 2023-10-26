@@ -30,6 +30,7 @@
 
 #include "command.h"
 #include "id_command.h"
+#include "stat_command.h"
 #include "announce_peer_command.h"
 #include "bootstrap_command.h"
 #include "find_node_command.h"
@@ -63,7 +64,8 @@ private:
     bool waitForDebugAttach = false;
     ApplicationLock lock;
 
-    IdCommand idCommand;
+    IdCommand idCommand {};
+    StatCommand statCommand {};
     AnnouncePeerCommand announcePeerCommand {};
     BootstrapCommand bootstrapCommand {};
     FindNodeCommand findNodeCommand {};
