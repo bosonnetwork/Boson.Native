@@ -149,6 +149,14 @@ public:
     Sp<PeerInfo> getPeer(const Id& peerId);
     bool removePeer(const Id& peerId);
 
+    uint32_t receivedBytesTotal() const noexcept;
+    uint32_t sentBytesTotal() const noexcept;
+    uint32_t receivedBytesPerSecond() const noexcept;
+    uint32_t sentBytesPerSecond() const noexcept;
+    uint32_t receivedMessagesTotal() const noexcept;
+    uint32_t sentMessagesTotal() const noexcept;
+    uint32_t timeoutMessagesTotal() const noexcept;
+
     std::string toString() const;
 private:
     bool checkPersistence(const std::string&);

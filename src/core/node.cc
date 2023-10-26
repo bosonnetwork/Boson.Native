@@ -608,6 +608,34 @@ bool Node::verify(const Blob& data, const Blob& signature) const {
     return keyPair.publicKey().verify(signature, data);
 }
 
+uint32_t Node::receivedBytesTotal() const noexcept {
+    return server->getStatistics().getReceivedBytes();
+}
+
+uint32_t Node::sentBytesTotal() const noexcept {
+    return server->getStatistics().getSentBytes();
+}
+
+uint32_t Node::receivedBytesPerSecond() const noexcept {
+    return server->getStatistics().getReceivedBytesPerSec();
+}
+
+uint32_t Node::sentBytesPerSecond() const noexcept {
+    return server->getStatistics().getSentBytesPerSec();
+}
+
+uint32_t Node::receivedMessagesTotal() const noexcept {
+    return server->getStatistics().getTotalReceivedMessages();
+}
+
+uint32_t Node::sentMessagesTotal() const noexcept {
+    return server->getStatistics().getTotalSentMessages();
+}
+
+uint32_t Node::timeoutMessagesTotal() const noexcept {
+    return server->getStatistics().getTotalTimeoutMessages();
+}
+
 int Node::getPort() {
     int port = config->listeningPort();
     return port <= 0 || port > 65535 ? Constants::DEFAULT_DHT_PORT : port;
