@@ -106,14 +106,14 @@ private:
     int sock4 {-1};
     int sock6 {-1};
 
-    SocketAddress bound4;
-    SocketAddress bound6;
+    SocketAddress bound4 {};
+    SocketAddress bound6 {};
 
-    std::thread rcv_thread;
+    std::thread rcv_thread {};
     std::atomic_bool running {false};
 
-    std::list<Sp<RPCCall>> callQueue;
-    std::map<int, Sp<RPCCall>> calls;
+    std::list<Sp<RPCCall>> callQueue {};
+    std::map<int, Sp<RPCCall>> calls {};
 
     State state {State::INITIAL};
     volatile int nextTxid {0};
@@ -125,7 +125,7 @@ private:
 
     RPCStatistics stats {};
 
-    mutable std::mutex lock;
+    mutable std::mutex lock {};
 
     std::queue<Sp<Message>> messageQueue {};
     Scheduler scheduler {};

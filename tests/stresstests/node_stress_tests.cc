@@ -53,8 +53,8 @@ static const int TEST_NODES_PORT_START = 39200;
 static const int BOOTSTRAP_NODES = 8;
 static const int TEST_NODES = 1024;
 
-static const int BOOTSTRAP_INTERVAL = 20; //seconds
-static const int NODES_STARTED_WAIT = 60; //seconds
+static const int BOOTSTRAP_INTERVAL = 5; //seconds
+static const int NODES_STARTED_WAIT = 20; //seconds
 
 static const std::string TEST_DIR = "stress_tests" + Utils::PATH_SEP;
 static int test_num = 0;
@@ -70,6 +70,11 @@ CPPUNIT_TEST_SUITE_REGISTRATION(NodeStressTests);
 NodeStressTests::NodeStressTests() {
     auto path = Utils::getPwdStorage(TEST_DIR);
     Utils::removeStorage(path);
+
+    workingDir = "stressTest" + Utils::PATH_SEP;
+
+    std::string localAddr = Utils::getLocalIpAddresses();
+    dcb.setIPv4Address(localAddr);
 }
 
 void NodeStressTests::prepareWorkingDirectory() {
@@ -91,7 +96,6 @@ void NodeStressTests::startBootstraps() {
         std::string dir = workingDir +  "bootstraps" + Utils::PATH_SEP + "node-" + std::to_string(i);
         auto path = Utils::getPwdStorage(dir);
 
-        dcb.setIPv4Address(localAddr);
         dcb.setListeningPort(BOOTSTRAP_NODES_PORT_START + i);
         dcb.setStoragePath(path);
 
@@ -121,6 +125,8 @@ void NodeStressTests::stopBootstraps() {
 }
 
 void NodeStressTests::startTestNodes() {
+    dcb.setBootstrap(bootstraps);
+
     for (int i = 0; i < TEST_NODES; i++) {
         printf("\007🟢 Starting the test node %d ...\n", i);
 
@@ -128,10 +134,8 @@ void NodeStressTests::startTestNodes() {
         auto path = Utils::getPwdStorage(dir);
         Utils::removeStorage(path);
 
-        dcb.setIPv4Address(localAddr);
         dcb.setListeningPort(TEST_NODES_PORT_START + i);
         dcb.setStoragePath(dir);
-        dcb.addBootstrap(bootstraps);
 
         auto config = dcb.build();
         auto node = std::make_shared<Node>(config);

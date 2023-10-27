@@ -217,6 +217,7 @@ public:
 private:
     void received(Sp<Message>);
     void update();
+    void updateBootstrap();
     void sendError(Sp<Message> q, int code, const std::string& msg);
 
     void onRequest(Sp<Message>);
@@ -249,7 +250,8 @@ private:
 
     std::vector<Sp<NodeInfo>> bootstrapNodes = {};
     std::map<SocketAddress, Id> knownNodes = {};
-    std::atomic<bool> bootstrapping;
+    std::atomic<bool> bootstrapping {false};
+    std::atomic<bool> needUpdateBootstrap {false};
     uint64_t lastBootstrap {0};
     BootstrapStage bootstrapStage {this};
 

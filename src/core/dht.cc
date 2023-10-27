@@ -120,6 +120,10 @@ void DHT::setStatus(ConnectionStatus expected, ConnectionStatus newStatus) {
 }
 
 void DHT::bootstrap() {
+    needUpdateBootstrap = true;
+}
+
+void DHT::updateBootstrap() {
     if (!isRunning() || currentTimeMillis() - lastBootstrap < Constants::BOOTSTRAP_MIN_INTERVAL)
        return;
 
@@ -228,7 +232,7 @@ void DHT::fillHomeBucket(const std::list<Sp<NodeInfo>>& nodes) {
     taskMan.add(task);
 }
 
-void DHT::update () {
+void DHT::update() {
     if (!isRunning())
         return;
 
@@ -239,10 +243,12 @@ void DHT::update () {
     rpcServer->updateReachability(now);
     routingTable.maintenance();
 
-    if (routingTable.getNumBucketEntries() < Constants::BOOTSTRAP_IF_LESS_THAN_X_PEERS ||
-            now - lastBootstrap > Constants::SELF_LOOKUP_INTERVAL)
+    if (needUpdateBootstrap || routingTable.getNumBucketEntries() < Constants::BOOTSTRAP_IF_LESS_THAN_X_PEERS ||
+            now - lastBootstrap > Constants::SELF_LOOKUP_INTERVAL) {
+        needUpdateBootstrap = false;
         // Regularly search for our id to update routing table
-        bootstrap();
+        updateBootstrap();
+    }
 
     if (persistFile != "" && (now - lastSave) > Constants::ROUTING_TABLE_PERSIST_INTERVAL) {
         log->info("Persisting routing table ...");

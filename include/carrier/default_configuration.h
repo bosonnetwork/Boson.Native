@@ -134,6 +134,15 @@ public:
             }
         }
 
+        void setBootstrap(const std::vector<NodeInfo>& nis) {
+            clearBootstrap();
+            addBootstrap(nis);
+        }
+
+        void clearBootstrap() {
+            bootstrapNodes.clear();
+        }
+
         void load(const std::string& path);
         void reset();
 
