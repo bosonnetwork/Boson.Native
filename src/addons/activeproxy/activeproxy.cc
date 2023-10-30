@@ -360,11 +360,19 @@ void ActiveProxy::connect() noexcept
         this->relayPort = port;
         this->box = CryptoBox{serverPk, this->sessionKey.privateKey() };
 
+        std::string domain = domainEnabled ? domainName : "";
         if (peerKeypair.has_value()) {
-            std::string domain = domainEnabled ? domainName : "";
             peer = PeerInfo::create(peerKeypair.value(), serverId, node->getId(), port, domain);
             // will announce the peer in the next libuv iteration
         }
+
+        if (!domain.empty())
+            log->info("-**- ActiveProxy: server: {}:{}, domain: {} -**-",
+                serverHost, relayPort, domain);
+        else
+            log->info("-**- ActiveProxy: server: {}:{} -**-",
+                serverHost, relayPort);
+
     });
 
     connection->onOpened([this](ProxyConnection* c) {
