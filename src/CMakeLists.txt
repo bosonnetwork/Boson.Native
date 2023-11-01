@@ -20,7 +20,7 @@ if (ENABLE_CARRIER_CRAWLER)
     add_definitions(-DCARRIER_CRAWLER)
 endif()
 
-set(INCLUDE_DIR ../include)
+set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 
 list(APPEND CARRIER_SOURCES
     core/utils/addr.cc
@@ -164,7 +164,16 @@ endif()
 
 add_custom_target(carrier0)
 
+if (CMAKE_PREFIX_PATH)
+    add_custom_target(phoney0 COMMAND echo "phony target")
+    set(CARRIER_DEPENDS phoney0)
+    set(CMAKE_FIND_ROOT_PATH  ${CMAKE_PREFIX_PATH})
+else()
+    set(CMAKE_FIND_ROOT_PATH ${PROJECT_INT_DIST_DIR})
+endif()
+
 if(ENABLE_STATIC)
+
     add_library(carrier-static STATIC ${CARRIER_SOURCES} ${CARRIER_HEADERS})
     add_dependencies(carrier-static ${CARRIER_DEPENDS})
     add_dependencies(carrier0 carrier-static)
@@ -173,7 +182,7 @@ if(ENABLE_STATIC)
     set_target_properties(carrier-static PROPERTIES OUTPUT_NAME carrier${STATIC_LIB_DECORATOR})
 
     target_include_directories(carrier-static PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}../include>
+        $<BUILD_INTERFACE:${CMAKE_FIND_ROOT_PATH}/include>
         $<INSTALL_INTERFACE:include>
     )
     target_link_libraries(carrier-static INTERFACE ${LIBS} ${SYSTEM_LIBS})
@@ -196,9 +205,12 @@ if(ENABLE_SHARED)
         SOVERSION ${CMAKE_PROJECT_VERSION_MAJOR})
 
     target_include_directories(carrier-shared PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}../include>
+        $<BUILD_INTERFACE:${CMAKE_FIND_ROOT_PATH}/include>
         $<INSTALL_INTERFACE:include>
     )
+
+    target_link_directories(carrier-shared
+        PRIVATE ${CMAKE_FIND_ROOT_PATH}/lib)
 
     if(NOT APPLE)
         target_link_libraries(carrier-shared
