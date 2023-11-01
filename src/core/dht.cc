@@ -296,8 +296,7 @@ void DHT::start(std::vector<Sp<NodeInfo>>& nodes) {
     // Regularly DHT update
     scheduler.add([&]() {
         update();
-    }, 5000, Constants::DHT_UPDATE_INTERVAL);
-
+    }, 100, Constants::DHT_UPDATE_INTERVAL);
 
     // send a ping request to a random node to check socket liveness
     scheduler.add([&]() {
