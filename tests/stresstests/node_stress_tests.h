@@ -76,9 +76,7 @@ private:
 
     DefaultConfiguration::Builder dcb {};
 
-    std::string workingDir = "stressTest" + Utils::PATH_SEP;
-    std::string localAddr = Utils::getLocalIpAddresses();
-
+    std::string workingDir {};
 };
 
 }  // namespace test
