@@ -22,6 +22,7 @@
 
 #pragma once
 
+#include <uv.h>
 #include <list>
 #include <queue>
 #include <random>
@@ -64,12 +65,12 @@ public:
 
     bool hasIPv4() const {
         std::lock_guard<std::mutex> lk(lock);
-        return sock4 != -1;
+        return dht4.has_value();
     }
 
     bool hasIPv6() const {
         std::lock_guard<std::mutex> lk(lock);
-        return sock6 != -1;
+        return dht6.has_value();
     }
 
     Scheduler& getScheduler() {
@@ -81,7 +82,7 @@ public:
     }
 
     SocketAddress& getAddress(sa_family_t af) {
-        return (af == AF_INET) ? bound4: bound6;
+        return (af == AF_INET) ? bind4: bind6;
     }
 
     void sendError(Sp<Message> msg, int code, const std::string& err);
@@ -91,10 +92,11 @@ public:
     }
 
 private:
-    void bindSockets(const SocketAddress& bind4, const SocketAddress& bind6);
-    void openSockets();
-    int sendData(Sp<Message>& msg);
+    void readStart(uv_udp_t* handle, const SocketAddress& bind);
+    void sendData(Sp<Message>& msg);
     void handlePacket(const uint8_t *buf, size_t buflen, const SocketAddress& from);
+    void failHandler(int rc, std::string errType);
+    void onStop() noexcept;
     void periodic();
 
     Sp<Logger> log;
@@ -103,13 +105,10 @@ private:
     std::optional<std::reference_wrapper<DHT>> dht4;
     std::optional<std::reference_wrapper<DHT>> dht6;
 
-    int sock4 {-1};
-    int sock6 {-1};
+    SocketAddress bind4 {};
+    SocketAddress bind6 {};
 
-    SocketAddress bound4 {};
-    SocketAddress bound6 {};
-
-    std::thread rcv_thread {};
+    std::thread dht_thread {};
     std::atomic_bool running {false};
 
     std::list<Sp<RPCCall>> callQueue {};
@@ -129,6 +128,23 @@ private:
 
     std::queue<Sp<Message>> messageQueue {};
     Scheduler scheduler {};
+
+    uv_udp_t udp4Handle { 0 };
+    uv_udp_t udp6Handle { 0 };
+
+    uv_loop_t loop { 0 };
+    uv_async_t stopHandle { 0 };
+    uv_check_t checkHandle { 0 };
+    uv_timer_t timerHandle { 0 };
+
+    bool loopInited {false};
+    bool asyncInited {false};
+    bool checkStarted {false};
+    bool timerStarted {false};
+    bool udp4Started {false};
+    bool udp6Started {false};
+
+    std::vector<uint8_t> readBuffer {};
 };
 
 } // namespace carrier

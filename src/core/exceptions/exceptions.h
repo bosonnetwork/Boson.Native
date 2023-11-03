@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 trinity-tech.io
+ * Copyright (c) 2022 -2023 trinity-tech.io
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,6 @@
 #include <stdexcept>
 
 namespace carrier {
-namespace activeproxy {
 
 class networking_error : public std::runtime_error
 {
@@ -48,5 +47,16 @@ public:
     virtual ~state_error() noexcept = default;
 };
 
-} // namespace activeproxy
+inline void checkArgument(bool expression, const std::string& errorMessage) {
+    if (!expression) {
+        throw std::invalid_argument(errorMessage);
+    }
+}
+
+inline void checkState(bool expression, const std::string& errorMessage) {
+    if (!expression) {
+        throw state_error(errorMessage);
+    }
+}
+
 } // namespace carrier

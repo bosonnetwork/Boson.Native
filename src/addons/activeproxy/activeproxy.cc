@@ -43,7 +43,7 @@
 
 #include "activeproxy.h"
 #include "connection.h"
-#include "exceptions.h"
+#include "exceptions/exceptions.h"
 #include "utils/addr.h"
 #include "crypto/hex.h"
 

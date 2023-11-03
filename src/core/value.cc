@@ -25,7 +25,7 @@
 #include "carrier/value.h"
 #include "crypto/hex.h"
 #include "crypto/shasum.h"
-#include "exceptions/state_error.h"
+#include "exceptions/exceptions.h"
 #include "serializers.h"
 
 namespace carrier {
@@ -149,10 +149,10 @@ std::vector<uint8_t> Value::decryptData(Signature::PrivateKey recipientSk) {
 
 Value Value::update(const std::vector<uint8_t>& data) {
     if (!isMutable())
-        throw StateError("Immutable value " + getId().toBase58String());
+        throw state_error("Immutable value " + getId().toBase58String());
 
     if (!hasPrivateKey())
-        throw StateError("Not the owner of the value " + getId().toBase58String());
+        throw state_error("Not the owner of the value " + getId().toBase58String());
 
     auto kp = Signature::KeyPair(getPrivateKey());
     return Value(kp, recipient, nonce.value(), sequenceNumber + 1, data);

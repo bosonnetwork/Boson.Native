@@ -114,11 +114,13 @@ list(APPEND CARRIER_DEPENDS
     spdlog-setup
     nlohmann
     libutf8proc
+    libuv
 )
 
 set(LIBS
     utf8proc
-    sqlite3)
+    sqlite3
+    uv_a)
 
 if(WIN32)
     set(LIBS
@@ -141,13 +143,6 @@ if(ENABLE_ADDONS)
         addons/activeproxy/connection.cc
         addons/addons.cc
     )
-
-    list(APPEND CARRIER_DEPENDS
-        libuv)
-
-    set(LIBS
-        ${LIBS}
-        uv_a)
 
 if(WIN32)
     set(LIBS
