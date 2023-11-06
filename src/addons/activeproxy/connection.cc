@@ -35,7 +35,7 @@
 #include "connection.h"
 #include "activeproxy.h"
 #include "packettype.h"
-#include "exceptions.h"
+#include "exceptions/exceptions.h"
 #include "utils/log.h"
 
 namespace boson {

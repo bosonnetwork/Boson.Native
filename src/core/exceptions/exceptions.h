@@ -1,6 +1,10 @@
 /*
+<<<<<<< HEAD:src/addons/activeproxy/exceptions.h
  * Copyright (c) 2022 - 2023 trinity-tech.io
  * Copyright (c) 2023 -  ~   bosonnetwork.io
+=======
+ * Copyright (c) 2022 -2023 trinity-tech.io
+>>>>>>> 821f2f0 (dht thread change socket select to libuv (#36)):src/core/exceptions/exceptions.h
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +31,6 @@
 #include <stdexcept>
 
 namespace boson {
-namespace activeproxy {
 
 class networking_error : public std::runtime_error
 {
@@ -49,5 +52,16 @@ public:
     virtual ~state_error() noexcept = default;
 };
 
-} // namespace activeproxy
+inline void checkArgument(bool expression, const std::string& errorMessage) {
+    if (!expression) {
+        throw std::invalid_argument(errorMessage);
+    }
+}
+
+inline void checkState(bool expression, const std::string& errorMessage) {
+    if (!expression) {
+        throw state_error(errorMessage);
+    }
+}
+
 } // namespace boson
