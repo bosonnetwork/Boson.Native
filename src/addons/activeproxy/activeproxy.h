@@ -158,6 +158,10 @@ public:
         return readBuffer;
     }
 
+    void setMaxConnections(uint32_t connections) noexcept {
+        maxConnections = connections;
+    }
+
 protected:
     void onStop() noexcept;
     void onIteration() noexcept;
