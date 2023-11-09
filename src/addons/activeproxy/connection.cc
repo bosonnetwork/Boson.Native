@@ -686,7 +686,7 @@ void ProxyConnection::processRelayPacket(const uint8_t* packet, size_t size) noe
  *   - domainEnabled[uint8]
  */
 const static size_t AUTH_ACK_SIZE = PACKET_HEADER_BYTES + CryptoBox::MAC_BYTES +
-    CryptoBox::PublicKey::BYTES + sizeof(uint16_t) + 1;
+    CryptoBox::PublicKey::BYTES + sizeof(uint16_t) + sizeof(uint16_t) + 1;
 
 void ProxyConnection::onAuthenticateResponse(const uint8_t* packet, size_t size) noexcept
 {
@@ -709,6 +709,9 @@ void ProxyConnection::onAuthenticateResponse(const uint8_t* packet, size_t size)
     ptr += CryptoBox::PublicKey::BYTES;
     uint16_t port = ntohs(*(uint16_t*)ptr);
     ptr += sizeof(port);
+    uint16_t maxConnections = ntohs(*(uint16_t*)ptr);
+    proxy.setMaxConnections(maxConnections);
+    ptr += sizeof(uint16_t);
     bool domainEnabled = *ptr;
 
     onAuthorized(serverPk, port, domainEnabled);
