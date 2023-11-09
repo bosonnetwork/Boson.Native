@@ -33,17 +33,21 @@ public:
 
 protected:
     void execute() override {
-        auto storage = node->getStorage();
-        auto peerIds = storage->getAllPeers();
-        std::cout << "----------------------------------------------" << std::endl;
-        if (!peerIds.empty()) {
-            for (const auto& id : peerIds)
-                std::cout << id.toString() << std::endl;
+        try {
+            auto storage = node->getStorage();
+            auto peerIds = storage->getAllPeers();
+            std::cout << "----------------------------------------------" << std::endl;
+            if (!peerIds.empty()) {
+                for (const auto& id : peerIds)
+                    std::cout << id.toString() << std::endl;
 
-            std::cout << "Total " << peerIds.size() << " peers." << std::endl;
-        } else {
-            std::cout << "No peer exists." << std::endl;
+                std::cout << "Total " << peerIds.size() << " peers." << std::endl;
+            } else {
+                std::cout << "No peer exists." << std::endl;
+            }
+            std::cout << "----------------------------------------------" << std::endl;
+        } catch (std::exception &ex) {
+            std::cout << "Error: " << ex.what() << std::endl;
         }
-        std::cout << "----------------------------------------------" << std::endl;
     };
 };

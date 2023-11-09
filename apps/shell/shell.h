@@ -55,13 +55,13 @@ protected:
 private:
     std::string addr4 {};
     std::string addr6 {};
-    int port = 0;
+    int port { 0 };
 
     std::string dataDir {};
     std::string bootstrap {};
     std::string configFile {};
 
-    bool waitForDebugAttach = false;
+    bool waitForDebugAttach {false};
     ApplicationLock lock;
 
     IdCommand idCommand {};

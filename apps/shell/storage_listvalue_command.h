@@ -33,18 +33,22 @@ public:
 
 protected:
     void execute() override {
-        auto storage = node->getStorage();
-        auto valueIds = storage->getAllValues();
+        try {
+            auto storage = node->getStorage();
+            auto valueIds = storage->getAllValues();
 
-        std::cout << "----------------------------------------------" << std::endl;
-        if (!valueIds.empty()) {
-            for (const auto& id : valueIds)
-                std::cout << id.toString() << std::endl;
+            std::cout << "----------------------------------------------" << std::endl;
+            if (!valueIds.empty()) {
+                for (const auto& id : valueIds)
+                    std::cout << id.toString() << std::endl;
 
-            std::cout << "Total " << valueIds.size() << " values." << std::endl;
-        } else {
-            std::cout << "No Value exists." << std::endl;
+                std::cout << "Total " << valueIds.size() << " values." << std::endl;
+            } else {
+                std::cout << "No Value exists." << std::endl;
+            }
+            std::cout << "----------------------------------------------" << std::endl;
+        } catch (std::exception &ex) {
+            std::cout << "Error: " << ex.what() << std::endl;
         }
-        std::cout << "----------------------------------------------" << std::endl;
     };
 };
