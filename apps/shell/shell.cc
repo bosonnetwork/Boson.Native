@@ -26,7 +26,6 @@
 #include <cctype>
 
 #include <editline/readline.h>
-
 #include <coredump.h>
 
 #include "shell.h"
@@ -52,11 +51,11 @@ static char *trim(char *str)
 
 void Shell::setupOptions()
 {
-    add_option("-4,--address4", addr4, "IPv4 address to listen.");
-    add_option("-6,--address6", addr6, "IPv6 address to listen.");
-    add_option("-p,--port", port, "The port to listen.");
-    add_option("-d,--dataDir", dataDir, "The directory to store the node data, default: ~/.cache/carrier.");
-    add_option("-b,--bootstrap", bootstrap, "The bootstrap node.");
+    add_option("-4,--address4", addr4, "IPv4 address to which to bind the listener.");
+    add_option("-6,--address6", addr6, "IPv6 address to which to bind the listener.");
+    add_option("-p,--port", port, "The port to which to boind the listener.");
+    add_option("-d,--dataDir", dataDir, "The path to store the node data, default: ~/.cache/carrier.");
+    add_option("-b,--bootstrap", bootstrap, "The bootstrap node to be used.");
     add_option("-c,--config", configFile, "The configuration file.");
     add_flag("--debug", waitForDebugAttach, "Waiting for the debuger attach.");
 
@@ -106,27 +105,25 @@ void Shell::handleCommands()
     if (port != 0)
         builder.setListeningPort(port);
 
-    if(!dataDir.empty()) {
+    if(!dataDir.empty())
         builder.setStoragePath(dataDir);
-    } else {
-        if (!builder.hasStoragePath())
-            builder.setStoragePath("~/.cache/carrier");
-    }
+
+    if (!builder.hasStoragePath())
+        builder.setStoragePath("~/.cache/carrier");
 
     auto config = builder.build();
     node = std::make_shared<Node>(config);
 
-    std::string lockfile = config->getStoragePath() + "/lock";
-
+    auto lockfile = config->getStoragePath() + "/lock";
     if(lock.acquire(lockfile) < 0) {
-        std::cout << "Another instance already running." << std::endl;
+        std::cout << "Another shell instance is already running." << std::endl;
         std::exit(-1);
     }
 
     try {
         node->start();
     } catch(std::exception& e) {
-        std::cout << e.what() << std::endl;
+        std::cout << "Shell ran with a failure and exited: " <<  e.what() << std::endl;
         std::exit(-1);
     }
 

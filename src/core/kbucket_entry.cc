@@ -20,13 +20,17 @@
 * SOFTWARE.
 */
 
+#include <cassert>
 #include <vector>
 
 #include <nlohmann/json.hpp>
 
+#include "carrier/version.h"
+#include "carrier/blob.h"
+#include "carrier/socket_address.h"
+
 #include "serializers.h"
 #include "kbucket_entry.h"
-#include "carrier/version.h"
 
 namespace carrier {
 
@@ -46,7 +50,7 @@ long KBucketEntry::backoffWindowEnd() const {
 void KBucketEntry::merge(Sp<KBucketEntry> other) {
     assert(other);
 
-    if (!this->equals(*other) || (this == other.get()))
+    if (!this->equals(*other) || this == other.get())
         return;
 
     created  = std::min<uint64_t>(created,  other->getCreationTime());
@@ -71,9 +75,10 @@ Sp<KBucketEntry> KBucketEntry::fromJson(nlohmann::json& root) {
     auto id = root.at("id").get<Id>();
     Blob ip = root.at("addr").get_binary();
     uint16_t port = root.at("port").get<uint16_t>();
+    int version = root.at("version").get<int>();
     SocketAddress addr{ip, port};
 
-    auto entry = std::make_shared<KBucketEntry>(id, addr, root.at("version").get<int>());
+    auto entry = std::make_shared<KBucketEntry>(id, addr, version);
     entry->created = root.at("created");
     entry->lastSeen = root.at("lastSeen");
     entry->lastSend = root.at("lastSend");

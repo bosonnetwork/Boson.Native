@@ -39,16 +39,19 @@ protected:
     };
 
     void execute() override {
-        auto valueid = Id(id);
-
-        auto storage = node->getStorage();
-        auto value = storage->getValue(valueid);
-        std::cout << "----------------------------------------------" << std::endl;
-        if (value)
-            std::cout << value->toString() << std::endl;
-        else
-            std::cout << "Value " << valueid.toBase58String() << " not exists.";
-        std::cout << "----------------------------------------------" << std::endl;
+        try {
+            auto valueid = Id(id);
+            auto storage = node->getStorage();
+            auto value = storage->getValue(valueid);
+            std::cout << "----------------------------------------------" << std::endl;
+            if (value)
+                std::cout << value->toString() << std::endl;
+            else
+                std::cout << "Value " << valueid.toBase58String() << " not exists.";
+            std::cout << "----------------------------------------------" << std::endl;
+        } catch (std::exception &ex) {
+            std::cout << "Error: " << ex.what() << std::endl;
+        }
     };
 
 private:
