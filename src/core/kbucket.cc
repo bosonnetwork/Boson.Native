@@ -20,7 +20,7 @@
 * SOFTWARE.
 */
 
-#include <iostream>
+#include <sstream>
 
 #include "utils/list.h"
 #include "kbucket.h"

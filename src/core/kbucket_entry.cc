@@ -22,6 +22,7 @@
 
 #include <cassert>
 #include <vector>
+#include <sstream>
 
 #include <nlohmann/json.hpp>
 
@@ -108,32 +109,32 @@ nlohmann::json KBucketEntry::toJson() const {
 }
 
 std::string KBucketEntry::toString() const {
+    std::stringstream ss{};
+    ss.str().reserve(1024);
     auto now = currentTimeMillis();
-    std::string str {};
 
 #ifdef CARRIER_DEVELOPMENT
-    str.append(getId().toHexString()).append("/");
+    ss << getId().toHexString() << "/";
 #endif
-
-    str.append(getId().toString())
-        .append(1, '@')
-        .append(getAddress().host())
-        .append(";seen:")
-        .append(std::to_string(now - lastSeen))
-        .append(";age:")
-        .append(std::to_string(now - created));
+    ss << getId().toString()
+        << "@"
+        << getAddress().host()
+        << "; seen:"
+        << std::to_string(now - lastSeen)
+        << "; age:"
+        << std::to_string(now - created);
 
     if (lastSend > 0)
-        str.append(";sent:" + std::to_string(now - lastSend));
+        ss << "; sent:" << std::to_string(now - lastSend);
     if (failedRequests != 0)
-        str.append(";fail:" + std::to_string(failedRequests));
+        ss << "; fail:" << std::to_string(failedRequests);
     if (reachable)
-        str.append(";reachable");
+        ss << "; reachable";
 
     if (getVersion() != 0)
-        str.append(";ver:").append(Version::toString(getVersion()));
+        ss << "; ver:" << Version::toString(getVersion());
 
-    return str;
+    return ss.str();
 }
 
 } // namespace carrier
