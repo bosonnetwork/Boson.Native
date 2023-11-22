@@ -21,6 +21,11 @@
  */
 
 #include <stdio.h>
+#include <iostream>
+#include <string>
+#include <cctype>
+#include <algorithm>
+
 #include <sys/stat.h>
 #include <stdlib.h>
 #include <errno.h>
@@ -30,30 +35,22 @@
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
-#include <string.h>
 
-// std
-#include <iostream>
-#include <string>
-#include <cctype>
-#include <algorithm>
-
-// carrier
 #include <carrier.h>
 #include "utils.h"
-#include "node_automation_tests.h"
+#include "node_tests.h"
 
 using namespace carrier;
 
 namespace test {
-CPPUNIT_TEST_SUITE_REGISTRATION(NodeAutomationTester);
+CPPUNIT_TEST_SUITE_REGISTRATION(NodeTests);
 
-void NodeAutomationTester::setUp() {
+void NodeTests::setUp() {
     dataDir = Utils::getPwdStorage("node_automation_tests_data");
     Utils::removeStorage(dataDir);
 
     auto builder = DefaultConfiguration::Builder {};
-    std::string conf_path = "." + Utils::PATH_SEP + "automation.conf";
+    std::string conf_path = "." + Utils::PATH_SEP + "boxtests.conf";
     builder.load(conf_path);
     builder.setIPv4Address(Utils::getLocalIpAddresses());
     builder.setListeningPort(42232);
@@ -68,7 +65,7 @@ void NodeAutomationTester::setUp() {
     bootstrapNodes = configuration->getBootstrapNodes();
 }
 
-void NodeAutomationTester::testAutomaticNode() {
+void NodeTests::testNode() {
     auto bn = bootstrapNodes[Utils::getRandomInteger(bootstrapNodes.size())];
 
     std::cout << "----------" << std::endl;
@@ -100,30 +97,9 @@ void NodeAutomationTester::testAutomaticNode() {
     auto origin = Id::random();
     std::vector<uint8_t> sig(64);
     Random::buffer(sig.data(), sig.size());
-
-#if 0
-    static PeerInfo create(const Id& nodeId, Id origin, int port, const std::string& alternativeURL) {
-
-    auto future3 = node->announcePeer(peer);
-    future3.get();
-    std::cout << "Announce peer succeeeed." << std::endl;
-
-    std::cout << "----------" << std::endl;
-    std::cout << "Trying to find peer with Id: " << peerId << std::endl;
-
-    //annotate momentarily，because super node don't support the new format of peer
-    /*auto future4 = node->findPeer(peerId, 1, LookupOption::CONSERVATIVE);
-    auto peers = future4.get();
-    CPPUNIT_ASSERT(!peers.empty());
-    for (auto& peer: peers) {
-        std::cout << "Peer: " << peer << std::endl;
-        peer->isValid();
-    }*/
-#endif
 }
 
-
-void NodeAutomationTester::tearDown() {
+void NodeTests::tearDown() {
     if (node != nullptr)
         node->stop();
 
