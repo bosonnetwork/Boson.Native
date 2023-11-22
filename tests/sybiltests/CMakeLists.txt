@@ -64,12 +64,12 @@ else()
         sodium)
 endif()
 
-add_executable(sybil_attacher ${SOURCES})
-target_link_libraries(sybil_attacher LINK_PUBLIC ${CARRIER_LIB} ${LIBS} ${SYSTEM_LIBS})
-add_dependencies(sybil_attacher ${DEPENDS})
+add_executable(sybiltests ${SOURCES})
+target_link_libraries(sybiltests LINK_PUBLIC ${CARRIER_LIB} ${LIBS} ${SYSTEM_LIBS})
+add_dependencies(sybiltests ${DEPENDS})
 
 if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
-    install(TARGETS sybil_attacher
+    install(TARGETS sybiltests
         RUNTIME DESTINATION "bin"
         ARCHIVE DESTINATION "lib"
         LIBRARY DESTINATION "lib")
