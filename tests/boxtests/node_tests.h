@@ -28,15 +28,16 @@
 
 namespace test {
 
-class NodeAutomationTester : public CppUnit::TestFixture {
-    CPPUNIT_TEST_SUITE(NodeAutomationTester);
-    CPPUNIT_TEST(testAutomaticNode);
+class NodeTests : public CppUnit::TestFixture {
+    CPPUNIT_TEST_SUITE(NodeTests);
+    CPPUNIT_TEST(testNode);
     CPPUNIT_TEST_SUITE_END();
 
 public:
     void setUp();
     void tearDown();
-    void testAutomaticNode();
+
+    void testNode();
 
 private:
     std::shared_ptr<Node> node = nullptr;

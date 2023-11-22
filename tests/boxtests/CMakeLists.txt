@@ -36,7 +36,7 @@ include_directories(
 list(APPEND APITESTS_SOURCES
     main.cc
     ../common/utils.cc
-    node_automation_tests.cc
+    node_tests.cc
 )
 
 set(LIBS
@@ -71,20 +71,20 @@ if(ENABLE_STATIC)
     set(LIBS carrier-static ${LIBS})
 endif()
 
-add_executable(functests ${APITESTS_SOURCES})
-target_link_libraries(functests ${LIBS} ${SYSTEM_LIBS})
-add_dependencies(functests ${APITESTS_DEPENDS})
+add_executable(boxtests ${APITESTS_SOURCES})
+target_link_libraries(boxtests ${LIBS} ${SYSTEM_LIBS})
+add_dependencies(boxtests ${APITESTS_DEPENDS})
 
-configure_file(automation.conf automation.conf COPYONLY)
+configure_file(boxtests.conf boxtests.conf COPYONLY)
 
 enable_testing()
-add_test(TEST functests)
+add_test(TEST boxtests)
 
 if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
-    install(TARGETS functests
+    install(TARGETS boxtests
         RUNTIME DESTINATION "bin"
         ARCHIVE DESTINATION "lib"
         LIBRARY DESTINATION "lib")
 endif()
 
-install(FILES automation.conf DESTINATION "bin")
+install(FILES boxtests.conf DESTINATION "bin")
