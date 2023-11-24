@@ -341,7 +341,7 @@ void DHT::onMessage(Sp<Message> msg) {
     if (!isRunning())
         return;
 
-    // ignore the messages we get from ourself
+    // Ignore the messages from its own node.
     if (node.isSelfId(msg->getId()) || isSelfAddress(msg->getOrigin()))
         return;
 
@@ -363,7 +363,7 @@ void DHT::onMessage(Sp<Message> msg) {
 }
 
 void DHT::received(Sp<Message> msg) {
-    auto addr = msg->getOrigin();
+    const auto& addr = msg->getOrigin();
     bool bogon = false;
 
 #ifdef CARRIER_DEVELOPMENT
@@ -376,7 +376,7 @@ void DHT::received(Sp<Message> msg) {
         return;
     }
 
-    Id id = msg->getId();
+    const auto& id = msg->getId();
     auto call = msg->getAssociatedCall();
 
     // we only want remote nodes with stable ports in our routing table,
@@ -393,29 +393,28 @@ void DHT::received(Sp<Message> msg) {
 
     auto iter = knownNodes.find(addr);
     if (iter != knownNodes.end() && iter->second != id) {
-        Id knownId = iter->second;
+        auto& knownId = iter->second;
         auto knownEntry = routingTable.getEntry(knownId);
         if (knownEntry != nullptr) {
-            // 1. a node with that address is in our routing table
-            // 2. the ID does not match our routing table entry
+            // It's happening under the following conditions:
+            // 1) a node with that address is in our routing table, and
+            // 2) the ID does not match our routing table entry
             //
-            // That means we are certain that the node either changed its
-            // node ID or does some ID-spoofing.
-            // In either case we don't want it in our routing table
+            // That means we are certain that the node either changed its node ID or
+            // is engaging in ID-spoofing. In either case, we don't want it in our
+            // routing table.
             log->warn("force-removing routing table entry {} because ID-change was detected; new ID {}",
                 knownEntry->toString(), id.toString());
             routingTable.remove(knownId);
 
-            // might be pollution attack, check other entries in the same bucket too in case
-            // random
-            // pings can't keep up with scrubbing.
+            // Might be a pollution attack, check other entries in the same bucket too in case
+            // random pings can't keep up with scrubbing.
             auto bucket = routingTable.getBucket(knownId);
             auto name = "Checking bucket " + bucket->getPrefix().toString() + " after ID change was detected";
             routingTable.tryPingMaintenance(bucket, {PingRefreshTask::Options::checkAll}, name);
             knownNodes[addr] = id;
             return;
-        }
-        else {
+        } else {
             knownNodes.erase(iter);
         }
     }
@@ -427,7 +426,7 @@ void DHT::received(Sp<Message> msg) {
         newEntry->signalResponse();
         newEntry->mergeRequestTime(call->getSentTime());
     } else if (old == nullptr) {
-        // Verify the node, speedup the bootstrap process
+        // Verify this new node, speedup the bootstrap process
         auto q = std::make_shared<PingRequest>();
         auto c = std::make_shared<RPCCall>(this, newEntry, q);
         // Maybe we are in the RPCSever's callback
