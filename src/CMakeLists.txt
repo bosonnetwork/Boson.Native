@@ -114,11 +114,13 @@ list(APPEND BOSON_DEPENDS
     spdlog-setup
     nlohmann
     libutf8proc
+    libuv
 )
 
 set(LIBS
     utf8proc
-    sqlite3)
+    sqlite3
+    uv_a)
 
 if(WIN32)
     set(LIBS
