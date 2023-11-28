@@ -24,7 +24,7 @@
 
 #include "lookup_task.h"
 
-namespace carrier {
+namespace boson {
 
 struct PeerInfo;
 class RPCCall;
@@ -47,4 +47,4 @@ private:
     std::function<void(std::vector<PeerInfo>&, Task*)> resultHandler;
 };
 
-} // namespace carrier
+} // namespace boson

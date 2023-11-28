@@ -26,9 +26,9 @@
 #include "id.h"
 #include "socket_address.h"
 
-namespace carrier {
+namespace boson {
 
-class CARRIER_PUBLIC NodeInfo {
+class BOSON_PUBLIC NodeInfo {
 public:
     NodeInfo() = default;
 
@@ -108,4 +108,4 @@ private:
     int version {0};
 };
 
-} // namespace carrier
+} // namespace boson

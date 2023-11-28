@@ -27,14 +27,14 @@
 #include <chrono>
 #include <thread>
 #include <algorithm>
-#include <carrier.h>
+#include <boson.h>
 
 #include "utils.h"
 #include "utils/list.h"
 #include "sqlite_storage.h"
 #include "peerinfo_storage_tests.h"
 
-using namespace carrier;
+using namespace boson;
 
 namespace test {
 CPPUNIT_TEST_SUITE_REGISTRATION(PeerInfoStorageTests);

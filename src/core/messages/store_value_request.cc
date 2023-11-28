@@ -27,7 +27,7 @@
 #include "serializers.h"
 #include "store_value_request.h"
 
-namespace carrier {
+namespace boson {
 
 void StoreValueRequest::setValue(const Value& value) {
     if (value.isMutable()) {
@@ -119,4 +119,4 @@ void StoreValueRequest::toString(std::stringstream& ss) const {
         << "}";
 }
 
-}  // namespace carrier
+}  // namespace boson

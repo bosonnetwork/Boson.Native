@@ -25,11 +25,11 @@
 #include <string>
 #include <vector>
 
-#include "carrier/id.h"
-#include "carrier/peer_info.h"
+#include "boson/id.h"
+#include "boson/peer_info.h"
 #include "message.h"
 
-namespace carrier {
+namespace boson {
 
 class AnnouncePeerRequest : public Message {
 public:
@@ -87,4 +87,4 @@ private:
     std::vector<uint8_t> signature {};
 };
 
-} // namespace carrier
+} // namespace boson

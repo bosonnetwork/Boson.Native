@@ -41,7 +41,7 @@ class PeerInfoStorageTests : public CppUnit::TestFixture {
     void testPutAndGetPersistentPeer();
 
 private:
-    carrier::Scheduler scheduler {};
+    boson::Scheduler scheduler {};
     std::string path;
 };
 

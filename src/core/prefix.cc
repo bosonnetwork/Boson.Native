@@ -20,10 +20,10 @@
 * SOFTWARE.
 */
 
-#include "carrier/prefix.h"
+#include "boson/prefix.h"
 #include "crypto/hex.h"
 
-namespace carrier {
+namespace boson {
 
 Id Prefix::last() const {
     auto p = Prefix(MAX_ID, depth);
@@ -95,4 +95,4 @@ std::string Prefix::toString() const {
     return _data + "/" + std::to_string(depth);
 }
 
-} // namespace carrier
+} // namespace boson

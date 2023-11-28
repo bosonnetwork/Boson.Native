@@ -24,12 +24,12 @@
 
 #include <nlohmann/json.hpp>
 
-#include "carrier/socket_address.h"
-#include "carrier/node_info.h"
-#include "carrier/peer_info.h"
-#include "carrier/id.h"
+#include "boson/socket_address.h"
+#include "boson/node_info.h"
+#include "boson/peer_info.h"
+#include "boson/id.h"
 
-namespace carrier {
+namespace boson {
 
 inline void to_json(nlohmann::json& json, const SocketAddress& sa) {
     json = sa.toString();
@@ -54,4 +54,4 @@ inline void from_json(const nlohmann::json& json, std::optional<Id>& id) {
 void to_json(nlohmann::json& json, const PeerInfo& pi);
 void from_json(const nlohmann::json& json, PeerInfo& pi);
 
-}  // namespace carrier
+}  // namespace boson

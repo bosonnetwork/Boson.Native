@@ -25,7 +25,7 @@
 #include <nlohmann/json.hpp>
 #include "message.h"
 
-namespace carrier {
+namespace boson {
 
 class ErrorMessage : public Message {
 public:
@@ -58,4 +58,4 @@ private:
     int code {0};
 };
 
-} // namespace carrier
+} // namespace boson

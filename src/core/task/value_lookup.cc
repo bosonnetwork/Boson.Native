@@ -20,14 +20,14 @@
  * SOFTWARE.
  */
 
-#include "carrier/value.h"
+#include "boson/value.h"
 #include "messages/find_value_request.h"
 #include "messages/find_value_response.h"
 #include "utils/log.h"
 #include "kclosest_nodes.h"
 #include "value_lookup.h"
 
-namespace carrier {
+namespace boson {
 
 void ValueLookup::prepare() {
     const int MAX_ENTRIES =  Constants::MAX_ENTRIES_PER_BUCKET * 2;
@@ -97,4 +97,4 @@ void ValueLookup::callResponsed(RPCCall* call, Sp<Message> message) {
     }
 }
 
-} // namespace carrier
+} // namespace boson

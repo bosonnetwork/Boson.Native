@@ -22,17 +22,22 @@
 
 #pragma once
 
-#include <string>
-#include "def.h"
-
-namespace carrier {
-
-class CARRIER_PUBLIC Version {
-public:
-    static int build(std::string& name, int version);
-    static const std::string toString(int version);
-};
-
-CARRIER_PUBLIC const char* version();
-
-} // namespace carrier
+#if defined(BOSON_STATIC)
+    #define BOSON_PUBLIC
+#elif defined(BOSON_DYNAMIC)
+    #ifdef BOSON_BUILD
+        #if defined(_WIN32) || defined(_WIN64)
+            #define BOSON_PUBLIC      __declspec(dllexport)
+        #else
+            #define BOSON_PUBLIC      __attribute__((visibility("default")))
+        #endif
+    #else
+        #if defined(_WIN32) || defined(_WIN64)
+            #define BOSON_PUBLIC      __declspec(dllimport)
+        #else
+            #define BOSON_PUBLIC      __attribute__((visibility("default")))
+        #endif
+    #endif
+#else
+    #define BOSON_PUBLIC
+#endif

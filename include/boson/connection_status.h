@@ -28,9 +28,9 @@
 #include "def.h"
 #include "network.h"
 
-namespace carrier {
+namespace boson {
 
-class CARRIER_PUBLIC ConnectionStatus {
+class BOSON_PUBLIC ConnectionStatus {
 public:
     enum Enum : uint8_t {
         Disconnected = 0,
@@ -65,7 +65,7 @@ private:
     Enum e {};
 };
 
-class CARRIER_PUBLIC ConnectionStatusListener {
+class BOSON_PUBLIC ConnectionStatusListener {
 public:
     ConnectionStatusListener() :
         statusChanged([](Network, ConnectionStatus, ConnectionStatus){}),
@@ -79,4 +79,4 @@ public:
     std::function<void(Network)> disconnected;
 };
 
-} // namespace carrier
+} // namespace boson

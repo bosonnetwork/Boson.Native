@@ -24,7 +24,7 @@
 #include "rpcstatistics.h"
 #include "utils/time.h"
 
-namespace carrier {
+namespace boson {
 
 uint32_t RPCStatistics::getReceivedBytesPerSec() noexcept {
     uint64_t now = currentTimeMillis();
@@ -167,4 +167,4 @@ std::string RPCStatistics::toString() const {
     return ss.str();
 }
 
-} // namespace carrier
+} // namespace boson

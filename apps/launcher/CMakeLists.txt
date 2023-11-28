@@ -58,7 +58,7 @@ list(APPEND LAUNCHER_SOURCES
 
 list(APPEND LAUNCHER_DEPENDS
     libuv
-    carrier0
+    boson0
     CLI11)
 
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
@@ -82,20 +82,20 @@ else()
 endif()
 
 if(ENABLE_SHARED)
-    set(LIBS carrier-shared ${LIBS})
+    set(LIBS boson-shared ${LIBS})
     #set(SYSTEM_LIBS pthread dl)
 else()
-    set(LIBS carrier-static ${LIBS})
+    set(LIBS boson-static ${LIBS})
 endif()
 
-add_executable(carrier-launcher ${LAUNCHER_SOURCES})
-target_link_libraries(carrier-launcher LINK_PUBLIC ${LIBS} ${SYSTEM_LIBS})
-add_dependencies(carrier-launcher ${LAUNCHER_DEPENDS})
+add_executable(boson-launcher ${LAUNCHER_SOURCES})
+target_link_libraries(boson-launcher LINK_PUBLIC ${LIBS} ${SYSTEM_LIBS})
+add_dependencies(boson-launcher ${LAUNCHER_DEPENDS})
 
 if(APPLE AND (${CMAKE_BUILD_TYPE} STREQUAL "Debug"))
-    add_custom_command(TARGET carrier-launcher POST_BUILD
+    add_custom_command(TARGET boson-launcher POST_BUILD
         COMMAND /usr/libexec/PlistBuddy -c "Add :com.apple.security.get-task-allow bool true" coredump.entitlements
-        COMMAND codesign -s - -f --entitlements coredump.entitlements $<TARGET_FILE:carrier-launcher>
+        COMMAND codesign -s - -f --entitlements coredump.entitlements $<TARGET_FILE:boson-launcher>
         COMMAND rm -f coredump.entitlements
         VERBATIM)
 endif()
@@ -103,14 +103,14 @@ endif()
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
     add_custom_target(meerkat-deb
 	    COMMAND BINARY_DIR=${CMAKE_BINARY_DIR} SOURCE_DIR=${CMAKE_SOURCE_DIR} DIST_DIR=${CMAKE_INSTALL_PREFIX} make -f ${CMAKE_SOURCE_DIR}/apps/launcher/Makefile
-	        DEPENDS carrier-launcher
-        COMMENT "Packaging Carrier Meerkat Service Distrubtion")
+	        DEPENDS boson-launcher
+        COMMENT "Packaging Boson Meerkat Service Distrubtion")
 endif()
 
-install(TARGETS carrier-launcher
+install(TARGETS boson-launcher
     RUNTIME DESTINATION "bin"
     ARCHIVE DESTINATION "lib"
     LIBRARY DESTINATION "lib")
 
 install(FILES default.conf
-    DESTINATION "etc/carrier-launcher")
+    DESTINATION "etc/boson-launcher")

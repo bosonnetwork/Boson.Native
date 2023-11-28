@@ -36,11 +36,11 @@
 #include <unistd.h>
 #endif
 
-#include <carrier.h>
+#include <boson.h>
 #include "utils.h"
 #include "node_tests.h"
 
-using namespace carrier;
+using namespace boson;
 
 namespace test {
 CPPUNIT_TEST_SUITE_REGISTRATION(NodeTests);

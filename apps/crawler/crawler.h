@@ -31,7 +31,7 @@
 #include "setting.h"
 #include "utils/log.h"
 
-using namespace carrier;
+using namespace boson;
 
 class Crawler {
 public:
@@ -80,7 +80,7 @@ private:
 
     std::string ip2location(std::string ip);
 
-    void initCarrierNode();
+    void initNode();
 
     std::vector<Sp<NodeInfo>> nodes_list {};
     std::vector<Sp<NodeInfo>> pinged_list {};

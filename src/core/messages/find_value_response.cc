@@ -27,7 +27,7 @@
 #include "serializers.h"
 #include "find_value_response.h"
 
-namespace carrier {
+namespace boson {
 
 void FindValueResponse::setValue(const Value& value) {
     if (value.isMutable()) {
@@ -101,4 +101,4 @@ void FindValueResponse::_toString(std::stringstream& ss) const {
         ss << ",v:" << Hex::encode(value);
 }
 
-} // namespace carrier
+} // namespace boson

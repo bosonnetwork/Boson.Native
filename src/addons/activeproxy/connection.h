@@ -26,11 +26,11 @@
 
 #include <functional>
 
-#include "carrier.h"
+#include "boson.h"
 #include "packettype.h"
 #include "utils/log.h"
 
-namespace carrier {
+namespace boson {
 namespace activeproxy {
 
 class ActiveProxy;
@@ -225,7 +225,7 @@ private:
     uint32_t id;
     uint32_t refCount { 1 };
 
-    std::shared_ptr<carrier::Logger> log;
+    std::shared_ptr<boson::Logger> log;
 
     ActiveProxy& proxy;
     ConnectionState state { ConnectionState::Initializing };
@@ -251,4 +251,4 @@ private:
 };
 
 } // namespace activeproxy
-} // namespace carrier
+} // namespace boson

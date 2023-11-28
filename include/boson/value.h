@@ -31,9 +31,9 @@
 #include "crypto_box.h"
 #include "signature.h"
 
-namespace carrier {
+namespace boson {
 
-class CARRIER_PUBLIC Value {
+class BOSON_PUBLIC Value {
 public:
     Value() = default;
 
@@ -183,4 +183,4 @@ private:
     int32_t sequenceNumber {0};
 };
 
-} // namespace carrier
+} // namespace boson

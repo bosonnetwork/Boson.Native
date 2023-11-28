@@ -20,13 +20,13 @@
  * SOFTWARE.
  */
 
-#include "carrier/id.h"
-#include "carrier/value.h"
+#include "boson/id.h"
+#include "boson/value.h"
 #include "messages/store_value_request.h"
 #include "candidate_node.h"
 #include "value_announce.h"
 
-namespace carrier {
+namespace boson {
 
 ValueAnnounce::ValueAnnounce(DHT* dht, const ClosestSet& closestSet, const Value& _value)
         :Task(dht, "ValueAnnounce"), value(_value) {
@@ -51,4 +51,4 @@ void ValueAnnounce::update() {
     }
 }
 
-} // namespace carrier
+} // namespace boson

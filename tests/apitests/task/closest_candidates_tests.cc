@@ -27,7 +27,7 @@
 #include "task/closest_candidates.h"
 #include "utils.h"
 #include "closest_candidates_tests.h"
-#include "carrier/id.h"
+#include "boson/id.h"
 
 namespace test {
 CPPUNIT_TEST_SUITE_REGISTRATION(ClosestCandidatestsTests);

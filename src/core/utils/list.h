@@ -27,7 +27,7 @@
 #include <vector>
 #include <algorithm>
 
-namespace carrier {
+namespace boson {
 
 template <class T>
 inline T list_get(const std::list<T>& list, int index) {
@@ -58,4 +58,4 @@ inline bool vector_contains(const std::vector<T>& vector, const T& val) {
     return it != vector.end();
 }
 
-} // namespace carrier
+} // namespace boson

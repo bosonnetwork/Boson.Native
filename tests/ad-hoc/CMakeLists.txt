@@ -31,7 +31,7 @@ include_directories(
     ../../include
     ../../src/core
     ../common
-    ${CARRIER_INT_DIST_DIR}/include)
+    ${BOSON_INT_DIST_DIR}/include)
 
 list(APPEND TEST_SOURCES
     main.cc
@@ -44,12 +44,12 @@ list(APPEND TEST_SOURCES
 list(APPEND ADHOC_DEPENDS
     CppUnit
     cpp-httplib
-    carrier0)
+    boson0)
 
 if(ENABLE_SHARED)
-    set(CARRIER_LIB carrier-shared)
+    set(BOSON_LIB boson-shared)
 else()
-    set(CARRIER_LIB carrier-static)
+    set(BOSON_LIB boson-static)
 endif()
 
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
@@ -74,7 +74,7 @@ if(WIN32)
 endif()
 
 add_executable(ad-hoc ${TEST_SOURCES})
-target_link_libraries(ad-hoc LINK_PUBLIC ${CARRIER_LIB} ${LIBS} ${SYSTEM_LIBS})
+target_link_libraries(ad-hoc LINK_PUBLIC ${BOSON_LIB} ${LIBS} ${SYSTEM_LIBS})
 add_dependencies(ad-hoc ${ADHOC_DEPENDS})
 
 enable_testing()

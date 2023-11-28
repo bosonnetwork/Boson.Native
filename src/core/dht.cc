@@ -23,9 +23,9 @@
 #include <atomic>
 #include <memory>
 
-#include "carrier/node.h"
-#include "carrier/peer_info.h"
-#include "carrier/value.h"
+#include "boson/node.h"
+#include "boson/peer_info.h"
+#include "boson/value.h"
 
 #include "utils/time.h"
 #include "utils/log.h"
@@ -58,7 +58,7 @@
 #include "kclosest_nodes.h"
 #include "dht.h"
 
-namespace carrier {
+namespace boson {
 
 void DHT::BootstrapStage::updateConnectionStatus() {
     std::unique_lock<std::mutex> lock(mtx);
@@ -366,7 +366,7 @@ void DHT::received(Sp<Message> msg) {
     const auto& addr = msg->getOrigin();
     bool bogon = false;
 
-#ifdef CARRIER_DEVELOPMENT
+#ifdef BOSON_DEVELOPMENT
     bogon = !addr.isAnyUnicast();
 #else
     bogon = addr.isBogon();
@@ -585,7 +585,7 @@ void DHT::onAnnouncePeer(const Sp<Message>& msg) {
     auto request = std::static_pointer_cast<AnnouncePeerRequest>(msg);
     bool bogon {false};
 
-#ifdef CARRIER_DEVELOPMENT
+#ifdef BOSON_DEVELOPMENT
     bogon = !request->getOrigin().isAnyUnicast();
 #else
     bogon = request->getOrigin().isBogon();
@@ -627,7 +627,7 @@ void DHT::onSend(const Id& id) {
     routingTable.onSend(id);
 }
 
-#ifdef CARRIER_CRAWLER
+#ifdef BOSON_CRAWLER
 void DHT::ping(Sp<NodeInfo> node, std::function<void(Sp<NodeInfo>)> completeHandler) {
     auto q = std::make_shared<PingRequest>();
 
@@ -827,4 +827,4 @@ std::string DHT::toString() const {
     return str;
 }
 
-} // namespace carrier
+} // namespace boson

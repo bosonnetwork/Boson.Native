@@ -29,9 +29,9 @@
 #include "blob.h"
 #include "signature.h"
 
-namespace carrier {
+namespace boson {
 
-class CARRIER_PUBLIC CryptoBox {
+class BOSON_PUBLIC CryptoBox {
 public:
     class KeyPair;
 
@@ -106,7 +106,7 @@ public:
         std::array<uint8_t, BYTES> key { 0 };
     };
 
-    class CARRIER_PUBLIC PublicKey {
+    class BOSON_PUBLIC PublicKey {
     public:
         static const uint32_t BYTES { 32 };
 
@@ -177,7 +177,7 @@ public:
         std::array<uint8_t, BYTES> key { 0 };
     };
 
-    class CARRIER_PUBLIC Nonce {
+    class BOSON_PUBLIC Nonce {
     public:
         static const uint32_t BYTES { 24 };
 
@@ -252,7 +252,7 @@ public:
         std::array<uint8_t, BYTES> nonce { 0 };
     };
 
-    class CARRIER_PUBLIC KeyPair {
+    class BOSON_PUBLIC KeyPair {
     public:
         static const uint32_t SEED_BYTES { 32 };
 
@@ -413,4 +413,4 @@ private:
     std::array<uint8_t, SYMMETRIC_KEY_BYTES> key {};
 };
 
-} // namespace carrier
+} // namespace boson

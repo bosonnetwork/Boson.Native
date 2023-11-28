@@ -31,7 +31,7 @@ include_directories(
     ../../include
     ../../src/core
     ../common
-    ${CARRIER_INT_DIST_DIR}/include)
+    ${BOSON_INT_DIST_DIR}/include)
 
 list(APPEND STRESSTESTS_SOURCES
     main.cc
@@ -60,7 +60,7 @@ list(APPEND STRESSTESTS_DEPENDS
     CLI11
     sqlite
     CppUnit
-    carrier0
+    boson0
     libsodium)
 
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
@@ -68,7 +68,7 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
 endif()
 
 if(ENABLE_STATIC)
-    set(LIBS carrier-static ${LIBS})
+    set(LIBS boson-static ${LIBS})
 endif()
 
 add_executable(stresstest ${STRESSTESTS_SOURCES})

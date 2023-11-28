@@ -22,13 +22,13 @@
 
 #include <string>
 #include <algorithm>
-#include <carrier.h>
+#include <boson.h>
 #include "id_tests.h"
 
 namespace test {
 CPPUNIT_TEST_SUITE_REGISTRATION(IdTests);
 
-using namespace carrier;
+using namespace boson;
 
 void IdTests::test1() {
     auto pk = Signature::KeyPair::random().publicKey();

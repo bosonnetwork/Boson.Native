@@ -23,7 +23,7 @@
 #include "activeproxy.h"
 #include <iostream>
 
-namespace carrier {
+namespace boson {
 
 std::map<std::string, std::shared_ptr<Addon>> g_addons {};
 
@@ -68,4 +68,4 @@ std::map<std::string, std::shared_ptr<Addon>>& getAddons() {
     return g_addons;
 }
 
-} // namespace carrier
+} // namespace boson

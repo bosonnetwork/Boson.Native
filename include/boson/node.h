@@ -40,7 +40,7 @@
 #include "connection_status.h"
 #include "result.h"
 
-namespace carrier {
+namespace boson {
 
 class RPCServer;
 class CryptoCache;
@@ -49,7 +49,7 @@ class DataStorage;
 class DHT;
 class Logger;
 
-class CARRIER_PUBLIC Node{
+class BOSON_PUBLIC Node{
 public:
     using StatusCallback = std::function<void(NodeStatus, NodeStatus)>;
 
@@ -116,7 +116,7 @@ public:
         return findPeer(id, expectedNum, defaultLookupOption);
     }
 
-#ifdef CARRIER_CRAWLER
+#ifdef BOSON_CRAWLER
     void ping(Sp<NodeInfo> node, std::function<void(Sp<NodeInfo>)> completeHandler) const;
     void getNodes(const Id& id, Sp<NodeInfo> node, std::function<void(std::list<Sp<NodeInfo>>)> completeHandler) const;
 #endif
@@ -198,4 +198,4 @@ private:
 
 };
 
-} // namespace carrier
+} // namespace boson

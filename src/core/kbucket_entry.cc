@@ -26,14 +26,14 @@
 
 #include <nlohmann/json.hpp>
 
-#include "carrier/version.h"
-#include "carrier/blob.h"
-#include "carrier/socket_address.h"
+#include "boson/version.h"
+#include "boson/blob.h"
+#include "boson/socket_address.h"
 
 #include "serializers.h"
 #include "kbucket_entry.h"
 
-namespace carrier {
+namespace boson {
 
 #undef max
 #undef min
@@ -113,7 +113,7 @@ std::string KBucketEntry::toString() const {
     ss.str().reserve(1024);
     auto now = currentTimeMillis();
 
-#ifdef CARRIER_DEVELOPMENT
+#ifdef BOSON_DEVELOPMENT
     ss << getId().toHexString() << "/";
 #endif
     ss << getId().toString()
@@ -137,4 +137,4 @@ std::string KBucketEntry::toString() const {
     return ss.str();
 }
 
-} // namespace carrier
+} // namespace boson

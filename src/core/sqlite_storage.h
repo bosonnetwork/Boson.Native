@@ -25,13 +25,13 @@
 #include <list>
 #include <sqlite3.h>
 
-#include "carrier/types.h"
-#include "carrier/id.h"
-#include "carrier/value.h"
+#include "boson/types.h"
+#include "boson/id.h"
+#include "boson/value.h"
 #include "data_storage.h"
 #include "scheduler.h"
 
-namespace carrier {
+namespace boson {
 
 class SqliteStorage final : public DataStorage {
 public:
@@ -65,4 +65,4 @@ private:
     sqlite3* sqlite_store {nullptr};
 };
 
-} // namespace carrier
+} // namespace boson

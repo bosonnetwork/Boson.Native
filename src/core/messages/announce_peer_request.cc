@@ -28,7 +28,7 @@
 #include "serializers.h"
 #include "announce_peer_request.h"
 
-namespace carrier {
+namespace boson {
 
 void AnnouncePeerRequest::serializeInternal(nlohmann::json& root) const {
     nlohmann::json object = {
@@ -90,4 +90,4 @@ void AnnouncePeerRequest::toString(std::stringstream& ss) const {
         << "}";
 }
 
-} // namespace carrier
+} // namespace boson

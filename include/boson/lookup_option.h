@@ -22,33 +22,15 @@
 
 #pragma once
 
-#include <list>
-#include <any>
-#include <map>
-
 #include "def.h"
-#include "types.h"
-#include "node_info.h"
-#include "socket_address.h"
 
-namespace carrier {
+namespace boson {
 
-class CARRIER_PUBLIC Configuration {
-public:
-    virtual SocketAddress& ipv4Address() = 0;
-    virtual SocketAddress& ipv6Address() = 0;
-
-    virtual int listeningPort() = 0;
-
-    /**
-     * If a Path that points to an existing, writable directory is returned then the routing table
-     * will be persisted to that directory periodically and during shutdown
-     */
-    virtual const std::string& getStoragePath() = 0;
-
-    virtual std::vector<Sp<NodeInfo>>& getBootstrapNodes() = 0;
-
-    virtual std::map<std::string, std::any>& getAddons() = 0;
+enum class BOSON_PUBLIC LookupOption {
+    LOCAL, /* reserved */
+    ARBITRARY,
+    OPTIMISTIC,
+    CONSERVATIVE
 };
 
-} // namespace carrier
+} // namespace boson

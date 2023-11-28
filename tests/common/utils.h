@@ -23,11 +23,11 @@
 #pragma once
 #include <list>
 
-#include <carrier.h>
+#include <boson.h>
 #include "utils/random_generator.h"
 #include "crypto/random.h"
 
-using namespace carrier;
+using namespace boson;
 
 #if defined(_WIN32) || defined(_WIN64)
     #define PATH_MAX                MAX_PATH

@@ -26,7 +26,7 @@
 
 #include "lookup_task.h"
 
-namespace carrier {
+namespace boson {
 
 class RPCCall;
 class Message;
@@ -53,4 +53,4 @@ private:
     std::function<void(const Value& , Task*)> resultHandler {};
 };
 
-} // namespace carrier
+} // namespace boson

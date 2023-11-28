@@ -26,28 +26,28 @@
 #include <any>
 #include <spdlog/spdlog.h>
 
-#include "carrier/types.h"
-#include "carrier/def.h"
+#include "boson/types.h"
+#include "boson/def.h"
 
 using namespace spdlog;
-namespace carrier {
+namespace boson {
 
-#define CARRIER_LOG_LEVEL_TRACE     0
-#define CARRIER_LOG_LEVEL_DEBUG     1
-#define CARRIER_LOG_LEVEL_INFO      2
-#define CARRIER_LOG_LEVEL_WARN      3
-#define CARRIER_LOG_LEVEL_ERROR     4
-#define CARRIER_LOG_LEVEL_CRITICAL  5
-#define CARRIER_LOG_LEVEL_OFF       6
+#define BOSON_LOG_LEVEL_TRACE     0
+#define BOSON_LOG_LEVEL_DEBUG     1
+#define BOSON_LOG_LEVEL_INFO      2
+#define BOSON_LOG_LEVEL_WARN      3
+#define BOSON_LOG_LEVEL_ERROR     4
+#define BOSON_LOG_LEVEL_CRITICAL  5
+#define BOSON_LOG_LEVEL_OFF       6
 
 enum Level {
-    Trace = CARRIER_LOG_LEVEL_TRACE,
-    Debug = CARRIER_LOG_LEVEL_DEBUG,
-    Info = CARRIER_LOG_LEVEL_INFO,
-    Warn = CARRIER_LOG_LEVEL_WARN,
-    Error = CARRIER_LOG_LEVEL_ERROR,
-    Critical = CARRIER_LOG_LEVEL_CRITICAL,
-    Off = CARRIER_LOG_LEVEL_OFF,
+    Trace = BOSON_LOG_LEVEL_TRACE,
+    Debug = BOSON_LOG_LEVEL_DEBUG,
+    Info = BOSON_LOG_LEVEL_INFO,
+    Warn = BOSON_LOG_LEVEL_WARN,
+    Error = BOSON_LOG_LEVEL_ERROR,
+    Critical = BOSON_LOG_LEVEL_CRITICAL,
+    Off = BOSON_LOG_LEVEL_OFF,
 };
 
 //
@@ -60,57 +60,57 @@ enum PatternTimeType {
 };
 
 /*
- * If use Detail to print file lines and function name, need use such as: CARRIER_LOGGER_INFO,
- * and if use CARRIER_LOGGER_DEBUG or CARRIER_LOGGER_TRACE need modify the CARRIER_LOG_ACTIVE_LEVEL to support
+ * If use Detail to print file lines and function name, need use such as: BOSON_LOGGER_INFO,
+ * and if use BOSON_LOGGER_DEBUG or BOSON_LOGGER_TRACE need modify the BOSON_LOG_ACTIVE_LEVEL to support
 */
 
-#ifndef CARRIER_FUNCTION
-#    define CARRIER_FUNCTION static_cast<const char *>(__FUNCTION__)
+#ifndef BOSON_FUNCTION
+#    define BOSON_FUNCTION static_cast<const char *>(__FUNCTION__)
 #endif
 
-#if !defined(CARRIER_LOG_ACTIVE_LEVEL)
-#    define CARRIER_LOG_ACTIVE_LEVEL CARRIER_LOG_LEVEL_INFO
+#if !defined(BOSON_LOG_ACTIVE_LEVEL)
+#    define BOSON_LOG_ACTIVE_LEVEL BOSON_LOG_LEVEL_INFO
 #endif
 
-#define CARRIER_LOGGER_CALL(logger, level, ...) (logger)->source_log(__FILE__, __LINE__, CARRIER_FUNCTION, level, __VA_ARGS__);
+#define BOSON_LOGGER_CALL(logger, level, ...) (logger)->source_log(__FILE__, __LINE__, BOSON_FUNCTION, level, __VA_ARGS__);
 
-#if CARRIER_LOG_ACTIVE_LEVEL <= CARRIER_LOG_LEVEL_TRACE
-#    define CARRIER_LOGGER_TRACE(logger, ...) CARRIER_LOGGER_CALL(logger, Level::Trace, __VA_ARGS__)
+#if BOSON_LOG_ACTIVE_LEVEL <= BOSON_LOG_LEVEL_TRACE
+#    define BOSON_LOGGER_TRACE(logger, ...) BOSON_LOGGER_CALL(logger, Level::Trace, __VA_ARGS__)
 #else
-#    define CARRIER_LOGGER_TRACE(logger, ...) (void)0
+#    define BOSON_LOGGER_TRACE(logger, ...) (void)0
 #endif
 
-#if CARRIER_LOG_ACTIVE_LEVEL <= CARRIER_LOG_LEVEL_DEBUG
-#    define CARRIER_LOGGER_DEBUG(logger, ...) CARRIER_LOGGER_CALL(logger, Level::Debug, __VA_ARGS__)
+#if BOSON_LOG_ACTIVE_LEVEL <= BOSON_LOG_LEVEL_DEBUG
+#    define BOSON_LOGGER_DEBUG(logger, ...) BOSON_LOGGER_CALL(logger, Level::Debug, __VA_ARGS__)
 #else
-#    define CARRIER_LOGGER_DEBUG(logger, ...) (void)0
+#    define BOSON_LOGGER_DEBUG(logger, ...) (void)0
 #endif
 
-#if CARRIER_LOG_ACTIVE_LEVEL <= CARRIER_LOG_LEVEL_INFO
-#    define CARRIER_LOGGER_INFO(logger, ...) CARRIER_LOGGER_CALL(logger, Level::Info, __VA_ARGS__)
+#if BOSON_LOG_ACTIVE_LEVEL <= BOSON_LOG_LEVEL_INFO
+#    define BOSON_LOGGER_INFO(logger, ...) BOSON_LOGGER_CALL(logger, Level::Info, __VA_ARGS__)
 #else
-#    define CARRIER_LOGGER_INFO(logger, ...) (void)0
+#    define BOSON_LOGGER_INFO(logger, ...) (void)0
 #endif
 
-#if CARRIER_LOG_ACTIVE_LEVEL <= CARRIER_LOG_LEVEL_WARN
-#    define CARRIER_LOGGER_WARN(logger, ...) CARRIER_LOGGER_CALL(logger, Level::Warn, __VA_ARGS__)
+#if BOSON_LOG_ACTIVE_LEVEL <= BOSON_LOG_LEVEL_WARN
+#    define BOSON_LOGGER_WARN(logger, ...) BOSON_LOGGER_CALL(logger, Level::Warn, __VA_ARGS__)
 #else
-#    define CARRIER_LOGGER_WARN(logger, ...) (void)0
+#    define BOSON_LOGGER_WARN(logger, ...) (void)0
 #endif
 
-#if CARRIER_LOG_ACTIVE_LEVEL <= CARRIER_LOG_LEVEL_ERROR
-#    define CARRIER_LOGGER_ERROR(logger, ...) CARRIER_LOGGER_CALL(logger, Level::Error, __VA_ARGS__)
+#if BOSON_LOG_ACTIVE_LEVEL <= BOSON_LOG_LEVEL_ERROR
+#    define BOSON_LOGGER_ERROR(logger, ...) BOSON_LOGGER_CALL(logger, Level::Error, __VA_ARGS__)
 #else
-#    define CARRIER_LOGGER_ERROR(logger, ...) (void)0
+#    define BOSON_LOGGER_ERROR(logger, ...) (void)0
 #endif
 
-#if CARRIER_LOG_ACTIVE_LEVEL <= CARRIER_LOG_LEVEL_CRITICAL
-#    define CARRIER_LOGGER_CRITICAL(logger, ...) CARRIER_LOGGER_CALL(logger, Level::Critical, __VA_ARGS__)
+#if BOSON_LOG_ACTIVE_LEVEL <= BOSON_LOG_LEVEL_CRITICAL
+#    define BOSON_LOGGER_CRITICAL(logger, ...) BOSON_LOGGER_CALL(logger, Level::Critical, __VA_ARGS__)
 #else
-#    define CARRIER_LOGGER_CRITICAL(logger, ...) (void)0
+#    define BOSON_LOGGER_CRITICAL(logger, ...) (void)0
 #endif
 
-class CARRIER_PUBLIC Logger {
+class BOSON_PUBLIC Logger {
 public:
     Logger() = default;
     Logger(const Sp<spdlog::logger> spd_logger) : spd_logger(spd_logger) {}
@@ -213,4 +213,4 @@ private:
     Sp<spdlog::logger> spd_logger;
 };
 
-} // namespace carrier
+} // namespace boson

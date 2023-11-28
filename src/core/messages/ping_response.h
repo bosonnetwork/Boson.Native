@@ -24,7 +24,7 @@
 
 #include "message.h"
 
-namespace carrier {
+namespace boson {
 
 class PingResponse : public Message {
 public:
@@ -33,4 +33,4 @@ public:
     PingResponse(): PingResponse(0) {}
 };
 
-} // namespace carrier
+} // namespace boson

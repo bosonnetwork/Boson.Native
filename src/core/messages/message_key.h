@@ -24,7 +24,7 @@
 
 #include <string>
 
-namespace carrier {
+namespace boson {
 
 struct MessageKey {
 public:
@@ -70,4 +70,4 @@ public:
     static const std::string KEY_ERR_MESSAGE;
 };
 
-} // namespace carrier
+} // namespace boson

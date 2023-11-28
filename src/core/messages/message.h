@@ -39,12 +39,12 @@
 #endif
 
 #include "constants.h"
-#include "carrier/socket_address.h"
-#include "carrier/id.h"
-#include "carrier/version.h"
+#include "boson/socket_address.h"
+#include "boson/id.h"
+#include "boson/version.h"
 #include "message_key.h"
 
-namespace carrier {
+namespace boson {
 
 class RPCCall;
 class RPCServer;
@@ -299,4 +299,4 @@ private:
     int version {0};
 };
 
-} // namespace carrier
+} // namespace boson

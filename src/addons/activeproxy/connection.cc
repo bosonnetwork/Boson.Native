@@ -29,7 +29,7 @@
 #include <cstdint>
 #include <stdlib.h>
 
-#include "carrier/blob.h"
+#include "boson/blob.h"
 
 #include "connection.h"
 #include "activeproxy.h"
@@ -37,7 +37,7 @@
 #include "exceptions.h"
 #include "utils/log.h"
 
-namespace carrier {
+namespace boson {
 namespace activeproxy {
 
 const static size_t PACKET_HEADER_BYTES = sizeof(uint16_t) + sizeof(uint8_t);
@@ -982,4 +982,4 @@ void ProxyConnection::startReadUpstream() noexcept
 }
 
 } // namespace activeproxy
-} // namespace carrier
+} // namespace boson

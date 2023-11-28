@@ -26,7 +26,7 @@
 #include <string>
 #include <stdexcept>
 
-namespace carrier {
+namespace boson {
 
 class StateError: public std::runtime_error
 {
@@ -50,4 +50,4 @@ inline void checkState(bool expression, const std::string& errorMessage) {
     }
 }
 
-} // namespace carrier
+} // namespace boson

@@ -24,7 +24,7 @@
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <carrier/node.h>
+#include <boson/node.h>
 
 namespace test {
 

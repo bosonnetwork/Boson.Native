@@ -29,9 +29,9 @@
 #define PACKAGE_VERSION "(unknown version)"
 #endif
 
-#include "carrier/version.h"
+#include "boson/version.h"
 
-namespace carrier {
+namespace boson {
 
 const char* version() {
     return PACKAGE_VERSION;
@@ -68,4 +68,4 @@ const std::string Version::toString(int version) {
     return result != names.end() ? (result->second + "/" + v) : (n + "/" + v);
 }
 
-} // namespace carrier
+} // namespace boson

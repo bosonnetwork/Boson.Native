@@ -20,10 +20,10 @@
  * SOFTWARE.
  */
 
-#include "carrier/id.h"
+#include "boson/id.h"
 #include "crypto_context.h"
 
-namespace carrier {
+namespace boson {
 
 CryptoContext::CryptoContext(const CryptoBox::PublicKey& pk, const CryptoBox::KeyPair& keypair) {
     box = CryptoBox(pk, keypair.privateKey());
@@ -36,4 +36,4 @@ CryptoContext::CryptoContext(const CryptoBox::PublicKey& pk, const CryptoBox::Ke
     nonce = CryptoBox::Nonce({(uint8_t*)dist.data(), CryptoBox::Nonce::BYTES});
 }
 
-} // namespace carrier
+} // namespace boson

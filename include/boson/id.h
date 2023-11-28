@@ -36,9 +36,9 @@
 #define ID_BYTES   32u
 #define ID_BITS    256u
 
-namespace carrier {
+namespace boson {
 
-class CARRIER_PUBLIC Id {
+class BOSON_PUBLIC Id {
 public:
     static const uint32_t BYTES { 32 };
 
@@ -165,4 +165,4 @@ private:
     std::array<uint8_t, ID_BYTES> bytes {0};
 };
 
-} // namespace carrier
+} // namespace boson

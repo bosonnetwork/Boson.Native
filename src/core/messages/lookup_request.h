@@ -23,7 +23,7 @@
 
 #include "message.h"
 
-namespace carrier {
+namespace boson {
 
 class LookupRequest : public Message {
 public:
@@ -84,4 +84,4 @@ private:
     bool wantToken {false};
 };
 
-} // namespace carrier
+} // namespace boson

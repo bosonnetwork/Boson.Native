@@ -30,7 +30,7 @@
 #include <mutex>
 #include <queue>
 
-namespace carrier {
+namespace boson {
 
 template <class T>
 class MTQueue
@@ -111,4 +111,4 @@ public:
     }
 };
 
-} // namespace carrier
+} // namespace boson

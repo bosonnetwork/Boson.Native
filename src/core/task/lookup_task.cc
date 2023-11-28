@@ -20,16 +20,16 @@
  * SOFTWARE.
  */
 
-#include "carrier/node.h"
+#include "boson/node.h"
 #include "messages/lookup_response.h"
 #include "task/closest_candidates.h"
 #include "task/lookup_task.h"
 #include "dht.h"
 
-namespace carrier {
+namespace boson {
 
 bool LookupTask::isBogonAddress(const SocketAddress& addr) const {
-#ifdef CARRIER_DEVELOPMENT
+#ifdef BOSON_DEVELOPMENT
     return !addr.isAnyUnicast();
 #else
     return addr.isBogon();
@@ -85,4 +85,4 @@ void LookupTask::callResponsed(RPCCall* call, Sp<Message> response) {
     addClosest(candidateNode);
 }
 
-} // namespace carrier
+} // namespace boson

@@ -29,7 +29,7 @@
 
 #include "candidate_node.h"
 
-namespace carrier {
+namespace boson {
 
 class ClosestCandidates {
 public:
@@ -59,7 +59,7 @@ private:
     int capacity {0};
     std::set<Id> dedup_ids {};
 
-#ifdef CARRIER_DEVELOPMENT
+#ifdef BOSON_DEVELOPMENT
     std::set<SocketAddress> dedups_addrs {};
 #else
     std::set<SocketAddress, SocketAddress::IpCompare> dedups_addrs {};
@@ -69,5 +69,5 @@ private:
     mutable std::mutex closest_mtx {};
 };
 
-} // namespace carrier
+} // namespace boson
 

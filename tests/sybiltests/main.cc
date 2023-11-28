@@ -41,12 +41,12 @@
 #endif
 
 #include <CLI/CLI.hpp>
-#include <carrier.h>
+#include <boson.h>
 
 #include "../common/utils.h"
 
 using namespace std;
-using namespace carrier;
+using namespace boson;
 using namespace test;
 
 struct Options {
@@ -81,7 +81,7 @@ void signal_handler(int signum)
 
 static void parseArgs(int argc, char **argv)
 {
-    CLI::App app("Carrier sybil attacher", "attacher");
+    CLI::App app("B sybil attacher", "attacher");
     app.add_option("-m, --mode", options.mode, "0: same address; 1: same node id.");
     app.add_option("-d, --duration", options.duration, "the duration (minute) of each node running");
     app.add_option("-i, --interval", options.interval, "the inerval time (second) of send 'find node' message.");

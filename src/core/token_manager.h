@@ -24,10 +24,10 @@
 #include <atomic>
 #include <array>
 
-#include "carrier/id.h"
-#include "carrier/socket_address.h"
+#include "boson/id.h"
+#include "boson/socket_address.h"
 
-namespace carrier {
+namespace boson {
 
 class SocketAddress;
 
@@ -47,4 +47,4 @@ private:
     std::array<uint8_t, 32> sessionSecret {};
 };
 
-} // namespace carrier
+} // namespace boson

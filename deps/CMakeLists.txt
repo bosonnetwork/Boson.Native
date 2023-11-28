@@ -37,7 +37,7 @@ if (ENABLE_APPS)
 
 endif()
 
-if(ENABLE_CARRIER_CRAWLER)
+if(ENABLE_BOSON_CRAWLER)
     add_submodule(IP2Location8
         DEPENDS platform-specific)
 endif()

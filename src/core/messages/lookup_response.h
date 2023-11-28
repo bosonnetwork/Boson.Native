@@ -24,9 +24,9 @@
 #include <list>
 #include "message.h"
 #include "dht.h"
-#include "carrier/node_info.h"
+#include "boson/node_info.h"
 
-namespace carrier {
+namespace boson {
 
 class LookupResponse : public Message {
 public:
@@ -78,4 +78,4 @@ private:
     int token {0};
 };
 
-} // namespace carrier
+} // namespace boson

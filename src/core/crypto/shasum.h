@@ -23,9 +23,9 @@
 #pragma once
 
 #include <vector>
-#include "carrier/blob.h"
+#include "boson/blob.h"
 
-namespace carrier {
+namespace boson {
 
 class SHA256 {
 public:
@@ -62,4 +62,4 @@ private:
     DigestState state;
 };
 
-} // namespace carrier
+} // namespace boson

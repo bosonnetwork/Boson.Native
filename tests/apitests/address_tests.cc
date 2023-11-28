@@ -23,11 +23,11 @@
 #include <iostream>
 #include <string>
 #include <nlohmann/json.hpp>
-#include <carrier.h>
+#include <boson.h>
 #include "utils.h"
 #include "address_tests.h"
 
-using namespace carrier;
+using namespace boson;
 
 namespace test {
 CPPUNIT_TEST_SUITE_REGISTRATION(AddressTests);

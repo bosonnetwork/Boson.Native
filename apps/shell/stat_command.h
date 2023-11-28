@@ -28,7 +28,7 @@
 
 class StatCommand : public Command {
 public:
-    StatCommand() : Command("stat", "Display traffic statistics of current Carrier node.") {};
+    StatCommand() : Command("stat", "Display traffic statistics of current Boson node.") {};
 
 protected:
     void execute() override {

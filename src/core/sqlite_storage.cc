@@ -20,14 +20,14 @@
  * SOFTWARE.
  */
 
-#include "carrier/id.h"
-#include "carrier/peer_info.h"
+#include "boson/id.h"
+#include "boson/peer_info.h"
 #include "crypto/hex.h"
 #include "constants.h"
 #include "scheduler.h"
 #include "sqlite_storage.h"
 
-namespace carrier {
+namespace boson {
 
 static int VERSION = 4;
 static std::string SET_USER_VERSION = "PRAGMA user_version = " + std::to_string(VERSION);
@@ -775,4 +775,4 @@ bool SqliteStorage::removePeer(const Id& peerId, const Id& origin) {
     return ret;
 }
 
-} // namespace carrier
+} // namespace boson

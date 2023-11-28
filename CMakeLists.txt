@@ -6,7 +6,7 @@ if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.24.0")
     cmake_policy(SET CMP0135 NEW)
 endif()
 
-project(carrier-native VERSION 2.0.5 LANGUAGES CXX)
+project(boson-native VERSION 2.0.5 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED on)
@@ -32,8 +32,8 @@ set(ENABLE_ADDONS TRUE CACHE BOOL "Build addons")
 set(ENABLE_TESTS ${ENABLE_TESTS_DEFAULT} CACHE BOOL "Build test cases")
 set(ENABLE_APPS ${ENABLE_APPS_DEFAULT} CACHE BOOL "Build applications")
 set(ENABLE_DOCS FALSE CACHE BOOL "Build APIs documentation")
-set(ENABLE_CARRIER_DEVELOPMENT FALSE CACHE BOOL "Eanble carrier development mode")
-set(ENABLE_CARRIER_CRAWLER FALSE CACHE BOOL "Eanble carrier crawler")
+set(ENABLE_BOSON_DEVELOPMENT FALSE CACHE BOOL "Eanble boson development mode")
+set(ENABLE_BOSON_CRAWLER FALSE CACHE BOOL "Eanble boson crawler")
 
 if (CMAKE_PREFIX_PATH)
     set(ENABLE_TESTS FALSE)
@@ -57,7 +57,7 @@ if (ENABLE_APPS)
     add_subdirectory(apps/launcher)
 endif()
 
-if(ENABLE_CARRIER_CRAWLER)
+if(ENABLE_BOSON_CRAWLER)
     add_subdirectory(apps/crawler)
 endif()
 

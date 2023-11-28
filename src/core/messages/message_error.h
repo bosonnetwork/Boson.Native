@@ -25,7 +25,7 @@
 #include <string>
 #include <stdexcept>
 
-namespace carrier {
+namespace boson {
 
 class MessageError : public std::runtime_error {
 public:
@@ -33,4 +33,4 @@ public:
         std::runtime_error(message) {}
 };
 
-} // namespace carrier
+} // namespace boson

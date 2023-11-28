@@ -20,12 +20,12 @@
  * SOFTWARE.
  */
 
-#include <carrier.h>
+#include <boson.h>
 
 #include "utils.h"
 #include "value_tests.h"
 
-using namespace carrier;
+using namespace boson;
 
 namespace test {
 CPPUNIT_TEST_SUITE_REGISTRATION(ValueTests);

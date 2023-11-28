@@ -26,7 +26,7 @@
 #include "lookup_response.h"
 #include "serializers.h"
 
-namespace carrier {
+namespace boson {
 
 const std::list<Sp<NodeInfo>>& LookupResponse::getNodes(Network type) const {
     switch (type) {
@@ -134,4 +134,4 @@ void LookupResponse::toString(std::stringstream& ss) const {
     ss << "}";
 }
 
-} // namespace carrier
+} // namespace boson

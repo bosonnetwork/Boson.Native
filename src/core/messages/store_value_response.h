@@ -24,7 +24,7 @@
 
 #include "message.h"
 
-namespace carrier {
+namespace boson {
 
 class StoreValueResponse : public Message {
 public:
@@ -33,4 +33,4 @@ public:
     StoreValueResponse(): StoreValueResponse(0) {}
 };
 
-} // namespace carrier
+} // namespace boson

@@ -32,7 +32,6 @@
 #endif
 #include <string.h>
 
-// std
 #include <iostream>
 #include <string>
 #include <cctype>
@@ -40,13 +39,12 @@
 #include <chrono>
 #include <thread>
 
-// carrier
-#include <carrier.h>
+#include <boson.h>
 #include <utils.h>
 #include "routingtable_tests.h"
 
 using namespace std::chrono_literals;
-using namespace carrier;
+using namespace boson;
 extern bool stopped;
 
 namespace test {

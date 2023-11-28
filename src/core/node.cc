@@ -28,8 +28,8 @@
 #include <set>
 #include <filesystem>
 
-#include "carrier/node.h"
-#include "carrier/node_status.h"
+#include "boson/node.h"
+#include "boson/node_status.h"
 #include "exceptions/state_error.h"
 #include "sqlite_storage.h"
 #include "crypto_cache.h"
@@ -45,7 +45,7 @@ namespace fs = std::filesystem;
 #endif
 
 static const std::string PATH_CWD = ".";
-namespace carrier {
+namespace boson {
 
 Result<NodeInfo> Node::getNodeInfo() {
     auto n4 = dht4 != nullptr ? std::make_shared<NodeInfo>(id, dht4->getOrigin()) : nullptr;
@@ -156,8 +156,8 @@ Node::Node(std::shared_ptr<Configuration> _config): config(_config)
         throw std::invalid_argument("No listening address");
     }
 
-#ifdef CARRIER_DEVELOPMENT
-    log->info("Carrier node running in development environment.");
+#ifdef BOSON_DEVELOPMENT
+    log->info("Boson node running in development environment.");
 #endif
 
     storagePath = config->getStoragePath().empty() ? PATH_CWD: config->getStoragePath();
@@ -190,7 +190,7 @@ Node::Node(std::shared_ptr<Configuration> _config): config(_config)
         writeIdFile(idPath);
     }
 
-    log->info("Carrier Kademlia node {}", id.toString());
+    log->info("Boson Kademlia node {}", id.toString());
 
     encryptionKeyPair = CryptoBox::KeyPair::fromSignatureKeyPair(keyPair);
 
@@ -218,7 +218,7 @@ void Node::start() {
         return;
 
     setStatus(NodeStatus::Stopped, NodeStatus::Initializing);
-    log->info("Carrier node {} is starting...", id.toString());
+    log->info("Boson node {} is starting...", id.toString());
 
     if (config->ipv4Address()) {
         dht4 = std::make_shared<DHT>(Network::IPv4, *this, config->ipv4Address());
@@ -275,7 +275,7 @@ void Node::stop() {
     if (status == NodeStatus::Stopped)
         return;
 
-    log->info("Carrier Kademlia node {} is stopping...", id.toString());
+    log->info("Boson Kademlia node {} is stopping...", id.toString());
 
     for (auto any : scheduledActions) {
         auto job = std::any_cast<Sp<Scheduler::Job>>(any);
@@ -307,7 +307,7 @@ void Node::stop() {
     }
 
     setStatus(NodeStatus::Running, NodeStatus::Stopped);
-    log->info("Carrier Kademlia node {} stopped", id.toString());
+    log->info("Boson Kademlia node {} stopped", id.toString());
 }
 
 void Node::persistentAnnounce() {
@@ -335,7 +335,7 @@ void Node::persistentAnnounce() {
     }
 }
 
-#ifdef CARRIER_CRAWLER
+#ifdef BOSON_CRAWLER
 void Node::ping(Sp<NodeInfo> node, std::function<void(Sp<NodeInfo>)> completeHandler) const {
     if (node->isIPv4()) {
         dht4->ping(node, completeHandler);
@@ -658,4 +658,4 @@ std::string Node::toString() const {
     return str;
 }
 
-} // namespace carrier
+} // namespace boson

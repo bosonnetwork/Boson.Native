@@ -1,19 +1,19 @@
 # Active Proxy Service Usage
 
-The Active Proxy service is the first service provided by Carrier Super Node. It is used to forward service entries for third parties that are originally located within a LAN network, making them accessible to the public
+The Active Proxy service is the first service provided by Boson Super Node. It is used to forward service entries for third parties that are originally located within a LAN network, making them accessible to the public
 
 
 
-### Preparing for Active Proxy Services on Carrier Super Nodes
+### Preparing for Active Proxy Services on Boson Super Nodes
 
-Here is an example configuration file for Carrier Super Node for your reference.
+Here is an example configuration file for Boson Super Node for your reference.
 
 ```json
 {
   "ipv4": true,
   "ipv6": false,
   "port": 39001,
-  "dataDir": "/var/lib/carrier",
+  "dataDir": "/var/lib/boson",
 
   "bootstraps": [
 		{
@@ -25,7 +25,7 @@ Here is an example configuration file for Carrier Super Node for your reference.
   ],
 	"services": [
     {
-      "class": "carrier.service.activeproxy.ActiveProxy",
+      "class": "Boson.service.activeproxy.ActiveProxy",
       "configuration": {
         "port": 8090,
         "portMappingRange": "20000-22000"
@@ -37,13 +37,13 @@ Here is an example configuration file for Carrier Super Node for your reference.
 
 In this configuration file, there is only one service included, named 'ActiveProxy.' Typically, the '**`8090`**' TCP port is reserved for use by the ActiveProxy service, and during runtime, the TCP port mapping range of '**`20000-22000`**' will be utilized to map ports and forward the services.
 
-💡 *Generally, the `TrinityTech` team deploys a list of Carrier Super Nodes, some of which provide Active Proxy services for users. All services from the Super Nodes use the same reserved port '8090' and port mapping range of '20000-22000'.”*
+💡 *Generally, the `TrinityTech` team deploys a list of Boson Super Nodes, some of which provide Active Proxy services for users. All services from the Super Nodes use the same reserved port '8090' and port mapping range of '20000-22000'.”*
 
 *At present, the Active Proxy service only supports the mapping of TCP-based connection services from internal sources to public-facing ones.*
 
 
 
-### Configuration of Active Proxy Service in the Carrier Node Application
+### Configuration of Active Proxy Service in the Boson Node Application
 
 An application, named "`Launcher`," is utilized as a daemon service running as a Native DHT node to make use of the Active Proxy service. The appropriate configuration for this is illustrated in the following example:
 
@@ -55,7 +55,7 @@ An application, named "`Launcher`," is utilized as a daemon service running as a
 
   "logger": {
     "level": "info",
-    "logFile": "./data/carrier.log", //if output to console， please delete this line
+    "logFile": "./data/boson.log", //if output to console， please delete this line
     "pattern": "[%Y-%m-%d %T] [%n] %^[%l] %v%$"
   },
 
@@ -83,14 +83,14 @@ An application, named "`Launcher`," is utilized as a daemon service running as a
 }
 ```
 
-<aside> 💡 Notice: The "`Launcher`" application can be constructed under the "launcher" directory of the Carrier.Native repository.
+<aside> 💡 Notice: The "`Launcher`" application can be constructed under the "launcher" directory of the Boson.Native repository.
 
 </aside>
 
 Here are the explanations for the fields used in “addons” part of the service configuration file:
 
 - **Name:** The name of the target service.
-- **configuration.serverPeerId:** The Peer ID of the target super carrier node.
+- **configuration.serverPeerId:** The Peer ID of the target super Boson node.
 - **configuration.peerPrivateKey:** The peer private key of the local client.
 - **configuration.domainName:** Your domain name.
 - **configuration.upstreamHost:** The host name or IP address of the local service to be mapped out.
@@ -138,6 +138,6 @@ with the command under a directory with “**launcher**” binary
 $ ./launcher -c sample.conf
 ```
 
-Once you have launched the `launcher` service, the Carrier Super Node will assign a mapped port for your service. In my case, the assigned port is `20000`, which is the first port in the mapping range.
+Once you have launched the `launcher` service, the Boson Super Node will assign a mapped port for your service. In my case, the assigned port is `20000`, which is the first port in the mapping range.
 
 To check if your website is working properly, you can access it at http://155.138.245.211:20000.

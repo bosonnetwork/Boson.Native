@@ -25,7 +25,7 @@
 #include "message_error.h"
 #include "error_message.h"
 
-namespace carrier {
+namespace boson {
 
 void ErrorMessage::serializeInternal(nlohmann::json& root) const {
     nlohmann::json object = {
@@ -58,4 +58,4 @@ void ErrorMessage::toString(std::stringstream& ss) const {
         << "'}";
 }
 
-} // namespace carrier
+} // namespace boson

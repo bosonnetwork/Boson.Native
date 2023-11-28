@@ -22,12 +22,12 @@
 
 #pragma once
 
-#include "carrier/id.h"
+#include "boson/id.h"
 #include "utils/loading_cache.h"
 #include "constants.h"
 #include "crypto_context.h"
 
-namespace carrier {
+namespace boson {
 
 class CryptoCache : public LocadingCache<Id, CryptoContext> {
 public:
@@ -50,4 +50,4 @@ private:
     CryptoBox::KeyPair keypair;
 };
 
-} // namespace carrier
+} // namespace boson

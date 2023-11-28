@@ -26,7 +26,7 @@
 #include <vector>
 #include "messages/message.h"
 
-namespace carrier {
+namespace boson {
 
 class RPCStatistics {
 public:
@@ -102,4 +102,4 @@ private:
     std::atomic_uint32_t droppedBytes {0};
 };
 
-} // namespace carrier
+} // namespace boson

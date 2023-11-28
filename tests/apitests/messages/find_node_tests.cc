@@ -22,7 +22,7 @@
 
 #include <list>
 
-#include "carrier/id.h"
+#include "boson/id.h"
 #include "messages/message.h"
 #include "messages/find_node_request.h"
 #include "messages/find_node_response.h"
@@ -30,7 +30,7 @@
 #include "utils.h"
 #include "find_node_tests.h"
 
-using namespace carrier;
+using namespace boson;
 
 namespace test {
 CPPUNIT_TEST_SUITE_REGISTRATION(FindNodeTests);

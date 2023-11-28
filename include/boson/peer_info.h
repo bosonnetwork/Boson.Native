@@ -31,9 +31,9 @@
 #include "blob.h"
 #include "signature.h"
 
-namespace carrier {
+namespace boson {
 
-class CARRIER_PUBLIC PeerInfo {
+class BOSON_PUBLIC PeerInfo {
 public:
     PeerInfo() = delete;
 
@@ -173,4 +173,4 @@ private:
     std::vector<uint8_t> signature {};
 };
 
-} // namespace carrier
+} // namespace boson

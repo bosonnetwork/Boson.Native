@@ -47,7 +47,7 @@
 #include "utils/addr.h"
 #include "crypto/hex.h"
 
-namespace carrier {
+namespace boson {
 namespace activeproxy {
 
 static const uint32_t IDLE_CHECK_INTERVAL = 60 * 1000;          // 60 seconds
@@ -597,4 +597,4 @@ void ActiveProxy::stopCheckServicePeer() noexcept {
 }
 
 } // namespace activeproxy
-} // namespace carrier
+} // namespace boson

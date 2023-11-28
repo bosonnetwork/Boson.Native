@@ -1,4 +1,4 @@
-project(carrier-shell CXX)
+project(boson-shell CXX)
 include(ProjectDefaults)
 
 check_include_file(unistd.h HAVE_UNISTD_H)
@@ -22,7 +22,7 @@ include_directories(
     ../../include
     ../../src
     ../../src/core
-    ${CARRIER_INT_DIST_DIR}/include)
+    ${BOSON_INT_DIST_DIR}/include)
 
 list(APPEND SHELL_SOURCES
     shell.cc
@@ -32,7 +32,7 @@ list(APPEND SHELL_DEPENDS
     CLI11
     libutf8proc
     editline
-    carrier0)
+    boson0)
 
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
     set(SYSTEM_LIBS dl)
@@ -65,24 +65,24 @@ else()
 endif()
 
 if(ENABLE_SHARED)
-    set(LIBS carrier-shared ${LIBS})
+    set(LIBS boson-shared ${LIBS})
 else()
-    set(LIBS carrier-static ${LIBS})
+    set(LIBS boson-static ${LIBS})
 endif()
 
-add_executable(carrier-shell ${SHELL_SOURCES})
-target_link_libraries(carrier-shell LINK_PUBLIC ${LIBS} ${SYSTEM_LIBS})
-add_dependencies(carrier-shell ${SHELL_DEPENDS})
+add_executable(boson-shell ${SHELL_SOURCES})
+target_link_libraries(boson-shell LINK_PUBLIC ${LIBS} ${SYSTEM_LIBS})
+add_dependencies(boson-shell ${SHELL_DEPENDS})
 
 if(APPLE AND (${CMAKE_BUILD_TYPE} STREQUAL "Debug"))
-    add_custom_command(TARGET carrier-shell POST_BUILD
+    add_custom_command(TARGET boson-shell POST_BUILD
         COMMAND /usr/libexec/PlistBuddy -c "Add :com.apple.security.get-task-allow bool true" coredump.entitlements
-        COMMAND codesign -s - -f --entitlements coredump.entitlements $<TARGET_FILE:carrier-shell>
+        COMMAND codesign -s - -f --entitlements coredump.entitlements $<TARGET_FILE:boson-shell>
         COMMAND rm -f coredump.entitlements
         VERBATIM)
 endif()
 
-install(TARGETS carrier-shell
+install(TARGETS boson-shell
     RUNTIME DESTINATION "bin"
     ARCHIVE DESTINATION "lib"
     LIBRARY DESTINATION "lib")

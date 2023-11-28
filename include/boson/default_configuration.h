@@ -28,9 +28,9 @@
 #include "def.h"
 #include "configuration.h"
 
-namespace carrier {
+namespace boson {
 
-class CARRIER_PUBLIC DefaultConfiguration final : public Configuration {
+class BOSON_PUBLIC DefaultConfiguration final : public Configuration {
 public:
     DefaultConfiguration() = delete;
     DefaultConfiguration(const std::string& ip4, const std::string& ip6, int port,
@@ -68,7 +68,7 @@ public:
         return addons;
     }
 
-    class CARRIER_PUBLIC Builder {
+    class BOSON_PUBLIC Builder {
     public:
         Builder() {
         }
@@ -168,4 +168,4 @@ private:
     std::map<std::string, std::any> addons {};
 };
 
-} // namespace carrier
+} // namespace boson

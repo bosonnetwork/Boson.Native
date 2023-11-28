@@ -22,7 +22,7 @@
 
 #include "serializers.h"
 
-namespace carrier {
+namespace boson {
 
 void from_json(const nlohmann::json& json, SocketAddress& sa) {
     auto s = json.get<std::string>();
@@ -58,4 +58,4 @@ void from_json(const nlohmann::json& json, NodeInfo& ni) {
     ni = NodeInfo(id, ip, port);
 }
 
-} // namespace carrier
+} // namespace boson

@@ -29,20 +29,20 @@
 #include <map>
 #include <mutex>
 
-#include "carrier/id.h"
-#include "carrier/value.h"
-#include "carrier/node_info.h"
-#include "carrier/peer_info.h"
-#include "carrier/lookup_option.h"
-#include "carrier/types.h"
-#include "carrier/connection_status.h"
+#include "boson/id.h"
+#include "boson/value.h"
+#include "boson/node_info.h"
+#include "boson/peer_info.h"
+#include "boson/lookup_option.h"
+#include "boson/types.h"
+#include "boson/connection_status.h"
 
 #include "task/task_manager.h"
 #include "rpcserver.h"
 #include "routing_table.h"
 #include "token_manager.h"
 
-namespace carrier {
+namespace boson {
 
 class Message;
 class PingRequest;
@@ -189,7 +189,7 @@ public:
         return running;
     }
 
-#ifdef CARRIER_CRAWLER
+#ifdef BOSON_CRAWLER
     void ping(Sp<NodeInfo> node, std::function<void(Sp<NodeInfo>)> completeHandler);
     void getNodes(const Id& id, Sp<NodeInfo> node, std::function<void(std::list<Sp<NodeInfo>>)> completeHandler);
 #endif
@@ -263,4 +263,4 @@ private:
     Sp<Logger> log;
 };
 
-} // namespace carrier
+} // namespace boson

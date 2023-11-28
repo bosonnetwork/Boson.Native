@@ -31,15 +31,15 @@
 #include <optional>
 #include <thread>
 
-#include "carrier.h"
-#include "carrier/blob.h"
+#include "boson.h"
+#include "boson/blob.h"
 #include "utils/log.h"
 
-namespace carrier {
+namespace boson {
 namespace activeproxy {
 
-using SocketAddress = carrier::SocketAddress;
-using CryptoBox = carrier::CryptoBox;
+using SocketAddress = boson::SocketAddress;
+using CryptoBox = boson::CryptoBox;
 
 class ProxyConnection;
 
@@ -251,7 +251,7 @@ private:
 
     std::string logLevel {};
     std::vector<uint8_t> readBuffer {};
-    std::shared_ptr<carrier::Logger> log;
+    std::shared_ptr<boson::Logger> log;
 
     std::string persistPath {};
 
@@ -262,4 +262,4 @@ private:
 };
 
 } // namespace activeproxy
-} // namespace carrier
+} // namespace boson

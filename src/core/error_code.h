@@ -23,7 +23,7 @@
 
 #pragma once
 
-namespace carrier {
+namespace boson {
 
 enum ErrorCode {
     Success                     = 0,
@@ -52,4 +52,4 @@ enum ErrorCode {
     Unknown                     = -1,
 };
 
-} // namespace carrier
+} // namespace boson

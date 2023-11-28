@@ -33,7 +33,7 @@
 #include "scheduler.h"
 #include "rpcstatistics.h"
 
-namespace carrier {
+namespace boson {
 
 class Node;
 
@@ -131,4 +131,4 @@ private:
     Scheduler scheduler {};
 };
 
-} // namespace carrier
+} // namespace boson

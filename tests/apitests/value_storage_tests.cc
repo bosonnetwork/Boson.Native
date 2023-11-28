@@ -26,14 +26,14 @@
 #include <iostream>
 #include <chrono>
 #include <thread>
-#include <carrier.h>
+#include <boson.h>
 
 #include "sqlite_storage.h"
 #include "utils/list.h"
 #include "utils.h"
 #include "value_storage_tests.h"
 
-using namespace carrier;
+using namespace boson;
 
 namespace test {
 CPPUNIT_TEST_SUITE_REGISTRATION(ValueStorageTests);

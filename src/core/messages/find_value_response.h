@@ -25,14 +25,14 @@
 #include <vector>
 #include <optional>
 
-#include "carrier/id.h"
-#include "carrier/value.h"
-#include "carrier/crypto_box.h"
+#include "boson/id.h"
+#include "boson/value.h"
+#include "boson/crypto_box.h"
 
 #include "lookup_response.h"
 #include "message.h"
 
-namespace carrier {
+namespace boson {
 
 class FindValueResponse : public LookupResponse {
 public:
@@ -68,4 +68,4 @@ private:
     std::vector<uint8_t> value;
 };
 
-} // namespace carrier
+} // namespace boson

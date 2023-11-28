@@ -27,10 +27,10 @@
 #include <sstream>
 #include <stdexcept>
 
-#include "carrier/peer_info.h"
+#include "boson/peer_info.h"
 #include "utils/common.h"
 
-namespace carrier {
+namespace boson {
 
 PeerInfo::PeerInfo(const Blob& peerId, const Blob& privateKey, const Blob& nodeId, const Blob& origin,
             uint16_t port, const std::string& alternativeURL, const Blob& signature) {
@@ -134,4 +134,4 @@ bool PeerInfo::isValid() const {
    return Signature::verify(getSignData(), signature, pk);
 }
 
-} // namespace carrier
+} // namespace boson

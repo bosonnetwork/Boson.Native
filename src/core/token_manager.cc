@@ -22,7 +22,7 @@
 
 #include <functional>
 
-#include "carrier/socket_address.h"
+#include "boson/socket_address.h"
 #include "utils/random_generator.h"
 #include "utils/time.h"
 #include "crypto/shasum.h"
@@ -36,7 +36,7 @@
 static const long TOKEN_TIMEOUT = 5 * 60 * 1000;   //5 minutes
 using namespace std::chrono;
 
-namespace carrier {
+namespace boson {
 
 TokenManager::TokenManager() {
     RandomGenerator<uint32_t> generator;
@@ -98,4 +98,4 @@ bool TokenManager::verifyToken(int token, const Id& nodeId, const SocketAddress&
     return false;
 }
 
-} // namespace carrier
+} // namespace boson

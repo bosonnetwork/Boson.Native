@@ -25,7 +25,7 @@
 #include <string>
 #include <stdexcept>
 
-namespace carrier {
+namespace boson {
 namespace activeproxy {
 
 class networking_error : public std::runtime_error
@@ -49,4 +49,4 @@ public:
 };
 
 } // namespace activeproxy
-} // namespace carrier
+} // namespace boson

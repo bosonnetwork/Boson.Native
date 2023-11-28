@@ -32,18 +32,16 @@
 #endif
 #include <string.h>
 
-// std
 #include <iostream>
 #include <string>
 #include <cctype>
 //#include <algorithm>
 
-// carrier
-#include <carrier.h>
+#include <boson.h>
 #include "utils.h"
 #include "node_stress_tests.h"
 
-using namespace carrier;
+using namespace boson;
 
 namespace test {
 

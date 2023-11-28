@@ -22,9 +22,9 @@
 
 #pragma once
 
-#include "carrier/crypto_box.h"
+#include "boson/crypto_box.h"
 
-namespace carrier {
+namespace boson {
 
 class CryptoContext
 {
@@ -77,4 +77,4 @@ private:
     CryptoBox::Nonce nonce;
 };
 
-} // namespace carrier
+} // namespace boson

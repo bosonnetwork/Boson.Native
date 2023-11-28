@@ -25,13 +25,13 @@
 #include <string>
 #include <algorithm>
 
-#include "carrier/id.h"
+#include "boson/id.h"
 #include "utils/random_generator.h"
 #include "crypto/base58.h"
 #include "crypto/shasum.h"
 #include "crypto/hex.h"
 
-namespace carrier {
+namespace boson {
 
 Id Id::MIN_ID = Id::zero();
 Id Id::MAX_ID = Id::ofHex("0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
@@ -207,4 +207,4 @@ void Id::fromHexString(const std::string& str) {
     Hex::decode(str.c_str() + pos, ID_BYTES * 2, bytes.data(), ID_BYTES);
 }
 
-} // namespace carrier
+} // namespace boson

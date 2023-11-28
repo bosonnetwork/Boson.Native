@@ -28,14 +28,14 @@
 
 class IdCommand : public Command {
 public:
-    IdCommand() : Command("id", "Display the ID of current Carrier node.") {};
+    IdCommand() : Command("id", "Display the ID of current boson node.") {};
 
 protected:
     void execute() override {
         auto id = node->getId();
 
         std::cout << "----------------------------------------------" << std::endl;
-        std::cout << "Carrier id [" << id.toBase58String() << "]" << std::endl;
+        std::cout << "Boson id [" << id.toBase58String() << "]" << std::endl;
         std::cout << "----------------------------------------------" << std::endl;
     }
 };

@@ -46,9 +46,9 @@ typedef uint16_t in_port_t;
 #include "def.h"
 #include "blob.h"
 
-namespace carrier {
+namespace boson {
 
-class CARRIER_PUBLIC SocketAddress {
+class BOSON_PUBLIC SocketAddress {
 public:
     SocketAddress() {}
 
@@ -193,4 +193,4 @@ private:
     sockaddr_storage ss { 0, AF_UNSPEC };
 };
 
-} // namespace carrier
+} // namespace boson

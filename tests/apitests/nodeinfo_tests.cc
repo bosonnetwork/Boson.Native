@@ -21,10 +21,10 @@
  */
 
 #include <string>
-#include <carrier.h>
+#include <boson.h>
 #include "nodeinfo_tests.h"
 
-using namespace carrier;
+using namespace boson;
 
 namespace test {
 CPPUNIT_TEST_SUITE_REGISTRATION(NodeInfoTests);

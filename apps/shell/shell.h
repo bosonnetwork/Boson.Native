@@ -25,7 +25,7 @@
 #include <string>
 #include <memory>
 
-#include <carrier.h>
+#include <boson.h>
 #include <application_lock.h>
 
 #include "command.h"
@@ -42,11 +42,11 @@
 #include "help_command.h"
 #include "exit_command.h"
 
-using namespace carrier;
+using namespace boson;
 
 class Shell : public Command {
 public:
-    Shell() : Command("carrier interactive shell.") {};
+    Shell() : Command("Boson interactive shell.") {};
     void handleCommands();
 
 protected:

@@ -28,13 +28,13 @@
 #include <cassert>
 #include <cstring>
 
-#include "carrier/blob.h"
+#include "boson/blob.h"
 
 #if defined(_WIN32) || defined(_WIN64)
 typedef ptrdiff_t       ssize_t;
 #endif
 
-namespace carrier {
+namespace boson {
 
 class Hex {
 public:
@@ -76,4 +76,4 @@ public:
     }
 };
 
-} // namespace carrier
+} // namespace boson
