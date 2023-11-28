@@ -25,7 +25,7 @@
 #include <cstdlib>
 #include <chrono>
 
-namespace carrier {
+namespace boson {
 
 inline uint64_t currentTimeMillis() {
     auto now = std::chrono::system_clock::now();
@@ -34,4 +34,4 @@ inline uint64_t currentTimeMillis() {
     return value.count();
 }
 
-} // namespace carrier
+} // namespace boson

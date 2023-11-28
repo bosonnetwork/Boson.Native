@@ -25,13 +25,13 @@
 #include <vector>
 #include <optional>
 
-#include "carrier/id.h"
-#include "carrier/value.h"
-#include "carrier/crypto_box.h"
+#include "boson/id.h"
+#include "boson/value.h"
+#include "boson/crypto_box.h"
 
 #include "message.h"
 
-namespace carrier {
+namespace boson {
 
 class StoreValueRequest : public Message {
 public:
@@ -94,4 +94,4 @@ private:
     std::vector<uint8_t> value;
 };
 
-} // namespace carrier
+} // namespace boson

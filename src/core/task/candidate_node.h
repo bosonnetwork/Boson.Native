@@ -22,11 +22,11 @@
 
 #pragma once
 
-#include "carrier/node_info.h"
+#include "boson/node_info.h"
 #include "utils/time.h"
 #include "kbucket_entry.h"
 
-namespace carrier {
+namespace boson {
 
 class CandidateNode: public NodeInfo {
 public:
@@ -89,4 +89,4 @@ private:
     int token {0};
 };
 
-} // namespace carrier
+} // namespace boson

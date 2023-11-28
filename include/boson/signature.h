@@ -31,9 +31,9 @@
 #include "def.h"
 #include "blob.h"
 
-namespace carrier {
+namespace boson {
 
-class CARRIER_PUBLIC Signature {
+class BOSON_PUBLIC Signature {
 public:
     class KeyPair;
 
@@ -317,4 +317,4 @@ private:
     struct SignState { uint8_t __opaque__[256]; };
     SignState state;
 };
-} // namespace carrier
+} // namespace boson

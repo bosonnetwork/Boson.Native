@@ -26,7 +26,7 @@
 #include "serializers.h"
 #include "lookup_request.h"
 
-namespace carrier {
+namespace boson {
 
 int LookupRequest::getWant() const {
     return (want4 ? 0x01 : 0) | (want6 ? 0x02 : 0) | (wantToken ? 0x04 : 0);
@@ -71,4 +71,4 @@ void LookupRequest::toString(std::stringstream& ss) const {
     ss << "}";
 }
 
-} // namespace carrier
+} // namespace boson

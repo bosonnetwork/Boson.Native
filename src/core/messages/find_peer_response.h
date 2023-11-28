@@ -24,9 +24,9 @@
 
 #include <list>
 #include "lookup_response.h"
-#include "carrier/peer_info.h"
+#include "boson/peer_info.h"
 
-namespace carrier {
+namespace boson {
 
 class FindPeerResponse : public LookupResponse {
 public:
@@ -56,4 +56,4 @@ private:
     std::vector<PeerInfo> peers {};
 };
 
-} // namespace carrier
+} // namespace boson

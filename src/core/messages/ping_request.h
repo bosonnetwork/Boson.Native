@@ -24,11 +24,11 @@
 
 #include "message.h"
 
-namespace carrier {
+namespace boson {
 
 class PingRequest : public Message {
 public:
     PingRequest() : Message(Message::Type::REQUEST, Message::Method::PING) {}
 };
 
-} // namespace carrier
+} // namespace boson

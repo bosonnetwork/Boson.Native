@@ -22,24 +22,23 @@
 
 #pragma once
 
-#include <string>
-#include <map>
-#include <any>
-#include <future>
-
-#include "node.h"
-
-namespace carrier {
-
-class CARRIER_PUBLIC Addon {
-public:
-    virtual std::future<void> initialize(Sp<Node> node, const std::map<std::string, std::any>& config) = 0;
-    virtual std::future<void> deinitialize() = 0;
-    virtual bool isInitialized() = 0;
-};
-
-CARRIER_PUBLIC void loadAddons(Sp<Node> node, std::map<std::string, std::any>& addons);
-CARRIER_PUBLIC void unloadAddons();
-CARRIER_PUBLIC std::map<std::string, std::shared_ptr<Addon>>& getAddons();
-
-} // namespace carrier
+#include <boson/addon.h>
+#include <boson/blob.h>
+#include <boson/def.h>
+#include <boson/types.h>
+#include <boson/crypto_box.h>
+#include <boson/signature.h>
+#include <boson/socket_address.h>
+#include <boson/prefix.h>
+#include <boson/id.h>
+#include <boson/configuration.h>
+#include <boson/default_configuration.h>
+#include <boson/lookup_option.h>
+#include <boson/node_info.h>
+#include <boson/peer_info.h>
+#include <boson/value.h>
+#include <boson/version.h>
+#include <boson/node_status.h>
+#include <boson/connection_status.h>
+#include <boson/node.h>
+#include <boson/addon.h>

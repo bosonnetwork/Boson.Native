@@ -29,9 +29,9 @@
 #include <map>
 #include <future>
 
-#include "carrier/id.h"
-#include "carrier/node_info.h"
-#include "carrier/types.h"
+#include "boson/id.h"
+#include "boson/node_info.h"
+#include "boson/types.h"
 
 #include "utils/random_generator.h"
 #include "utils/mtqueue.h"
@@ -39,7 +39,7 @@
 #include "task/ping_refresh_task.h"
 #include "kbucket.h"
 
-namespace carrier {
+namespace boson {
 
 class DHT;
 class KBucket;
@@ -160,4 +160,4 @@ private:
     Sp<Logger> log;
 };
 
-} // namespace carrier
+} // namespace boson

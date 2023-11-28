@@ -19,57 +19,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
 #pragma once
 
-#include <cstdint>
-#include <string>
+#include <list>
+#include <any>
+#include <map>
+
 #include "def.h"
+#include "types.h"
+#include "node_info.h"
+#include "socket_address.h"
 
-namespace carrier {
+namespace boson {
 
-class CARRIER_PUBLIC NodeStatus {
+class BOSON_PUBLIC Configuration {
 public:
-    enum Enum : uint8_t {
-        Stopped = 0,
-        Initializing,
-        Running
-    };
+    virtual SocketAddress& ipv4Address() = 0;
+    virtual SocketAddress& ipv6Address() = 0;
 
-    constexpr NodeStatus() = delete;
-    constexpr NodeStatus(Enum e) : e(e) {};
+    virtual int listeningPort() = 0;
 
-    // Allows comparisons with Enum constants.
-    constexpr operator Enum() const noexcept {
-        return e;
-    }
+    /**
+     * If a Path that points to an existing, writable directory is returned then the routing table
+     * will be persisted to that directory periodically and during shutdown
+     */
+    virtual const std::string& getStoragePath() = 0;
 
-    // Needed to prevent if(e)
-    explicit operator bool() const = delete;
+    virtual std::vector<Sp<NodeInfo>>& getBootstrapNodes() = 0;
 
-    std::string toString() const noexcept {
-        switch (e) {
-            case Stopped: return "Stopped";
-            case Initializing: return "Initializing";
-            case Running: return "Running";
-            default:
-                return "Invalid value";
-        }
-    }
-
-private:
-    Enum e {};
+    virtual std::map<std::string, std::any>& getAddons() = 0;
 };
 
-class CARRIER_PUBLIC NodeStatusListener {
-public:
-    NodeStatusListener() :
-        statusChanged([](NodeStatus, NodeStatus){}),
-        started([](){}),
-        stopped([](){}) {};
-
-    std::function<void(NodeStatus, NodeStatus)> statusChanged;
-    std::function<void()> started;
-    std::function<void()> stopped;
-};
-
-} // namespace carrier
+} // namespace boson

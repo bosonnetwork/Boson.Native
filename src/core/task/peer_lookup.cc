@@ -27,7 +27,7 @@
 #include "task/peer_lookup.h"
 #include "kclosest_nodes.h"
 
-namespace carrier {
+namespace boson {
 
 void PeerLookup::prepare() {
     const int MAX_ENTRIES =  Constants::MAX_ENTRIES_PER_BUCKET * 2;
@@ -86,4 +86,4 @@ void PeerLookup::callResponsed(RPCCall* call, Sp<Message> message) {
     }
 }
 
-} // namespace carrier
+} // namespace boson

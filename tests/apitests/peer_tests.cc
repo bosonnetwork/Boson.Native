@@ -23,12 +23,12 @@
 #include <vector>
 #include <chrono>
 #include <thread>
-#include <carrier.h>
+#include <boson.h>
 
 #include "utils.h"
 #include "peer_tests.h"
 
-using namespace carrier;
+using namespace boson;
 using namespace std::chrono_literals;
 
 namespace test {

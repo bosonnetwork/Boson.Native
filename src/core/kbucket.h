@@ -25,14 +25,14 @@
 #include <list>
 #include <memory>
 
-#include "carrier/prefix.h"
-#include "carrier/types.h"
+#include "boson/prefix.h"
+#include "boson/types.h"
 #include "utils/random_generator.h"
 #include "utils/log.h"
 #include "constants.h"
 #include "kbucket_entry.h"
 
-namespace carrier {
+namespace boson {
 
 class Message;
 
@@ -169,4 +169,4 @@ private:
     Sp<Logger> log;
 };
 
-} // namespace carrier
+} // namespace boson

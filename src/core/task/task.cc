@@ -33,7 +33,7 @@
 #include "messages/message.h"
 #include "dht.h"
 
-namespace carrier {
+namespace boson {
 
 std::atomic<int> Task::nextTaskId(0);
 std::vector<RPCCall::State> Task::callStatesTobeUpdate = {
@@ -213,4 +213,4 @@ std::string Task::toString() const {
     return ss.str();
 }
 
-} // namespace carrier
+} // namespace boson

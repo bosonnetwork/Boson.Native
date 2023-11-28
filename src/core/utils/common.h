@@ -25,7 +25,7 @@
 #include <utf8proc.h>
 #include <string>
 
-namespace carrier {
+namespace boson {
     std::string utf8NFC(const std::string& src) {
         utf8proc_uint8_t* utf = utf8proc_NFC((unsigned char *)(src.c_str()));
         std::string ret {};

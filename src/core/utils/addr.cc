@@ -37,10 +37,10 @@
 #include <WinNT.h>
 #endif
 
-#include "carrier/socket_address.h"
+#include "boson/socket_address.h"
 #include "addr.h"
 
-namespace carrier {
+namespace boson {
 
 #if defined(__linux__)
 #define ntohll(x) htobe64(x)
@@ -144,4 +144,4 @@ std::string getLocalIpAddresses(bool ipv4) {
     return ipAddress;
 }
 
-} // namespace carrier
+} // namespace boson

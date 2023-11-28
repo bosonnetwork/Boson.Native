@@ -53,7 +53,7 @@ include_directories(
     ../../src/core
     )
 
-add_definitions(-DCARRIER_CRAWLER)
+add_definitions(-DBOSON_CRAWLER)
 
 list(APPEND CRAWLER_SOURCES
     setting.cc
@@ -74,27 +74,27 @@ set(LIBS
 
 
 if(ENABLE_SHARED)
-set(LIBS carrier-shared ${LIBS})
+set(LIBS boson-shared ${LIBS})
 else()
-set(LIBS carrier-static ${LIBS})
+set(LIBS boson-static ${LIBS})
 endif()
 
-add_executable(carrier-crawler ${CRAWLER_SOURCES})
-target_link_libraries(carrier-crawler LINK_PUBLIC ${LIBS} ${SYSTEM_LIBS})
-add_dependencies(carrier-crawler ${CRAWLER_DEPENDS})
+add_executable(boson-crawler ${CRAWLER_SOURCES})
+target_link_libraries(boson-crawler LINK_PUBLIC ${LIBS} ${SYSTEM_LIBS})
+add_dependencies(boson-crawler ${CRAWLER_DEPENDS})
 
 if(APPLE AND (${CMAKE_BUILD_TYPE} STREQUAL "Debug"))
-    add_custom_command(TARGET carrier-crawler POST_BUILD
+    add_custom_command(TARGET boson-crawler POST_BUILD
         COMMAND /usr/libexec/PlistBuddy -c "Add :com.apple.security.get-task-allow bool true" coredump.entitlements
-        COMMAND codesign -s - -f --entitlements coredump.entitlements $<TARGET_FILE:carrier-crawler>
+        COMMAND codesign -s - -f --entitlements coredump.entitlements $<TARGET_FILE:boson-crawler>
         COMMAND rm -f coredump.entitlements
         VERBATIM)
 endif()
 
-install(TARGETS carrier-crawler
+install(TARGETS boson-crawler
     RUNTIME DESTINATION "bin"
     ARCHIVE DESTINATION "lib"
     LIBRARY DESTINATION "lib")
 
 install(FILES default.conf
-    DESTINATION "etc/carrier-crawler")
+    DESTINATION "etc/boson-crawler")

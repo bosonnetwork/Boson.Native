@@ -41,7 +41,7 @@
 #include <filesystem>
 #endif
 
-namespace carrier {
+namespace boson {
 
 class ApplicationLock {
 public:
@@ -133,4 +133,4 @@ private:
 #endif
 };
 
-} // namespace carrier
+} // namespace boson

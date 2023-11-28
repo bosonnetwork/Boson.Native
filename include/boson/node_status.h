@@ -19,15 +19,57 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 #pragma once
 
-#include <memory>
-#include <vector>
+#include <cstdint>
+#include <string>
+#include "def.h"
 
-namespace carrier {
+namespace boson {
 
-template<class T> using Sp = std::shared_ptr<T>;
-template<class T> using Wp = std::weak_ptr<T>;
+class BOSON_PUBLIC NodeStatus {
+public:
+    enum Enum : uint8_t {
+        Stopped = 0,
+        Initializing,
+        Running
+    };
 
-} // namespace carrier
+    constexpr NodeStatus() = delete;
+    constexpr NodeStatus(Enum e) : e(e) {};
+
+    // Allows comparisons with Enum constants.
+    constexpr operator Enum() const noexcept {
+        return e;
+    }
+
+    // Needed to prevent if(e)
+    explicit operator bool() const = delete;
+
+    std::string toString() const noexcept {
+        switch (e) {
+            case Stopped: return "Stopped";
+            case Initializing: return "Initializing";
+            case Running: return "Running";
+            default:
+                return "Invalid value";
+        }
+    }
+
+private:
+    Enum e {};
+};
+
+class BOSON_PUBLIC NodeStatusListener {
+public:
+    NodeStatusListener() :
+        statusChanged([](NodeStatus, NodeStatus){}),
+        started([](){}),
+        stopped([](){}) {};
+
+    std::function<void(NodeStatus, NodeStatus)> statusChanged;
+    std::function<void()> started;
+    std::function<void()> stopped;
+};
+
+} // namespace boson

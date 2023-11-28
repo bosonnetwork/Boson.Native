@@ -25,7 +25,7 @@
 #include <list>
 #include "utils/time.h"
 
-namespace carrier {
+namespace boson {
 
 template <typename Key, typename Value>
 class LocadingCache{
@@ -99,4 +99,4 @@ private:
     int ttl;
 };
 
-} // namespace carrier
+} // namespace boson

@@ -23,7 +23,7 @@
 #include "message_error.h"
 #include "find_value_request.h"
 
-namespace carrier {
+namespace boson {
 
 void FindValueRequest::_serialize(nlohmann::json& object) const {
     if (sequenceNumber >= 0)
@@ -42,4 +42,4 @@ void FindValueRequest::_toString(std::stringstream& ss) const {
         ss << ",seq:" << std::to_string(sequenceNumber);
 }
 
-} // namespace carrier
+} // namespace boson

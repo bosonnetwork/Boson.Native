@@ -25,9 +25,9 @@
 #include <deque>
 #include "task.h"
 #include "closest_set.h"
-#include "carrier/value.h"
+#include "boson/value.h"
 
-namespace carrier {
+namespace boson {
 
 class DHT;
 
@@ -46,4 +46,4 @@ private:
     Value value;
 };
 
-} // namespace carrier
+} // namespace boson

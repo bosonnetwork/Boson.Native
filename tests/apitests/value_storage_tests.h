@@ -45,7 +45,7 @@ class ValueStorageTests : public CppUnit::TestFixture {
     void testUpdateEncryptedValue();
 
 private:
-    carrier::Scheduler scheduler {};
+    boson::Scheduler scheduler {};
     std::string path {};
 };
 

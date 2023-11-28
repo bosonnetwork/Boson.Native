@@ -27,7 +27,7 @@
 #include "candidate_node.h"
 #include "closest_candidates.h"
 
-namespace carrier {
+namespace boson {
 
 const Sp<CandidateNode>& ClosestCandidates::get(const Id& id) const {
     const auto it = std::find_if(closest.begin(), closest.end(), [&](const Sp<CandidateNode>& node) {
@@ -138,4 +138,4 @@ void ClosestCandidates::add(const std::list<Sp<NodeInfo>>& candidates) {
     }
 }
 
-} // namespace carrier
+} // namespace boson

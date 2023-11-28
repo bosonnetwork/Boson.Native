@@ -26,7 +26,7 @@
 #include <random>
 #include <type_traits>
 
-namespace carrier {
+namespace boson {
 
 #include <random>
 #include <type_traits>
@@ -60,4 +60,4 @@ private:
 };
 
 
-} // namespace carrier
+} // namespace boson

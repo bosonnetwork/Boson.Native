@@ -26,7 +26,7 @@
 #include <nlohmann/json.hpp>
 
 #include "setting.h"
-#include <carrier.h>
+#include <boson.h>
 
 #include "utils/log.h"
 
@@ -48,7 +48,7 @@
 /* Number of random node requests to make for each node we send a request to */
 #define RANDOM_REQUESTS             32
 
-namespace carrier {
+namespace boson {
 
 static std::string normailizePath(const std::string& path) {
     if (path.find("~") != std::string::npos) {

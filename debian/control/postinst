@@ -16,21 +16,21 @@ chperms() {
 
 case "$1" in
   configure)
-    if ! getent passwd carrier-meerkat > /dev/null; then
+    if ! getent passwd boson-meerkat > /dev/null; then
         adduser --system \
                 --quiet \
                 --group \
                 --no-create-home \
                 --disabled-password \
-                --home /var/lib/carrier-meerkat \
-                carrier-meerkat
+                --home /var/lib/boson-meerkat \
+                boson-meerkat
     fi
 
-    chperms carrier-meerkat carrier-meerkat 0775 /var/lib/carrier-meerkat
-    chperms carrier-meerkat carrier-meerkat 0775 /var/log/carrier-meerkat
+    chperms boson-meerkat boson-meerkat 0775 /var/lib/boson-meerkat
+    chperms boson-meerkat boson-meerkat 0775 /var/log/boson-meerkat
 
-    chperms root carrier-meerkat 0755 /etc/carrier-meerkat
-    chperms root carrier-meerkat 0644 /etc/carrier-meerkat/default.conf
+    chperms root boson-meerkat 0755 /etc/boson-meerkat
+    chperms root boson-meerkat 0644 /etc/boson-meerkat/default.conf
 
   ;;
 esac
@@ -38,17 +38,17 @@ esac
 # Begin postinst_systemd_enable
 if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ] || [ "$1" = "abort-deconfigure" ] || [ "$1" = "abort-remove" ] ; then
 	# This will only remove masks created by d-s-h on package removal.
-	deb-systemd-helper unmask 'carrier-meerkat.service' >/dev/null || true
+	deb-systemd-helper unmask 'boson-meerkat.service' >/dev/null || true
 
 	# was-enabled defaults to true, so new installations run enable.
-	if deb-systemd-helper --quiet was-enabled 'carrier-meerkat.service'; then
+	if deb-systemd-helper --quiet was-enabled 'boson-meerkat.service'; then
 		# Enables the unit on first installation, creates new
 		# symlinks on upgrades if the unit file has changed.
-		deb-systemd-helper enable 'carrier-meerkat.service' >/dev/null || true
+		deb-systemd-helper enable 'boson-meerkat.service' >/dev/null || true
 	else
 		# Update the statefile to add new symlinks (if any), which need to be
 		# cleaned up on purge. Also remove old symlinks.
-		deb-systemd-helper update-state 'carrier-meerkat.service' >/dev/null || true
+		deb-systemd-helper update-state 'boson-meerkat.service' >/dev/null || true
 	fi
 fi
 # End postinst_systemd_enable
@@ -57,16 +57,16 @@ fi
 if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ] || [ "$1" = "abort-deconfigure" ] || [ "$1" = "abort-remove" ] ; then
 	if [ -d /run/systemd/system ]; then
 		systemctl --system daemon-reload >/dev/null || true
-		deb-systemd-invoke start 'carrier-meerkat.service' >/dev/null || true
+		deb-systemd-invoke start 'boson-meerkat.service' >/dev/null || true
 	fi
 fi
 # End postinst_systemd_start
 
 # Begin postinst_init
 if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ] || [ "$1" = "abort-deconfigure" ] || [ "$1" = "abort-remove" ] ; then
-	if [ -x "/etc/init.d/carrier-meerkat" ]; then
-		update-rc.d carrier-meerkat defaults >/dev/null
-		invoke-rc.d carrier-meerkat start || exit $?
+	if [ -x "/etc/init.d/boson-meerkat" ]; then
+		update-rc.d boson-meerkat defaults >/dev/null
+		invoke-rc.d boson-meerkat start || exit $?
 	fi
 fi
 # End postinst_init

@@ -22,7 +22,7 @@
 
 #include "constants.h"
 
-namespace carrier {
+namespace boson {
 
 const int Constants::DEFAULT_DHT_PORT                       = 39001;
 
@@ -62,6 +62,6 @@ const int Constants::RE_ANNOUNCE_INTERVAL                   = 5 * 60 * 1000;
 const std::string Constants::NODE_NAME                      = "Meerkat";
 const std::string Constants::NODE_SHORT_NAME                = "MK";
 const int Constants::NODE_VERSION                           = 1;
-const std::string Constants::ENVIRONMENT_PROPERTY           = "carrier.enviroment";
+const std::string Constants::ENVIRONMENT_PROPERTY           = "boson.enviroment";
 
-} // namespace carrier
+} // namespace boson

@@ -25,7 +25,7 @@
 #include <string>
 #include <stdexcept>
 
-namespace carrier {
+namespace boson {
 
 class CryptoError : public std::runtime_error
 {
@@ -37,4 +37,4 @@ public:
     virtual ~CryptoError() noexcept = default;
 };
 
-} // namespace carrier
+} // namespace boson

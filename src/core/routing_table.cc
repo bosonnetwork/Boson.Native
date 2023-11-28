@@ -37,12 +37,12 @@
 #include "utils/time.h"
 #include "kbucket.h"
 #include "routing_table.h"
-#include "carrier/node.h"
+#include "boson/node.h"
 #include "dht.h"
 
 #include <fstream>
 
-namespace carrier {
+namespace boson {
 
 int RoutingTable::indexOf(const std::list<Sp<KBucket>>& bucketsRef, const Id& id) {
     int low = 0;
@@ -482,4 +482,4 @@ std::string RoutingTable::toString() const {
     return str;
 }
 
-} // namespace carrier
+} // namespace boson

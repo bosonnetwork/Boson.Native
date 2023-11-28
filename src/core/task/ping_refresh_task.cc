@@ -28,7 +28,7 @@
 #include "messages/ping_request.h"
 #include "ping_refresh_task.h"
 
-namespace carrier {
+namespace boson {
 
 void PingRefreshTask::addBucket(Sp<KBucket> bucket) {
     this->bucket = bucket;
@@ -73,4 +73,4 @@ void PingRefreshTask::update() {
     }
 }
 
-} // namespace carrier
+} // namespace boson

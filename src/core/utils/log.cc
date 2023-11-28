@@ -40,7 +40,7 @@
 
 using namespace spdlog;
 
-namespace carrier {
+namespace boson {
 
 struct UserSettings {
     level::level_enum defalutLevel = level::info;
@@ -167,4 +167,4 @@ void Logger::setPattern(const std::string& pattern, PatternTimeType time_type) c
     spd_logger->set_pattern(pattern, spd_time_type);
 }
 
-} // namespace carrier
+} // namespace boson

@@ -26,7 +26,7 @@
 #include <algorithm>
 #include <random>
 
-#include <carrier.h>
+#include <boson.h>
 
 #include "crypto/hex.h"
 #include "prefix_tests.h"
@@ -34,9 +34,9 @@
 namespace test {
 CPPUNIT_TEST_SUITE_REGISTRATION(PrefixTests);
 
-typedef carrier::Id             Id;
-typedef carrier::Hex            Hex;
-typedef carrier::Prefix         Prefix;
+typedef boson::Id             Id;
+typedef boson::Hex            Hex;
+typedef boson::Prefix         Prefix;
 
 void
 PrefixTests::setUp() {
@@ -103,7 +103,7 @@ void PrefixTests::testGetParent() {
     CPPUNIT_ASSERT(prefix == parent);
 
     for (int i = 0; i < ID_BITS; i++) {
-        id = carrier::Id::MAX_ID;
+        id = boson::Id::MAX_ID;
 
         prefix = Prefix(id, i);
         parent = prefix.getParent();

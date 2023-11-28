@@ -23,9 +23,9 @@
 #pragma once
 
 #include <vector>
-#include "carrier/blob.h"
+#include "boson/blob.h"
 
-namespace carrier {
+namespace boson {
 
 class Random {
 public:
@@ -47,4 +47,4 @@ public:
     static void buffer(std::vector<uint8_t>& bytes);
 };
 
-} // namespace carrier
+} // namespace boson

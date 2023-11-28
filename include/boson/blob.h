@@ -26,7 +26,7 @@
 #include <vector>
 #include <string>
 
-namespace carrier {
+namespace boson {
 
 class Blob {
 public:
@@ -102,4 +102,4 @@ private:
     size_t _size {0};
 };
 
-} // namespace carrier
+} // namespace boson

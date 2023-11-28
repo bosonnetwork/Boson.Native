@@ -26,7 +26,7 @@
 #include "message_error.h"
 #include "find_peer_response.h"
 
-namespace carrier {
+namespace boson {
 
 int FindPeerResponse::estimateSize() const {
     int size = LookupResponse::estimateSize();
@@ -111,4 +111,4 @@ void FindPeerResponse::_toString(std::stringstream& ss) const {
     }
 }
 
-} // namespace carrier
+} // namespace boson

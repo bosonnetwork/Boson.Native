@@ -20,9 +20,9 @@
 * SOFTWARE.
 */
 
-#include "carrier/configuration.h"
-#include "carrier/prefix.h"
-#include "carrier/node.h"
+#include "boson/configuration.h"
+#include "boson/prefix.h"
+#include "boson/node.h"
 
 #include "utils/list.h"
 
@@ -32,7 +32,7 @@
 #include "routing_table.h"
 #include "kclosest_nodes.h"
 
-namespace carrier {
+namespace boson {
 
 KClosestNodes::KClosestNodes(DHT& _dht, const Id& _id, int _maxEntries)
     : KClosestNodes(_dht, _id, _maxEntries, [](const Sp<KBucketEntry>& entry) {
@@ -125,4 +125,4 @@ void KClosestNodes::fill(bool includeSelf) {
     shave();
 }
 
-} // namespace carrier
+} // namespace boson

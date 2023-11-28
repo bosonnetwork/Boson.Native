@@ -24,12 +24,12 @@
 
 #include <nlohmann/json.hpp>
 
-#include "carrier/id.h"
-#include "carrier/node_info.h"
+#include "boson/id.h"
+#include "boson/node_info.h"
 #include "utils/time.h"
 #include "constants.h"
 
-namespace carrier {
+namespace boson {
 
 /**
  * Entry in a KBucket, it basically contains an IP address of a node, the UDP
@@ -184,4 +184,4 @@ private:
     int failedRequests {0};
 };
 
-} // namespace carrier
+} // namespace boson

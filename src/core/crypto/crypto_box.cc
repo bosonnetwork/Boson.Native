@@ -27,12 +27,12 @@
 #include <cassert>
 
 #include <sodium.h>
-#include "carrier/crypto_box.h"
+#include "boson/crypto_box.h"
 #include "crypto/random.h"
 #include "crypto/hex.h"
 #include "exceptions/crypto_error.h"
 
-namespace carrier {
+namespace boson {
 
 static_assert(CryptoBox::PrivateKey::BYTES == crypto_box_SECRETKEYBYTES,
     "error Inappropriate CryptoBox::PrivateKey size definition.");
@@ -217,4 +217,4 @@ void CryptoBox::decrypt(Blob& plain, const Blob& cipher,
         throw CryptoError(std::string("Decrypt data failed."));
 }
 
-} // namespace carrier
+} // namespace boson

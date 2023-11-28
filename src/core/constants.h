@@ -23,7 +23,7 @@
 
 #include <string>
 
-namespace carrier {
+namespace boson {
 
 struct Constants {
     ///////////////////////////////////////////////////////////////////////////
@@ -97,4 +97,4 @@ struct Constants {
     static const std::string    ENVIRONMENT_PROPERTY;
 };
 
-} // namespace carrier
+} // namespace boson

@@ -20,12 +20,12 @@
  * SOFTWARE.
  */
 
-#include <carrier.h>
+#include <boson.h>
 #include "crypto_context.h"
 #include "crypto_tests.h"
 
 namespace test {
-using namespace carrier;
+using namespace boson;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(CryptoTester);
 

@@ -24,7 +24,7 @@
 
 #include "lookup_request.h"
 
-namespace carrier {
+namespace boson {
 
 class FindValueRequest : public LookupRequest {
 public:
@@ -58,4 +58,4 @@ private:
     int sequenceNumber {-1};
 };
 
-} // namespace carrier
+} // namespace boson

@@ -25,9 +25,9 @@
 #include "def.h"
 #include "id.h"
 
-namespace carrier {
+namespace boson {
 
-class CARRIER_PUBLIC Prefix : public Id {
+class BOSON_PUBLIC Prefix : public Id {
 public:
     Prefix() noexcept : Id() {}
     Prefix(const Id& id, int _depth) noexcept : depth(_depth) {
@@ -94,4 +94,4 @@ private:
     int depth {-1};
 };
 
-} // namespace carrier
+} // namespace boson

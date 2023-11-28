@@ -24,7 +24,7 @@
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <carrier.h>
+#include <boson.h>
 
 #define TEST_ALL 0
 

@@ -30,7 +30,7 @@
 #include "rpccall.h"
 #include "utils/log.h"
 
-namespace carrier {
+namespace boson {
 
 class DHT;
 class Task;
@@ -178,4 +178,4 @@ private:
     std::vector<std::string> stateName = {"INITIAL", "QUEUED", "RUNNING", "FINISHED", "CANCELED"};
 };
 
-} // namespace carrier
+} // namespace boson

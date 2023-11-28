@@ -21,10 +21,10 @@
 */
 
 #include <sstream>
-#include "carrier/node_info.h"
-#include "carrier/version.h"
+#include "boson/node_info.h"
+#include "boson/version.h"
 
-namespace carrier {
+namespace boson {
 
 std::string NodeInfo::toString() const {
     std::stringstream ss;
@@ -47,4 +47,4 @@ std::string NodeInfo::getReadableVersion() const {
     return Version::toString(version);
 }
 
-} // namespace carrier
+} // namespace boson

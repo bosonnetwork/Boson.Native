@@ -26,7 +26,7 @@
 #include "kbucket.h"
 #include "messages/message.h"
 
-namespace carrier {
+namespace boson {
 
 void KBucket::_put(Sp<KBucketEntry> newEntry) {
     if (!newEntry)
@@ -206,4 +206,4 @@ std::string KBucket::toString() const {
     return ss.str();
 }
 
-} // namespace carrier
+} // namespace boson

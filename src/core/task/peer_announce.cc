@@ -24,7 +24,7 @@
 #include "peer_announce.h"
 #include "candidate_node.h"
 
-namespace carrier {
+namespace boson {
 
 PeerAnnounce::PeerAnnounce(DHT* dht, const ClosestSet& closestSet, const PeerInfo& _peer)
         : Task(dht, "PeerAnnounce"), peer(_peer) {
@@ -49,4 +49,4 @@ void PeerAnnounce::update() {
     }
 }
 
-} // namespace carrier
+} // namespace boson

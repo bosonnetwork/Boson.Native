@@ -24,10 +24,10 @@
 
 #include <list>
 #include <algorithm>
-#include "carrier/id.h"
-#include "carrier/node_info.h"
+#include "boson/id.h"
+#include "boson/node_info.h"
 
-namespace carrier {
+namespace boson {
 
 class DHT;
 class KBucket;
@@ -80,4 +80,4 @@ private:
     std::function<bool(const Sp<KBucketEntry>&)> filter;
 };
 
-} // namespace carrier
+} // namespace boson

@@ -36,7 +36,7 @@
 #include "store_value_response.h"
 #include "message_error.h"
 
-namespace carrier {
+namespace boson {
 
 const int Message::MSG_TYPE_MASK = 0xE0;
 const int Message::MSG_METHOD_MASK = 0x1F;
@@ -149,4 +149,4 @@ std::vector<uint8_t> Message::serialize() const {
     return nlohmann::json::to_cbor(root);
 }
 
-} // namespace carrier
+} // namespace boson

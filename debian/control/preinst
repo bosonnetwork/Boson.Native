@@ -14,17 +14,17 @@ case "$1" in
 esac
 
 # Begin preinst
-if ( [ "$1" = "install" ] || [ "$1" = "upgrade" ] ) && [ -d /usr/lib/carrier-meerkat ]; then
-	if [ -x "/etc/init.d/carrier-meerkat" ]; then
-		invoke-rc.d carrier-meerkat stop || exit $?
+if ( [ "$1" = "install" ] || [ "$1" = "upgrade" ] ) && [ -d /usr/lib/boson-meerkat ]; then
+	if [ -x "/etc/init.d/boson-meerkat" ]; then
+		invoke-rc.d boson-meerkat stop || exit $?
 	fi
 
 	if [ -d /run/systemd/system ]; then
-		deb-systemd-invoke stop 'carrier-meerkat.service' >/dev/null || true
+		deb-systemd-invoke stop 'boson-meerkat.service' >/dev/null || true
 	fi
 
-	if [ -d /usr/lib/carrier-meerkat/lib ]; then
-		BACKUP_DIR=/usr/lib/carrier-meerkat/lib/backup-`date +"%Y%m%d%H%M%S"`
+	if [ -d /usr/lib/boson-meerkat/lib ]; then
+		BACKUP_DIR=/usr/lib/boson-meerkat/lib/backup-`date +"%Y%m%d%H%M%S"`
 	fi
 fi
 # End preinst

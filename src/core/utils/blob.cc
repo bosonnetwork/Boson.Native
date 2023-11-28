@@ -23,13 +23,13 @@
 
 #include <string>
 
-#include "carrier/blob.h"
+#include "boson/blob.h"
 #include "crypto/hex.h"
 
-namespace carrier {
+namespace boson {
 
 const std::string Blob::toHexString() const {
     return Hex::encode(_ptr, _size, true);
 }
 
-} // namespace carrier
+} // namespace boson

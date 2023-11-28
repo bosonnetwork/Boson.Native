@@ -26,10 +26,10 @@
 #include <cassert>
 
 #include <sodium.h>
-#include "carrier/signature.h"
+#include "boson/signature.h"
 #include "crypto/hex.h"
 
-namespace carrier {
+namespace boson {
 
 static_assert(Signature::PrivateKey::BYTES == crypto_sign_SECRETKEYBYTES,
     "Inappropriate Signature::PrivateKey size definition.");
@@ -169,4 +169,4 @@ bool Signature::verify(const Blob& sig, const Signature::PublicKey& pk) const
     return crypto_sign_final_verify(s, sig.ptr(), pk.bytes()) == 0;
 }
 
-} // namespace carrier
+} // namespace boson

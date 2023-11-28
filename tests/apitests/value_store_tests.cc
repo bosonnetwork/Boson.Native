@@ -22,12 +22,12 @@
 
 #include <list>
 #include <iostream>
-#include <carrier.h>
+#include <boson.h>
 
 #include "utils.h"
 #include "value_store_tests.h"
 
-using namespace carrier;
+using namespace boson;
 
 namespace test {
 CPPUNIT_TEST_SUITE_REGISTRATION(ValueStoreTests);

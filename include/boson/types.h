@@ -22,22 +22,12 @@
 
 #pragma once
 
-#if defined(CARRIER_STATIC)
-    #define CARRIER_PUBLIC
-#elif defined(CARRIER_DYNAMIC)
-    #ifdef CARRIER_BUILD
-        #if defined(_WIN32) || defined(_WIN64)
-            #define CARRIER_PUBLIC      __declspec(dllexport)
-        #else
-            #define CARRIER_PUBLIC      __attribute__((visibility("default")))
-        #endif
-    #else
-        #if defined(_WIN32) || defined(_WIN64)
-            #define CARRIER_PUBLIC      __declspec(dllimport)
-        #else
-            #define CARRIER_PUBLIC      __attribute__((visibility("default")))
-        #endif
-    #endif
-#else
-    #define CARRIER_PUBLIC
-#endif
+#include <memory>
+#include <vector>
+
+namespace boson {
+
+template<class T> using Sp = std::shared_ptr<T>;
+template<class T> using Wp = std::weak_ptr<T>;
+
+} // namespace boson

@@ -27,7 +27,7 @@
 #include "crypto/hex.h"
 #include "messages/message.h"
 
-using namespace carrier;
+using namespace boson;
 
 namespace test {
 

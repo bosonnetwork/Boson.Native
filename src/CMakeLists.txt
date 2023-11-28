@@ -1,4 +1,4 @@
-project(carrier-core CXX)
+project(boson-core CXX)
 
 include(ProjectDefaults)
 include(CheckIncludeFile)
@@ -12,17 +12,17 @@ if(WIN32)
         -DWIN32_LEAN_AND_MEAN)
 endif()
 
-if (ENABLE_CARRIER_DEVELOPMENT)
-    add_definitions(-DCARRIER_DEVELOPMENT)
+if (ENABLE_BOSON_DEVELOPMENT)
+    add_definitions(-DBOSON_DEVELOPMENT)
 endif()
 
-if (ENABLE_CARRIER_CRAWLER)
-    add_definitions(-DCARRIER_CRAWLER)
+if (ENABLE_BOSON_CRAWLER)
+    add_definitions(-DBOSON_CRAWLER)
 endif()
 
 set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 
-list(APPEND CARRIER_SOURCES
+list(APPEND BOSON_SOURCES
     core/utils/addr.cc
     core/utils/blob.cc
     core/utils/log.cc
@@ -77,28 +77,28 @@ list(APPEND CARRIER_SOURCES
     core/constants.cc
 )
 
-list(APPEND CARRIER_HEADERS
-    ${INCLUDE_DIR}/carrier/addon.h
-    ${INCLUDE_DIR}/carrier/blob.h
-    ${INCLUDE_DIR}/carrier/def.h
-    ${INCLUDE_DIR}/carrier/types.h
-    ${INCLUDE_DIR}/carrier/crypto_box.h
-    ${INCLUDE_DIR}/carrier/signature.h
-    ${INCLUDE_DIR}/carrier/socket_address.h
-    ${INCLUDE_DIR}/carrier/prefix.h
-    ${INCLUDE_DIR}/carrier/id.h
-    ${INCLUDE_DIR}/carrier/configuration.h
-    ${INCLUDE_DIR}/carrier/default_configuration.h
-    ${INCLUDE_DIR}/carrier/lookup_option.h
-    ${INCLUDE_DIR}/carrier/node_info.h
-    ${INCLUDE_DIR}/carrier/peer_info.h
-    ${INCLUDE_DIR}/carrier/value.h
-    ${INCLUDE_DIR}/carrier/version.h
-    ${INCLUDE_DIR}/carrier/node_status.h
-    ${INCLUDE_DIR}/carrier/connection_status.h
-    ${INCLUDE_DIR}/carrier/node.h
-    ${INCLUDE_DIR}/carrier/network.h
-    ${INCLUDE_DIR}/carrier/result.h
+list(APPEND BOSON_HEADERS
+    ${INCLUDE_DIR}/boson/addon.h
+    ${INCLUDE_DIR}/boson/blob.h
+    ${INCLUDE_DIR}/boson/def.h
+    ${INCLUDE_DIR}/boson/types.h
+    ${INCLUDE_DIR}/boson/crypto_box.h
+    ${INCLUDE_DIR}/boson/signature.h
+    ${INCLUDE_DIR}/boson/socket_address.h
+    ${INCLUDE_DIR}/boson/prefix.h
+    ${INCLUDE_DIR}/boson/id.h
+    ${INCLUDE_DIR}/boson/configuration.h
+    ${INCLUDE_DIR}/boson/default_configuration.h
+    ${INCLUDE_DIR}/boson/lookup_option.h
+    ${INCLUDE_DIR}/boson/node_info.h
+    ${INCLUDE_DIR}/boson/peer_info.h
+    ${INCLUDE_DIR}/boson/value.h
+    ${INCLUDE_DIR}/boson/version.h
+    ${INCLUDE_DIR}/boson/node_status.h
+    ${INCLUDE_DIR}/boson/connection_status.h
+    ${INCLUDE_DIR}/boson/node.h
+    ${INCLUDE_DIR}/boson/network.h
+    ${INCLUDE_DIR}/boson/result.h
 )
 
 include_directories(
@@ -107,7 +107,7 @@ include_directories(
     ./addons/activeproxy
     )
 
-list(APPEND CARRIER_DEPENDS
+list(APPEND BOSON_DEPENDS
     sqlite
     libsodium
     spdlog
@@ -136,13 +136,13 @@ else()
 endif()
 
 if(ENABLE_ADDONS)
-    list(APPEND CARRIER_SOURCES
+    list(APPEND BOSON_SOURCES
         addons/activeproxy/activeproxy.cc
         addons/activeproxy/connection.cc
         addons/addons.cc
     )
 
-    list(APPEND CARRIER_DEPENDS
+    list(APPEND BOSON_DEPENDS
         libuv)
 
     set(LIBS
@@ -162,11 +162,11 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
     set(SYSTEM_LIBS pthread dl)
 endif()
 
-add_custom_target(carrier0)
+add_custom_target(boson0)
 
 if (CMAKE_PREFIX_PATH)
     add_custom_target(phoney0 COMMAND echo "phony target")
-    set(CARRIER_DEPENDS phoney0)
+    set(BOSON_DEPENDS phoney0)
     set(CMAKE_FIND_ROOT_PATH  ${CMAKE_PREFIX_PATH})
 else()
     set(CMAKE_FIND_ROOT_PATH ${PROJECT_INT_DIST_DIR})
@@ -174,59 +174,59 @@ endif()
 
 if(ENABLE_STATIC)
 
-    add_library(carrier-static STATIC ${CARRIER_SOURCES} ${CARRIER_HEADERS})
-    add_dependencies(carrier-static ${CARRIER_DEPENDS})
-    add_dependencies(carrier0 carrier-static)
+    add_library(boson-static STATIC ${BOSON_SOURCES} ${BOSON_HEADERS})
+    add_dependencies(boson-static ${BOSON_DEPENDS})
+    add_dependencies(boson0 boson-static)
 
-    target_compile_definitions(carrier-static PRIVATE CARRIER_BUILD CARRIER_STATIC)
-    set_target_properties(carrier-static PROPERTIES OUTPUT_NAME carrier${STATIC_LIB_DECORATOR})
+    target_compile_definitions(boson-static PRIVATE BOSON_BUILD BOSON_STATIC)
+    set_target_properties(boson-static PROPERTIES OUTPUT_NAME boson${STATIC_LIB_DECORATOR})
 
-    target_include_directories(carrier-static PUBLIC
+    target_include_directories(boson-static PUBLIC
         $<BUILD_INTERFACE:${CMAKE_FIND_ROOT_PATH}/include>
         $<INSTALL_INTERFACE:include>
     )
-    target_link_libraries(carrier-static INTERFACE ${LIBS} ${SYSTEM_LIBS})
+    target_link_libraries(boson-static INTERFACE ${LIBS} ${SYSTEM_LIBS})
 
-    install(TARGETS carrier-static
+    install(TARGETS boson-static
         RUNTIME DESTINATION "bin"
         ARCHIVE DESTINATION "lib"
         LIBRARY DESTINATION "lib")
 endif()
 
 if(ENABLE_SHARED)
-    add_library(carrier-shared SHARED ${CARRIER_SOURCES} ${CARRIER_HEADERS})
-    add_dependencies(carrier-shared ${CARRIER_DEPENDS})
-    add_dependencies(carrier0 carrier-shared)
+    add_library(boson-shared SHARED ${BOSON_SOURCES} ${BOSON_HEADERS})
+    add_dependencies(boson-shared ${BOSON_DEPENDS})
+    add_dependencies(boson0 boson-shared)
 
-    target_compile_definitions(carrier-shared PRIVATE CARRIER_BUILD CARRIER_DYNAMIC)
-    set_target_properties(carrier-shared PROPERTIES
-        OUTPUT_NAME carrier${SHARED_LIB_DECORATOR}
+    target_compile_definitions(boson-shared PRIVATE BOSON_BUILD BOSON_DYNAMIC)
+    set_target_properties(boson-shared PROPERTIES
+        OUTPUT_NAME boson${SHARED_LIB_DECORATOR}
         VERSION ${CMAKE_PROJECT_VERSION}
         SOVERSION ${CMAKE_PROJECT_VERSION_MAJOR})
 
-    target_include_directories(carrier-shared PUBLIC
+    target_include_directories(boson-shared PUBLIC
         $<BUILD_INTERFACE:${CMAKE_FIND_ROOT_PATH}/include>
         $<INSTALL_INTERFACE:include>
     )
 
-    target_link_directories(carrier-shared
+    target_link_directories(boson-shared
         PRIVATE ${CMAKE_FIND_ROOT_PATH}/lib)
 
     if(NOT APPLE)
-        target_link_libraries(carrier-shared
+        target_link_libraries(boson-shared
             PRIVATE ${LIBS} ${SYSTEM_LIBS})
     else()
-        target_link_libraries(carrier-shared
+        target_link_libraries(boson-shared
             PRIVATE ${LIBS} ${SYSTEM_LIBS}
             SYSTEM "-framework CoreFoundation" "-framework Security")
     endif()
 
-    install(TARGETS carrier-shared
-        EXPORT CarrierConfig
+    install(TARGETS boson-shared
+        EXPORT BosonConfig
         RUNTIME DESTINATION "bin"
         ARCHIVE DESTINATION "lib"
         LIBRARY DESTINATION "lib")
 endif()
 
-install(FILES ${CARRIER_HEADERS} DESTINATION "include/carrier")
-install(FILES "${INCLUDE_DIR}/carrier.h" DESTINATION "include")
+install(FILES ${boson.hEADERS} DESTINATION "include/boson")
+install(FILES "${INCLUDE_DIR}/boson.h" DESTINATION "include")

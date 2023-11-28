@@ -24,11 +24,11 @@
 
 #include <optional>
 #include <functional>
-#include "carrier/node_info.h"
+#include "boson/node_info.h"
 #include "messages/message.h"
 #include "scheduler.h"
 
-namespace carrier {
+namespace boson {
 
 class RPCServer;
 class DHT;
@@ -172,4 +172,4 @@ private:
     size_t hashValue {0};
 };
 
-} // namespace carrier
+} // namespace boson

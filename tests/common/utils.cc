@@ -50,7 +50,7 @@
 #include <sys/types.h>
 #include <filesystem>
 
-#include "carrier/node_info.h"
+#include "boson/node_info.h"
 #include "utils.h"
 
 namespace fs = std::filesystem;

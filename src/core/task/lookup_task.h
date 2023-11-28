@@ -22,12 +22,12 @@
 
 #pragma once
 
-#include "carrier/id.h"
+#include "boson/id.h"
 #include "closest_set.h"
 #include "closest_candidates.h"
 #include "task.h"
 
-namespace carrier {
+namespace boson {
 
 class LookupTask : public Task {
 public:
@@ -76,4 +76,4 @@ private:
     ClosestCandidates closestCandidates;
 };
 
-} // namespace carrier
+} // namespace boson

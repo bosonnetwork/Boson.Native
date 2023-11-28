@@ -25,7 +25,7 @@
 #include <map>
 #include "candidate_node.h"
 
-namespace carrier {
+namespace boson {
 
 class ClosestSet {
 public:
@@ -110,4 +110,4 @@ private:
     int insertAttemptsSinceHeadModification {0};
 };
 
-} // namespace carrier
+} // namespace boson

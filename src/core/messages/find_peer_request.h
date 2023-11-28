@@ -24,7 +24,7 @@
 
 #include "lookup_request.h"
 
-namespace carrier {
+namespace boson {
 
 class FindPeerRequest : public LookupRequest {
 public:
@@ -34,4 +34,4 @@ public:
     FindPeerRequest() : LookupRequest(Message::Method::FIND_PEER) {}
 };
 
-} // namespace carrier
+} // namespace boson

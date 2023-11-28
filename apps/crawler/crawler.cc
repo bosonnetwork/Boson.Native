@@ -42,7 +42,7 @@ namespace fs = std::filesystem;
 void Crawler::init(std::string path) {
     setting.load(path);
 
-    initCarrierNode();
+    initNode();
 
     if (!setting.ip2location_database.empty())
         ip2location_init(setting.ip2location_database.c_str());
@@ -235,7 +235,7 @@ std::string Crawler::ip2location(std::string ip) {
     return result;
 }
 
-void Crawler::initCarrierNode() {
+void Crawler::initNode() {
     auto builder = DefaultConfiguration::Builder{};
 
     if (setting.port > 0)

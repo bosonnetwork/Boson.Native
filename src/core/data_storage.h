@@ -24,11 +24,11 @@
 
 #include <list>
 
-#include "carrier/id.h"
-#include "carrier/value.h"
-#include "carrier/peer_info.h"
+#include "boson/id.h"
+#include "boson/value.h"
+#include "boson/peer_info.h"
 
-namespace carrier {
+namespace boson {
 
 
 class DataStorage {
@@ -61,4 +61,4 @@ public:
     virtual void close() = 0;
 };
 
-} // namespace carrier
+} // namespace boson

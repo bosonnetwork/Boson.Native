@@ -24,7 +24,7 @@
 
 #include "lookup_request.h"
 
-namespace carrier {
+namespace boson {
 
 class FindNodeRequest: public LookupRequest {
 public:
@@ -47,4 +47,4 @@ public:
     }
 };
 
-} // namespace carrier
+} // namespace boson

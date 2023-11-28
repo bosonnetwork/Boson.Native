@@ -24,12 +24,12 @@
 
 #include <deque>
 
-#include "carrier/id.h"
-#include "carrier/peer_info.h"
+#include "boson/id.h"
+#include "boson/peer_info.h"
 #include "task.h"
 #include "closest_set.h"
 
-namespace carrier {
+namespace boson {
 
 class DHT;
 class CandidateNode;
@@ -49,4 +49,4 @@ private:
     PeerInfo peer;
 };
 
-} // namespace carrier
+} // namespace boson

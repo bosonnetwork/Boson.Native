@@ -24,10 +24,10 @@
 
 #include "network.h"
 
-namespace carrier {
+namespace boson {
 
 template <class T>
-class CARRIER_PUBLIC Result {
+class BOSON_PUBLIC Result {
 
 public:
     Result(Sp<T> v4, Sp<T> v6): v4(v4), v6(v6) {};
@@ -81,4 +81,4 @@ private:
     Sp<T> v6 {nullptr};
 };
 
-} // namespace carrier
+} // namespace boson

@@ -22,7 +22,7 @@
 
 #include "message_key.h"
 
-namespace carrier {
+namespace boson {
 
 const std::string MessageKey::KEY_REQ_NODES4     = "n4";
 const std::string MessageKey::KEY_REQ_NODES6     = "n6";
@@ -65,4 +65,4 @@ const std::string MessageKey::KEY_ERROR          = "e";
 const std::string MessageKey::KEY_ERR_CODE       = "c";
 const std::string MessageKey::KEY_ERR_MESSAGE    = "m";
 
-} // namespace carrier
+} // namespace boson

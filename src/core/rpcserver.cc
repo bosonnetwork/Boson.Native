@@ -28,7 +28,7 @@
 #include <winsock2.h>
 #endif
 
-#include "carrier/node.h"
+#include "boson/node.h"
 #include "utils/time.h"
 #include "utils/random_generator.h"
 #include "exceptions/dht_error.h"
@@ -40,7 +40,7 @@
 #include "dht.h"
 #include "rpcstatistics.h"
 
-namespace carrier {
+namespace boson {
 
 RPCServer::RPCServer(Node& _node, const Sp<DHT> _dht4, const Sp<DHT> _dht6): node(_node),
     dht4(_dht4 ? std::optional<std::reference_wrapper<DHT>>(*_dht4) : std::nullopt),
@@ -585,4 +585,4 @@ void RPCServer::periodic() {
     scheduler.run();
 }
 
-} // namespace carrier
+} // namespace boson

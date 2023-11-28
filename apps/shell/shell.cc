@@ -31,7 +31,7 @@
 #include "shell.h"
 
 std::shared_ptr<Node> Command::node {};
-static const std::string prompt = "Carrier $";
+static const std::string prompt = "Boson $";
 
 static char *trim(char *str)
 {
@@ -54,7 +54,7 @@ void Shell::setupOptions()
     add_option("-4,--address4", addr4, "IPv4 address to which to bind the listener.");
     add_option("-6,--address6", addr6, "IPv6 address to which to bind the listener.");
     add_option("-p,--port", port, "The port to which to boind the listener.");
-    add_option("-d,--dataDir", dataDir, "The path to store the node data, default: ~/.cache/carrier.");
+    add_option("-d,--dataDir", dataDir, "The path to store the node data, default: ~/.cache/boson.");
     add_option("-b,--bootstrap", bootstrap, "The bootstrap node to be used.");
     add_option("-c,--config", configFile, "The configuration file.");
     add_flag("--debug", waitForDebugAttach, "Waiting for the debuger attach.");
@@ -109,7 +109,7 @@ void Shell::handleCommands()
         builder.setStoragePath(dataDir);
 
     if (!builder.hasStoragePath())
-        builder.setStoragePath("~/.cache/carrier");
+        builder.setStoragePath("~/.cache/boson");
 
     auto config = builder.build();
     node = std::make_shared<Node>(config);
@@ -129,7 +129,7 @@ void Shell::handleCommands()
 
     char* line;
     char* cmdline;
-    while ((line = readline("Carrier $ ")) != nullptr) {
+    while ((line = readline("Boson $ ")) != nullptr) {
         cmdline = trim(line);
 
         if (*cmdline) {
@@ -149,7 +149,7 @@ int main(int argc, char **argv)
     rl_initialize();
     stifle_history(256);
     rl_bind_key('\t', rl_complete);
-    rl_readline_name = "carrier-shell";
+    rl_readline_name = "boson-shell";
 #endif
 
     // We can add auto completion later

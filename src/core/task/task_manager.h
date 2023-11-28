@@ -29,7 +29,7 @@
 #include "utils/log.h"
 #include "constants.h"
 
-namespace carrier {
+namespace boson {
 
 class DHT;
 class Task;
@@ -65,4 +65,4 @@ private:
     mutable std::mutex taskman_mtx {};
 };
 
-} // namespace carrier
+} // namespace boson

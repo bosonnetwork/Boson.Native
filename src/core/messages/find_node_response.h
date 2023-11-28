@@ -24,7 +24,7 @@
 
 #include "lookup_response.h"
 
-namespace carrier {
+namespace boson {
 
 class FindNodeResponse : public LookupResponse {
 public:
@@ -32,4 +32,4 @@ public:
     FindNodeResponse() : FindNodeResponse(0) {}
 };
 
-} // namespace carrier
+} // namespace boson

@@ -22,13 +22,13 @@
 
 #include <sstream>
 
-#include "carrier/value.h"
+#include "boson/value.h"
 #include "crypto/hex.h"
 #include "crypto/shasum.h"
 #include "exceptions/state_error.h"
 #include "serializers.h"
 
-namespace carrier {
+namespace boson {
 
 Value::Value(const Blob& publicKey, const Blob& privateKey, const Blob& recipient, const Blob& nonce,
         int sequenceNumber, const Blob& signature, const Blob& data) {
@@ -184,4 +184,4 @@ std::string Value::toString() const {
     return ss.str();
 }
 
-} // namespace carrier
+} // namespace boson

@@ -21,7 +21,7 @@ include_directories(
     ../../include
     ../../src/core
     ../common
-    ${CARRIER_INT_DIST_DIR}/include)
+    ${BOSON_INT_DIST_DIR}/include)
 
 list(APPEND SOURCES
     main.cc
@@ -30,12 +30,12 @@ list(APPEND SOURCES
 
 list(APPEND DEPENDS
     cpp-httplib
-    carrier0)
+    boson0)
 
 if(ENABLE_SHARED)
-    set(CARRIER_LIB carrier-shared)
+    set(BOSON_LIB boson-shared)
 else()
-    set(CARRIER_LIB carrier-static)
+    set(BOSON_LIB boson-static)
 endif()
 
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
@@ -65,7 +65,7 @@ else()
 endif()
 
 add_executable(sybiltests ${SOURCES})
-target_link_libraries(sybiltests LINK_PUBLIC ${CARRIER_LIB} ${LIBS} ${SYSTEM_LIBS})
+target_link_libraries(sybiltests LINK_PUBLIC ${BOSON_LIB} ${LIBS} ${SYSTEM_LIBS})
 add_dependencies(sybiltests ${DEPENDS})
 
 if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")

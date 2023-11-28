@@ -25,7 +25,7 @@
 #include <string>
 #include <stdexcept>
 
-namespace carrier {
+namespace boson {
 
 class DhtError : public std::runtime_error {
 public:
@@ -33,4 +33,4 @@ public:
         std::runtime_error("DHT error occurred: " + str) {}
 };
 
-} // namespace carrier
+} // namespace boson

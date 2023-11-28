@@ -27,14 +27,14 @@
 #include "utils/addr.h"
 #include "utils/json_to_any.h"
 #include "utils/log.h"
-#include "carrier/default_configuration.h"
+#include "boson/default_configuration.h"
 
 
 #if defined(_WIN32) || defined(_WIN64)
 #define S_ISDIR(m)      (((m) & S_IFMT) == S_IFDIR)
 #endif
 
-namespace carrier {
+namespace boson {
 
 typedef DefaultConfiguration::Builder Builder;
 
@@ -159,4 +159,4 @@ Sp<Configuration> Builder::build() {
     return std::static_pointer_cast<Configuration>(dataStorage);
 }
 
-} // namespace carrier
+} // namespace boson

@@ -27,7 +27,7 @@
 #include <sodium.h>
 #include "shasum.h"
 
-namespace carrier {
+namespace boson {
 
 void SHA256::reset()
 {
@@ -63,4 +63,4 @@ void SHA256::digest(Blob& hash, const Blob& data)
     crypto_hash_sha256(hash.ptr(), data.ptr(), data.size()); // Always success
 }
 
-} // namespace carrier
+} // namespace boson

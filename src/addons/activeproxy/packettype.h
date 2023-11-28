@@ -27,7 +27,7 @@
 
 #include "crypto/random.h"
 
-namespace carrier {
+namespace boson {
 namespace activeproxy {
 
 #define AUTH_MIN        0x00
@@ -166,4 +166,4 @@ private:
 };
 
 } // namespace activeproxy
-} // namespace carrier
+} // namespace boson

@@ -27,7 +27,7 @@
 #include "utils/list.h"
 #include "task.h"
 
-namespace carrier {
+namespace boson {
 
 class DHT;
 class KBucket;
@@ -67,4 +67,4 @@ private:
     bool removeOnTimeout { false };
 };
 
-} // namespace carrier
+} // namespace boson

@@ -32,14 +32,14 @@
 
 #include <CLI/CLI.hpp>
 
-#include <carrier.h>
+#include <boson.h>
 #include <application_lock.h>
 #include <coredump.h>
 
 #include "utils/log.h"
 
 using namespace std::chrono_literals;
-using namespace carrier;
+using namespace boson;
 
 std::promise<void> quitBarrier;
 ApplicationLock lock;
@@ -57,7 +57,7 @@ struct Options {
 
 static void printVersion()
 {
-    std::cout << "Carrier version " << version() << std::endl;
+    std::cout << "Boson version " << version() << std::endl;
 }
 
 static Options parseArgs(int argc, char **argv)
@@ -65,14 +65,14 @@ static Options parseArgs(int argc, char **argv)
     Options options;
     bool version {false};
 
-    CLI::App app("Carrier Launcher", "launcher");
+    CLI::App app("Boson Launcher", "launcher");
     app.add_option("-c, --config", options.configFile, "The configuration file.");
     app.add_option("-4, --address4", options.addr4, "IPv4 address to listen.");
     app.add_option("-6, --address6", options.addr6, "IPv6 address to listen.");
     app.add_option("-p, --port", options.port, "The port to listen.");
     app.add_option("-d, --data-dir", options.dataDir, "The directory to store the node data.");
     app.add_flag("-D, --daemonize", options.daemonize, "Run in daemonize mode.");
-    app.add_flag("-v, --version", version, "Show the Carrier version.");
+    app.add_flag("-v, --version", version, "Show the Boson version.");
 
     try {
         app.parse(argc, argv);
@@ -112,7 +112,7 @@ static Sp<Configuration> initConfigure(Options& options)
     return config;
 }
 
-static Sp<Node> startCarrierNode(Sp<Configuration> config)
+static Sp<Node> startNode(Sp<Configuration> config)
 {
     auto node = std::make_shared<Node>(config);
     if (node) {
@@ -120,21 +120,21 @@ static Sp<Node> startCarrierNode(Sp<Configuration> config)
         auto barrier = std::promise<void>();
 
         listener->connected = [&](Network network) {
-            std::cout << "The launcher node is connected to carrier network." << std::endl;
+            std::cout << "The launcher node is connected toboson network." << std::endl;
             try {
                 barrier.set_value();
             } catch (const std::future_error& e) {
             }
         };
         listener->disconnected = [&](Network network) {
-            std::cout << "The launcher node is disonnected to carrier network." << std::endl;
+            std::cout << "The launcher node is disonnected toboson network." << std::endl;
         };
 
         node->addConnectionStatusListener(listener);
         node->start();
-        std::cout << "The launcher node is waiting for itself to connect to carrier network." << std::endl;
+        std::cout << "The launcher node is waiting for itself to connect toboson network." << std::endl;
         barrier.get_future().wait();
-        std::cout << "The launcher node is connected to carrier network." << std::endl;
+        std::cout << "The launcher node is connected toboson network." << std::endl;
     } else {
         throw std::runtime_error("Creating a Node failed.");
     }
@@ -223,7 +223,7 @@ int main(int argc, char *argv[])
         auto config = initConfigure(options);
         checkExistingInstance(config);
 
-        node = startCarrierNode(config);
+        node = startNode(config);
         loadAddons(node, config->getAddons());
 
     } catch(std::exception& e) {

@@ -24,11 +24,11 @@
 
 #include <string>
 #include <vector>
-#include <carrier.h>
+#include <boson.h>
 
-namespace carrier {
+namespace boson {
 
-class CARRIER_PUBLIC CrawlerSetting {
+class BOSON_PUBLIC CrawlerSetting {
 public:
 
     void load(const std::string& path);
@@ -55,4 +55,4 @@ public:
     uint16_t port {39005};
 };
 
-} // namespace carrier
+} // namespace boson

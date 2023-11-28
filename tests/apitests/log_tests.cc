@@ -46,9 +46,8 @@
 #include "utils.h"
 #include "utils/log.h"
 
-// carrier
-#include <carrier.h>
-using namespace carrier;
+#include <boson.h>
+using namespace boson;
 
 namespace test {
 CPPUNIT_TEST_SUITE_REGISTRATION(LoggerTester);
@@ -153,22 +152,22 @@ void LoggerTester::testMacro() {
     log->setLevel(Level::Info);
 
     log->setPattern("[%Y-%m-%d %T] [%@] [%!] [%n] %^[%l] %v%$");
-    CARRIER_LOGGER_CRITICAL(log, "Level info: critical message.. {} ,{}", 1, 3.23);
-    CARRIER_LOGGER_ERROR(log, "Level info: error message.. {} ,{}", 1, 3.23);
-    CARRIER_LOGGER_WARN(log, "Level info: warn message.. {} ,{}", 1, 3.23);
-    CARRIER_LOGGER_INFO(log, "Level info: info message.. {} ,{}", 1, 3.23);
-    CARRIER_LOGGER_DEBUG(log, "Level info: debug message.. {} ,{}", 1, 3.23);
-    CARRIER_LOGGER_TRACE(log, "Level info: trace message.. {} ,{}", 1, 3.23);
+    BOSON_LOGGER_CRITICAL(log, "Level info: critical message.. {} ,{}", 1, 3.23);
+    BOSON_LOGGER_ERROR(log, "Level info: error message.. {} ,{}", 1, 3.23);
+    BOSON_LOGGER_WARN(log, "Level info: warn message.. {} ,{}", 1, 3.23);
+    BOSON_LOGGER_INFO(log, "Level info: info message.. {} ,{}", 1, 3.23);
+    BOSON_LOGGER_DEBUG(log, "Level info: debug message.. {} ,{}", 1, 3.23);
+    BOSON_LOGGER_TRACE(log, "Level info: trace message.. {} ,{}", 1, 3.23);
 
     puts("");
     log->setLevel(Level::Trace);
     CPPUNIT_ASSERT(log->isTraceEnabled());
-    CARRIER_LOGGER_CRITICAL(log, "Level trace: critical message.. {} ,{}", 1, 3.23);
-    CARRIER_LOGGER_ERROR(log, "Level trace: error message.. {} ,{}", 1, 3.23);
-    CARRIER_LOGGER_WARN(log, "Level trace: warn message.. {} ,{}", 1, 3.23);
-    CARRIER_LOGGER_INFO(log, "Level trace: info message.. {} ,{}", 1, 3.23);
-    CARRIER_LOGGER_DEBUG(log, "Level trace: debug message.. {} ,{}", 1, 3.23);
-    CARRIER_LOGGER_TRACE(log, "Level trace: trace message.. {} ,{}", 1, 3.23);
+    BOSON_LOGGER_CRITICAL(log, "Level trace: critical message.. {} ,{}", 1, 3.23);
+    BOSON_LOGGER_ERROR(log, "Level trace: error message.. {} ,{}", 1, 3.23);
+    BOSON_LOGGER_WARN(log, "Level trace: warn message.. {} ,{}", 1, 3.23);
+    BOSON_LOGGER_INFO(log, "Level trace: info message.. {} ,{}", 1, 3.23);
+    BOSON_LOGGER_DEBUG(log, "Level trace: debug message.. {} ,{}", 1, 3.23);
+    BOSON_LOGGER_TRACE(log, "Level trace: trace message.. {} ,{}", 1, 3.23);
 }
 
 void LoggerTester::testConf() {

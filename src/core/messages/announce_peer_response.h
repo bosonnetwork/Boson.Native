@@ -24,7 +24,7 @@
 
 #include "message.h"
 
-namespace carrier {
+namespace boson {
 
 class AnnouncePeerResponse : public Message {
 public:
@@ -35,4 +35,4 @@ public:
         : AnnouncePeerResponse(0) {}
 };
 
-} // namespace carrier
+} // namespace boson

@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-#include "carrier/node_info.h"
+#include "boson/node_info.h"
 #include "kbucket_entry.h"
 #include "kclosest_nodes.h"
 
@@ -28,7 +28,7 @@
 #include "messages/find_node_response.h"
 #include "node_lookup.h"
 
-namespace carrier {
+namespace boson {
 
 void NodeLookup::prepare() {
     // if we're bootstrapping start from the bucket that has the greatest possible
@@ -87,4 +87,4 @@ void NodeLookup::callResponsed(RPCCall* call, Sp<Message> response) {
     }
 }
 
-} // namespace carrier
+} // namespace boson

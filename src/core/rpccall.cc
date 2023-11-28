@@ -32,7 +32,7 @@
 #include "kbucket_entry.h"
 #include "task/candidate_node.h"
 
-namespace carrier {
+namespace boson {
 
 RPCCall::RPCCall(DHT& _dht, Sp<NodeInfo> _target, Sp<Message> _request)
     : dht(_dht), target(_target), request(_request),
@@ -128,4 +128,4 @@ void RPCCall::checkTimeout() {
     }
 }
 
-} // namespace carrier
+} // namespace boson

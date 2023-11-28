@@ -40,10 +40,10 @@
 #include <stdexcept>
 #include <iostream>
 
-#include "carrier/socket_address.h"
-#include "carrier/blob.h"
+#include "boson/socket_address.h"
+#include "boson/blob.h"
 
-namespace carrier {
+namespace boson {
 
 // Invalid address
 static std::string NA = "N/A";
@@ -434,4 +434,4 @@ bool SocketAddress::IpCompare::operator()(const SocketAddress& a, const SocketAd
                         (const uint8_t*)&b.ss + offset, len) < 0;
 }
 
-} // namespace carrier
+} // namespace boson

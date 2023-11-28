@@ -24,7 +24,7 @@
 
 #include "lookup_task.h"
 
-namespace carrier {
+namespace boson {
 
 class DHT;
 class RPCCall;
@@ -63,4 +63,4 @@ private:
     std::function<void(Sp<NodeInfo>, Task*)> resultHandler;
 };
 
-} // namespace carrier
+} // namespace boson
